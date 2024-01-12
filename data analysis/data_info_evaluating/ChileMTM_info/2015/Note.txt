@@ -1,0 +1,2 @@
+Note:
+May and June are deleted because they are both empty and mess up the code because of that.

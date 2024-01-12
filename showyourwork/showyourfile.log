@@ -1,0 +1,26 @@
+/other/file_name_return.py
+/other/processed_folder_creator.py
+/other/srff_finder.py
+/other/mean_filename_helper.py
+/data_info_evaluating/arrayprocessing.py
+/other/processing_filename_helper.py
+/interference and wave correlation/main.py
+/interference and wave correlation/plan.txt
+/interference and wave correlation/csvhandling.py
+/interference and wave correlation/array_processing.py
+/f.py
+/data analysis/MERRA-2 data temp vs wind/time_wind_grapher.py
+/data analysis/MERRA-2 data temp vs wind/file_input.py
+/data analysis/MERRA-2 data temp vs wind/array_processing.py
+/data analysis/MERRA-2 data temp vs wind/string_processing.py
+/data analysis/MERRA-2 data temp vs wind/metadata_gathering.py
+/data analysis/MERRA-2 data analysis/main.py
+/data analysis/MERRA-2 data analysis/file_input.py
+/other/downloading_merra_script.py
+/other/dumb_lil_thing.py
+/data analysis/MERRA-2 data analysis/metadata_gathering.py
+/data analysis/MERRA-2 data analysis/plan.txt
+/data analysis/MERRA-2 data analysis/grapher.py
+/data analysis/MERRA-2 data analysis/function_tester.py
+/data analysis/MERRA-2 data analysis/multi-dataset_graphing.py
+/data analysis/MERRA-2 data analysis/multi_dataset_graphing.py

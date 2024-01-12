@@ -1,0 +1,3 @@
+data_info_out.csv Has a manually put in, additonal note, saying
+that certain days in 2017 had potentially missing unprocessed 
+pictures.

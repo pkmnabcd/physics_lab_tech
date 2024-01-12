@@ -1,0 +1,7 @@
+Purpose of the program: do data analysis and output a graph.
+
+Make a loop that does it for each year that I give it
+Data flow: import the csv file, sum the interference and possible wave column for each month, and save those values in
+an arrays.
+Output graphs with the x-axis being the months, and the two y-axis being the interference sum and possible wave sum for
+the month.
