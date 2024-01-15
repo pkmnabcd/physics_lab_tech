@@ -54,6 +54,7 @@ class Merra:
 
         # Default other settings
         self.__want_smoothing = False
+        self.__smoothing_window_size = 32
         self.__do_polynomial_best_fit = False
         self.__polynomial_best_fit_order = 0
         self.__do_residual_analysis_graph = False
@@ -200,7 +201,7 @@ class Merra:
         day_of_year_list = self.return_day_of_year_list()
 
         if self.__want_smoothing:
-            day_of_year_list = do_smoothing(day_of_year_list)
+            day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
         day_of_year_list = np.array(day_of_year_list)
 
         small_figure = graphing_temp or (not graphing_temp and self.__want_smoothing)
@@ -209,7 +210,7 @@ class Merra:
         if graphing_temp:
             temp_data = self.return_temp_list()
             if self.__want_smoothing:
-                temp_data = do_smoothing(temp_data)
+                temp_data = do_smoothing(temp_data, self.__smoothing_window_size)
             temp_data = np.array(temp_data)
 
             plt.plot(day_of_year_list, temp_data, label='T', color='tab:blue')
@@ -221,12 +222,12 @@ class Merra:
         else:
             north_wind_data = self.return_north_wind_list()
             if self.__want_smoothing:
-                north_wind_data = do_smoothing(north_wind_data)
+                north_wind_data = do_smoothing(north_wind_data, self.__smoothing_window_size)
             north_wind_data = np.array(north_wind_data)
 
             east_wind_data = self.return_east_wind_list()
             if self.__want_smoothing:
-                east_wind_data = do_smoothing(east_wind_data)
+                east_wind_data = do_smoothing(east_wind_data, self.__smoothing_window_size)
             east_wind_data = np.array(east_wind_data)
 
             plt.plot(day_of_year_list, north_wind_data, label='V', color='tab:blue')
@@ -292,7 +293,7 @@ class Merra:
 
         day_of_year_list = self.__get_day_of_year_list_for_month(month_index)
         if self.__want_smoothing:
-            day_of_year_list = do_smoothing(day_of_year_list)
+            day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
         day_of_year_list = np.array(day_of_year_list)
 
         plt.figure(figsize=(12, 8))
@@ -300,7 +301,7 @@ class Merra:
         if graphing_temp:
             temp_data = get_1d_list_from_2d(self.__temperature_data[month_index])
             if self.__want_smoothing:
-                temp_data = do_smoothing(temp_data)
+                temp_data = do_smoothing(temp_data, self.__smoothing_window_size)
             temp_data = np.array(temp_data)
             plt.plot(day_of_year_list, temp_data, label='T')
 
@@ -311,8 +312,8 @@ class Merra:
             north_wind_data = get_1d_list_from_2d(self.__north_wind_data[month_index])
             east_wind_data = get_1d_list_from_2d(self.__east_wind_data[month_index])
             if self.__want_smoothing:
-                north_wind_data = do_smoothing(north_wind_data)
-                east_wind_data = do_smoothing(east_wind_data)
+                north_wind_data = do_smoothing(north_wind_data, self.__smoothing_window_size)
+                east_wind_data = do_smoothing(east_wind_data, self.__smoothing_window_size)
             north_wind_data = np.array(north_wind_data)
             east_wind_data = np.array(east_wind_data)
 
@@ -366,7 +367,7 @@ class Merra:
 
         day_of_year_list = self.return_day_of_year_list()
         if self.__want_smoothing:
-            day_of_year_list = do_smoothing(day_of_year_list)
+            day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
         day_of_year_list_np = np.array(day_of_year_list)
 
         plt.figure(figsize=(15, 10))
@@ -374,7 +375,7 @@ class Merra:
         if graphing_temp:
             temp_data = self.return_temp_list()
             if self.__want_smoothing:
-                temp_data = do_smoothing(temp_data)
+                temp_data = do_smoothing(temp_data, self.__smoothing_window_size)
             temp_data_np = np.array(temp_data)
 
             if use_polynomials:
@@ -384,8 +385,8 @@ class Merra:
                 poly_order = str(len(polynomials) - 1)
             else:
                 unsmoothed_day_of_year_list = day_of_year_list
-                day_of_year_list = do_smoothing(day_of_year_list)
-                smoothed_temp = do_smoothing(temp_data)
+                day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
+                smoothed_temp = do_smoothing(temp_data, self.__smoothing_window_size)
                 original_temp = temp_data
 
                 reduce_data_using_date_differences(unsmoothed_day_of_year_list, day_of_year_list, original_temp)
@@ -393,42 +394,64 @@ class Merra:
 
             plt.plot(day_of_year_list, subtracted_data, label='Temp', color='tab:blue')
 
-        else:  # TODO: Check temp version, write it for wind version, write title/filename stuff
+        else:
             north_wind_data = self.return_north_wind_list()
-            if self.__want_smoothing:
-                north_wind_data = do_smoothing(north_wind_data)
-            north_wind_data_np = np.array(north_wind_data)
-
             east_wind_data = self.return_east_wind_list()
             if self.__want_smoothing:
-                east_wind_data = do_smoothing(east_wind_data)
+                north_wind_data = do_smoothing(north_wind_data, self.__smoothing_window_size)
+                east_wind_data = do_smoothing(east_wind_data, self.__smoothing_window_size)
+            north_wind_data_np = np.array(north_wind_data)
             east_wind_data_np = np.array(east_wind_data)
 
-            north_polynomials = np.polyfit(day_of_year_list_np, north_wind_data_np, self.__polynomial_best_fit_order)
-            north_subtracted_data = subtract_best_fit_from_data(north_wind_data, north_polynomials, day_of_year_list)
-            north_subtracted_data = np.array(north_subtracted_data)
+            if use_polynomials:
+                north_polynomials = np.polyfit(day_of_year_list_np, north_wind_data_np, self.__polynomial_best_fit_order)
+                north_subtracted_data = subtract_best_fit_from_data(north_wind_data, north_polynomials, day_of_year_list)
+                north_subtracted_data = np.array(north_subtracted_data)
 
-            east_polynomials = np.polyfit(day_of_year_list_np, east_wind_data_np, self.__polynomial_best_fit_order)
-            east_subtracted_data = subtract_best_fit_from_data(east_wind_data, east_polynomials, day_of_year_list)
-            east_subtracted_data = np.array(east_subtracted_data)
+                east_polynomials = np.polyfit(day_of_year_list_np, east_wind_data_np, self.__polynomial_best_fit_order)
+                east_subtracted_data = subtract_best_fit_from_data(east_wind_data, east_polynomials, day_of_year_list)
+                east_subtracted_data = np.array(east_subtracted_data)
+                poly_order = str(len(north_polynomials) - 1)
+            else:
+                unsmoothed_day_of_year_list = day_of_year_list
+                day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
+
+                smoothed_north = do_smoothing(north_wind_data, self.__smoothing_window_size)
+                smoothed_east = do_smoothing(east_wind_data, self.__smoothing_window_size)
+                original_north = north_wind_data
+                original_east = east_wind_data
+
+                reduce_data_using_date_differences(unsmoothed_day_of_year_list, day_of_year_list, original_north)
+                reduce_data_using_date_differences(unsmoothed_day_of_year_list, day_of_year_list, original_east)
+                north_subtracted_data = np.array(original_north) - np.array(smoothed_north)
+                east_subtracted_data = np.array(original_east) - np.array(smoothed_east)
 
             plt.plot(day_of_year_list_np, north_subtracted_data, label='North Wind', color='tab:blue')
             plt.plot(day_of_year_list_np, east_subtracted_data, label='East Wind', color='tab:orange')
-            poly_order = str(len(north_polynomials) - 1)
 
         plt.grid(visible=True, axis="both")
         title_type = "Temperature between " if graphing_temp else "Wind between "
         location = get_location_string(self.__subfolder)
         if use_polynomials:
-            title = "\n".join(wrap("Order " + poly_order + " Residual Analysis of " + title_type + begin_month + " and " +
-                                   end_month + " " + year + " at " + location + " at altitude level " + altitude))
+            title = "\n".join(wrap("Order " + poly_order + " Residual Analysis of " + title_type + begin_month + " and "
+                                   + end_month + " " + year + " at " + location + " at altitude level " + altitude))
             if self.__do_specified_day_of_year_range:
-                begin_day, end_day = str(self.__specified_day_of_year_range[0]), str(self.__specified_day_of_year_range[1])
-                title = "\n".join(wrap("Order " + poly_order + " Residual Analysis of " + title_type + "day " + begin_day +
-                                       " and day " + end_day + " " + year + " at " + location + " at altitude level " +
-                                       altitude))
+                begin_day = str(self.__specified_day_of_year_range[0])
+                end_day = str(self.__specified_day_of_year_range[1])
+                title = "\n".join(wrap("Order " + poly_order + " Residual Analysis of " + title_type + "day " +
+                                       begin_day + " and day " + end_day + " " + year + " at " + location +
+                                       " at altitude level " + altitude))
         else:
-            title =
+            title = "\n".join(wrap("Residual Analysis from 4-day smoothed graph of " + title_type + begin_month +
+                                   " and " + end_month + " " + year + " at " + location + " at altitude level " +
+                                   altitude))
+            if self.__do_specified_day_of_year_range:
+                begin_day = str(self.__specified_day_of_year_range[0])
+                end_day = str(self.__specified_day_of_year_range[1])
+                title = "\n".join(wrap("Residual Analysis from 4-day smoothed graph of " + title_type + "day " +
+                                       begin_day + " and day " + end_day + " " + year + " at " + location +
+                                       " at altitude level " + altitude))
+
         plt.title(title, fontsize=25)
 
         if self.__make_day_marker:
@@ -448,12 +471,15 @@ class Merra:
         save_directory = self.__year_folder + "output_graphs//" + self.__subfolder + "//"
         folder_check_and_maker(save_directory)
 
-        smoothing_string = "of_smoothed_" if self.__want_smoothing else "of_unsmoothed_"
+        smoothing_string = "of_smoothed_" if self.__want_smoothing else ""
         filename_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
-        filename = "residual_analysis_" + smoothing_string + "from_" + begin_month + "_to_" + end_month
+        analysis_type = "residual_analysis_polynomial_" if use_polynomials else "residual_analysis_smoothed_"
+
+        filename = analysis_type + smoothing_string + "from_" + begin_month + "_to_" + end_month
         if self.__do_specified_day_of_year_range:
-            begin_day, end_day = str(self.__specified_day_of_year_range[0]), str(self.__specified_day_of_year_range[1])
-            filename = "residual_analysis_" + smoothing_string + "from_day_" + begin_day + "to_day_" + end_day
+            begin_day = str(self.__specified_day_of_year_range[0])
+            end_day = str(self.__specified_day_of_year_range[1])
+            filename = analysis_type + smoothing_string + "from_day_" + begin_day + "to_day_" + end_day
         filename += "_" + year + filename_type + altitude + ".png"
         save_path = save_directory + filename
         plt.savefig(save_path)
@@ -722,17 +748,30 @@ def get_location_string(subfolder_string):
     return outstring
 
 
-def do_smoothing(array):
-    window_size = 80
+def do_smoothing(array, window_size):
     i = 0
     moving_averages = []
 
-    while i < len(array) - window_size + 1:
+    while i < len(array) - window_size:
         window_average = round(np.sum(array[i:i + window_size]) / window_size, 2)
         moving_averages.append(window_average)
         i += 1
 
     return moving_averages
+
+
+def do_day_of_year_smoothing(array, window_size):
+    out_list = []
+    for value in array:  # Copy the array to not modify the original
+        out_list.append(value)
+    assert(window_size % 16 == 0)  # Want whole days taken from each side only
+    front_pop_count = window_size // 2
+    back_pop_count = window_size // 2
+    for i in range(front_pop_count):
+        out_list.pop(0)
+    for i in range(back_pop_count):
+        out_list.pop()
+    return out_list
 
 
 def subtract_best_fit_from_data(data, polynomials, day_of_year_list):
