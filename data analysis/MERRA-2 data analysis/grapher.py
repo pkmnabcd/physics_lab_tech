@@ -357,7 +357,7 @@ class Merra:
 
         plt.close()
 
-    def __generate_residual_analysis_graph(self, graphing_temp):  # TODO: add alternate method of doing the analysis
+    def __generate_residual_analysis_graph(self, graphing_temp):
         begin_month = self.__start_month
         end_month = self.__end_month
         altitude = str(self.__current_altitude_value)
@@ -903,8 +903,8 @@ def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
     :return: graphs saved to //output_graphs in the month_filepath / year_filepath
     """
     if isinstance(graphing_multiple_locations, list):
-        graph_multiple_locations_for_year(graphing_multiple_locations, year_filepath, graph_temp, graph_winds, altitude_level,
-                                          day_emphasis_bar, smoothing, specified_date_range)
+        graph_multiple_locations_for_year(graphing_multiple_locations, year_filepath, graph_temp, graph_winds,
+                                          altitude_level, day_emphasis_bar, smoothing, specified_date_range)
         return
     if isinstance(graph_all_locations_one_day_day, int):
         graph_all_locations_one_day(year_filepath, graph_temp, graph_winds, altitude_level,
