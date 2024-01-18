@@ -12,6 +12,7 @@ from os import mkdir
 from textwrap import wrap
 from multi_dataset_graphing import graph_multiple_locations_for_year
 from multi_dataset_graphing import graph_all_locations_one_day
+from scipy.fft import fft
 
 
 def __folder_check_and_maker(path):
@@ -57,8 +58,10 @@ class Merra:
         self.__smoothing_window_size = 32
         self.__do_polynomial_best_fit = False
         self.__polynomial_best_fit_order = 0
+
         self.__do_residual_analysis_graph = False
         self.__residual_analysis_type = "poly"
+        self.__do_residual_fft = False
 
         self.__make_monthly_graphs = False
         self.__make_graph_for_year = False
@@ -96,7 +99,7 @@ class Merra:
         self.__do_polynomial_best_fit = True
         self.__polynomial_best_fit_order = order
 
-    def set_residual_analysis_toggle(self, toggle, residual_type):
+    def set_residual_analysis_toggle(self, toggle, residual_type, do_fft):
         assert isinstance(toggle, bool)
         if self.__polynomial_best_fit_order == 0:
             self.__polynomial_best_fit_order = 2
@@ -109,6 +112,7 @@ class Merra:
         if residual_type != "poly":
             self.__residual_analysis_type = residual_type
             self.__want_smoothing = False
+        self.__do_residual_fft = do_fft
 
     def set_monthly_graphs_toggle(self, toggle):
         assert isinstance(toggle, bool)
@@ -382,7 +386,6 @@ class Merra:
                 polynomials = np.polyfit(day_of_year_list_np, temp_data_np, self.__polynomial_best_fit_order)
                 subtracted_data = subtract_best_fit_from_data(temp_data, polynomials, day_of_year_list)
                 subtracted_data = np.array(subtracted_data)
-                poly_order = str(len(polynomials) - 1)
             else:
                 unsmoothed_day_of_year_list = day_of_year_list
                 day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
@@ -391,6 +394,9 @@ class Merra:
 
                 reduce_data_using_date_differences(unsmoothed_day_of_year_list, day_of_year_list, original_temp)
                 subtracted_data = np.array(original_temp) - np.array(smoothed_temp)
+
+            if self.__do_residual_fft:
+                subtracted_data = fft(subtracted_data)
 
             plt.plot(day_of_year_list, subtracted_data, label='Temp', color='tab:blue')
 
@@ -411,7 +417,6 @@ class Merra:
                 east_polynomials = np.polyfit(day_of_year_list_np, east_wind_data_np, self.__polynomial_best_fit_order)
                 east_subtracted_data = subtract_best_fit_from_data(east_wind_data, east_polynomials, day_of_year_list)
                 east_subtracted_data = np.array(east_subtracted_data)
-                poly_order = str(len(north_polynomials) - 1)
             else:
                 unsmoothed_day_of_year_list = day_of_year_list
                 day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
@@ -426,33 +431,42 @@ class Merra:
                 north_subtracted_data = np.array(original_north) - np.array(smoothed_north)
                 east_subtracted_data = np.array(original_east) - np.array(smoothed_east)
 
+            if self.__do_residual_fft:
+                north_subtracted_data = fft(north_subtracted_data)
+                east_subtracted_data = fft(east_subtracted_data)
+
             plt.plot(day_of_year_list_np, north_subtracted_data, label='North Wind', color='tab:blue')
             plt.plot(day_of_year_list_np, east_subtracted_data, label='East Wind', color='tab:orange')
 
         plt.grid(visible=True, axis="both")
+        poly_order = str(self.__polynomial_best_fit_order)
+
         title_type = "Temperature between " if graphing_temp else "Wind between "
         location = get_location_string(self.__subfolder)
         if use_polynomials:
-            title = "\n".join(wrap("Order " + poly_order + " Residual Analysis of " + title_type + begin_month + " and "
-                                   + end_month + " " + year + " at " + location + " at altitude level " + altitude))
+            title = "Order " + poly_order + " Residual Analysis of " + title_type + begin_month + " and " + \
+                                   end_month + " " + year + " at " + location + " at altitude level " + altitude
             if self.__do_specified_day_of_year_range:
                 begin_day = str(self.__specified_day_of_year_range[0])
                 end_day = str(self.__specified_day_of_year_range[1])
-                title = "\n".join(wrap("Order " + poly_order + " Residual Analysis of " + title_type + "day " +
-                                       begin_day + " and day " + end_day + " " + year + " at " + location +
-                                       " at altitude level " + altitude))
+                title = "Order " + poly_order + " Residual Analysis of " + title_type + "day " + \
+                        begin_day + " and day " + end_day + " " + year + " at " + location + \
+                        " at altitude level " + altitude
         else:
-            title = "\n".join(wrap("Residual Analysis from 4-day smoothed graph of " + title_type + begin_month +
-                                   " and " + end_month + " " + year + " at " + location + " at altitude level " +
-                                   altitude))
+            title = "Residual Analysis from 4-day smoothed graph of " + title_type + begin_month + \
+                                   " and " + end_month + " " + year + " at " + location + " at altitude level " + \
+                                   altitude
             if self.__do_specified_day_of_year_range:
                 begin_day = str(self.__specified_day_of_year_range[0])
                 end_day = str(self.__specified_day_of_year_range[1])
-                title = "\n".join(wrap("Residual Analysis from 4-day smoothed graph of " + title_type + "day " +
-                                       begin_day + " and day " + end_day + " " + year + " at " + location +
-                                       " at altitude level " + altitude))
+                title = "Residual Analysis from 4-day smoothed graph of " + title_type + "day " + \
+                        begin_day + " and day " + end_day + " " + year + " at " + location + \
+                        " at altitude level " + altitude
 
-        plt.title(title, fontsize=25)
+        if self.__do_residual_fft:
+            title = "FFT of " + title
+
+        plt.title("\n".join(wrap(title)), fontsize=25)
 
         if self.__make_day_marker:
             if self.__do_specified_day_of_year_range:
@@ -471,15 +485,18 @@ class Merra:
         save_directory = self.__year_folder + "output_graphs//" + self.__subfolder + "//"
         folder_check_and_maker(save_directory)
 
+        fft_string = "fft_" if self.__do_residual_fft else ""
         smoothing_string = "of_smoothed_" if self.__want_smoothing else ""
         filename_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
         analysis_type = "residual_analysis_polynomial_" if use_polynomials else "residual_analysis_smoothed_"
 
-        filename = analysis_type + smoothing_string + "from_" + begin_month + "_to_" + end_month
+        filename = fft_string + analysis_type + smoothing_string
         if self.__do_specified_day_of_year_range:
             begin_day = str(self.__specified_day_of_year_range[0])
             end_day = str(self.__specified_day_of_year_range[1])
-            filename = analysis_type + smoothing_string + "from_day_" + begin_day + "to_day_" + end_day
+            filename = fft_string + analysis_type + smoothing_string + "from_day_" + begin_day + "to_day_" + end_day
+        else:
+            filename += "from_" + begin_month + "_to_" + end_month
         filename += "_" + year + filename_type + altitude + ".png"
         save_path = save_directory + filename
         plt.savefig(save_path)
@@ -871,7 +888,7 @@ def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
             graph_months=False, graph_year=False, altitude_level=1,
             do_all_altitudes=False, do_every_other_altitude=False, specified_altitudes=None, day_emphasis_bar=None,
             smoothing=False, polynomial_best_fit=None, residual_analysis_graph=False, residual_analysis_type="poly",
-            specified_date_range=None,
+            do_residual_fft=False, specified_date_range=None,
             graphing_multiple_locations=None, graph_all_locations_one_day_day=None):
     """
     Graphs MERRA-2 data given after IDE processing
@@ -896,6 +913,7 @@ def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
     subtracted from it to get the residual.
     :param residual_analysis_type: sets the base residual analysis. "poly" for polynomial-best-fit line, "smoothed" to
     use the smoothed line.
+    :param do_residual_fft if True, output is residual analysis run through fft
     :param specified_date_range: None for nothing, [start_int, end_int] to plot that range of data. Ex: [3, 15]
     :param graphing_multiple_locations: None only use subfolder data, input list of subfolder names to graph all of
     that data on the same plot. Ex: ["McMurdo", "Davis", "McMurdo_minus_15#20"]
@@ -933,7 +951,7 @@ def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
         merra_object.set_polynomial_fit_order(polynomial_best_fit)
 
     if residual_analysis_graph:
-        merra_object.set_residual_analysis_toggle(residual_analysis_graph, residual_analysis_type)
+        merra_object.set_residual_analysis_toggle(residual_analysis_graph, residual_analysis_type, do_residual_fft)
 
     if do_all_altitudes:
         merra_object.set_do_all_altitudes_toggle(True)
