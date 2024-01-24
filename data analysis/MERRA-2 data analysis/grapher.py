@@ -13,6 +13,7 @@ from textwrap import wrap
 from multi_dataset_graphing import graph_multiple_locations_for_year
 from multi_dataset_graphing import graph_all_locations_one_day
 from scipy.fft import fft
+from scipy.fft import fftfreq
 
 
 def __folder_check_and_maker(path):
@@ -113,6 +114,8 @@ class Merra:
             self.__residual_analysis_type = residual_type
             self.__want_smoothing = False
         self.__do_residual_fft = do_fft
+        if do_fft:
+            self.__make_day_marker = False
 
     def set_monthly_graphs_toggle(self, toggle):
         assert isinstance(toggle, bool)
@@ -197,6 +200,40 @@ class Merra:
         if self.__north_wind_data_loaded and self.__east_wind_data_loaded:
             self.__generate_residual_analysis_graph(False)
 
+    def __generate_graph_filename(self, monthly_graph, residual_graph, graphing_temp, begin_month,
+                                  end_month, altitude, year, use_polynomials=False, month=None):
+        if monthly_graph:
+            save_directory = self.__year_folder + "//" + month + "//output_graphs//" + self.__subfolder + "//"
+        else:
+            save_directory = self.__year_folder + "output_graphs//" + self.__subfolder + "//"
+        folder_check_and_maker(save_directory)
+
+        smoothing_string = "smoothed_data_" if self.__want_smoothing else ""
+        if self.__do_polynomial_best_fit:
+            smoothing_string += "degree_" + str(self.__polynomial_best_fit_order) + "_poly_fit_"
+
+        fft_string = "fft_" if self.__do_residual_fft else ""
+        data_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
+        if residual_graph:
+            analysis_type = "residual_analysis_polynomial_" if use_polynomials else "residual_analysis_smoothed_"
+        else:
+            analysis_type = ""
+
+        if monthly_graph:
+            time_range = month
+        else:
+            if self.__do_specified_day_of_year_range:
+                begin_day = str(self.__specified_day_of_year_range[0])
+                end_day = str(self.__specified_day_of_year_range[1])
+                time_range = "from_" + begin_day + "_to_" + end_day
+            else:
+                time_range = "from_" + begin_month + "_to_" + end_month
+
+        filename = fft_string + analysis_type + smoothing_string + time_range
+        filename += "_" + year + data_type + altitude + ".png"
+        save_path = save_directory + filename
+        return save_path  # TODO: implement this method into the graph methods
+
     def __generate_year_graph(self, graphing_temp):
         begin_month = self.__start_month
         end_month = self.__end_month
@@ -269,20 +306,7 @@ class Merra:
         plt.ylabel(y_label, fontsize=20)
         plt.yticks(fontsize=15)
 
-        save_directory = self.__year_folder + "output_graphs//" + self.__subfolder + "//"
-        folder_check_and_maker(save_directory)
-
-        smoothing_file_label = "smoothed_" if self.__want_smoothing else ""
-        if self.__do_polynomial_best_fit:
-            smoothing_file_label += "degree_" + str(self.__polynomial_best_fit_order) + "_poly_fit_"
-
-        filename_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
-        filename = smoothing_file_label + begin_month + "_to_" + end_month
-        if self.__do_specified_day_of_year_range:
-            begin_day, end_day = str(self.__specified_day_of_year_range[0]), str(self.__specified_day_of_year_range[1])
-            filename = smoothing_file_label + begin_day + "_to_" + end_day
-        filename += "_" + year + filename_type + altitude + ".png"
-        save_path = save_directory + filename
+        save_path = self.__generate_graph_filename(False, False, graphing_temp, begin_month, end_month, altitude, year)
         plt.savefig(save_path)
 
         plt.close()
@@ -347,16 +371,7 @@ class Merra:
         plt.ylabel(y_label, fontsize=20)
         plt.yticks(fontsize=15)
 
-        save_directory = self.__year_folder + "//" + month + "//output_graphs//" + self.__subfolder + "//"
-        folder_check_and_maker(save_directory)
-
-        smoothing_file_label = "smoothed_" if self.__want_smoothing else ""
-        if self.__do_polynomial_best_fit:
-            smoothing_file_label += "degree_" + str(self.__polynomial_best_fit_order) + "_poly_fit_"
-
-        filename_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
-        filename = smoothing_file_label + month + year + filename_type + altitude + ".png"
-        save_path = save_directory + filename
+        save_path = self.__generate_graph_filename(True, False, graphing_temp, None, None, altitude, year, month=month)
         plt.savefig(save_path)
 
         plt.close()
@@ -396,9 +411,14 @@ class Merra:
                 subtracted_data = np.array(original_temp) - np.array(smoothed_temp)
 
             if self.__do_residual_fft:
-                subtracted_data = fft(subtracted_data)
+                subtracted_data = np.abs(fft(subtracted_data))
+                N = len(subtracted_data)  # Number sample points
+                T = 1/8  # sample spacing (1/8 of a day)
+                frequency_data = fftfreq(N, T)
+                plt.plot(frequency_data[:N//2], subtracted_data[:N//2], label='Temp', color='tab:blue')  # TODO test
 
-            plt.plot(day_of_year_list, subtracted_data, label='Temp', color='tab:blue')
+            else:
+                plt.plot(day_of_year_list, subtracted_data, label='Temp', color='tab:blue')
 
         else:
             north_wind_data = self.return_north_wind_list()
@@ -432,11 +452,18 @@ class Merra:
                 east_subtracted_data = np.array(original_east) - np.array(smoothed_east)
 
             if self.__do_residual_fft:
-                north_subtracted_data = fft(north_subtracted_data)
-                east_subtracted_data = fft(east_subtracted_data)
+                north_subtracted_data = np.abs(fft(north_subtracted_data))
+                east_subtracted_data = np.abs(fft(east_subtracted_data))
 
-            plt.plot(day_of_year_list_np, north_subtracted_data, label='North Wind', color='tab:blue')
-            plt.plot(day_of_year_list_np, east_subtracted_data, label='East Wind', color='tab:orange')
+                N = len(north_subtracted_data)  # Number sample points
+                T = 1 / 8  # sample spacing (1/8 of a day)
+
+                frequency_data = fftfreq(N, T)
+                plt.plot(frequency_data[:N//2], north_subtracted_data[:N//2], label='North Wind', color='tab:blue')
+                plt.plot(frequency_data[:N//2], east_subtracted_data[:N//2], label='East Wind', color='tab:orange')
+            else:
+                plt.plot(day_of_year_list_np, north_subtracted_data, label='North Wind', color='tab:blue')
+                plt.plot(day_of_year_list_np, east_subtracted_data, label='East Wind', color='tab:orange')
 
         plt.grid(visible=True, axis="both")
         poly_order = str(self.__polynomial_best_fit_order)
@@ -475,30 +502,18 @@ class Merra:
                     plt.axvline(x=self.__day_marker_value, color='r',
                                 label="Marker for day " + str(self.__day_marker_value))
 
-        plt.xlabel("Day of Year", fontsize=20)
+        plt.xlabel("Day of Year", fontsize=20) if not self.__do_residual_fft else plt.xlabel("Frequency", fontsize=20)
         plt.xticks(fontsize=15)
         plt.axhline(y=0, color='black')
         y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
+        if self.__do_residual_fft:
+            y_label = "Power (?)"
         plt.ylabel(y_label, fontsize=20)
         plt.yticks(fontsize=15)
+        plt.legend()
 
-        save_directory = self.__year_folder + "output_graphs//" + self.__subfolder + "//"
-        folder_check_and_maker(save_directory)
-
-        fft_string = "fft_" if self.__do_residual_fft else ""
-        smoothing_string = "of_smoothed_" if self.__want_smoothing else ""
-        filename_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
-        analysis_type = "residual_analysis_polynomial_" if use_polynomials else "residual_analysis_smoothed_"
-
-        filename = fft_string + analysis_type + smoothing_string
-        if self.__do_specified_day_of_year_range:
-            begin_day = str(self.__specified_day_of_year_range[0])
-            end_day = str(self.__specified_day_of_year_range[1])
-            filename = fft_string + analysis_type + smoothing_string + "from_day_" + begin_day + "to_day_" + end_day
-        else:
-            filename += "from_" + begin_month + "_to_" + end_month
-        filename += "_" + year + filename_type + altitude + ".png"
-        save_path = save_directory + filename
+        save_path = self.__generate_graph_filename(False, True, graphing_temp, begin_month, end_month, altitude,
+                                                   year, use_polynomials=use_polynomials)
         plt.savefig(save_path)
 
         plt.close()
