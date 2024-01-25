@@ -899,6 +899,23 @@ def get_1d_list_from_3d(inlist):
     return get_1d_list_from_2d(out_list)
 
 
+def save_datasets(x_data, y_data, save_directory):
+    """
+    Take in data and output into a save file of ordered pairs
+    :param x_data: data from the x-axis, should be same length as y_data
+    :param y_data: data from the y-axis, should be same length as x_data
+    :param save_directory: the place to put the output file (should end with //)
+    :return: file placed in save_directory, file named file_path//data_output.txt
+    """
+    out_string = ""
+    for i in range(len(x_data)):
+        out_string += str(x_data[i]) + ", " + str(y_data[i]) + "\n"
+    file_save = save_directory + "data_output.txt"
+    file_obj = open(file_save, 'w')
+    file_obj.write(out_string)
+    file_obj.close()
+
+
 def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
             graph_months=False, graph_year=False, altitude_level=1,
             do_all_altitudes=False, do_every_other_altitude=False, specified_altitudes=None, day_emphasis_bar=None,
