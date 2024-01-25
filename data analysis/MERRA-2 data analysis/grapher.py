@@ -232,7 +232,7 @@ class Merra:
         filename = fft_string + analysis_type + smoothing_string + time_range
         filename += "_" + year + data_type + altitude + ".png"
         save_path = save_directory + filename
-        return save_path  # TODO: implement this method into the graph methods
+        return save_path
 
     def __generate_year_graph(self, graphing_temp):
         begin_month = self.__start_month
@@ -411,11 +411,11 @@ class Merra:
                 subtracted_data = np.array(original_temp) - np.array(smoothed_temp)
 
             if self.__do_residual_fft:
-                subtracted_data = np.abs(fft(subtracted_data))
                 N = len(subtracted_data)  # Number sample points
                 T = 1/8  # sample spacing (1/8 of a day)
-                frequency_data = fftfreq(N, T)
-                plt.plot(frequency_data[:N//2], subtracted_data[:N//2], label='Temp', color='tab:blue')  # TODO test
+                subtracted_data = np.abs(fft(subtracted_data))[:N//2]
+                frequency_data = fftfreq(N, T)[:N//2]
+                plt.plot(frequency_data, subtracted_data, label='Temp', color='tab:blue')
 
             else:
                 plt.plot(day_of_year_list, subtracted_data, label='Temp', color='tab:blue')
@@ -452,15 +452,14 @@ class Merra:
                 east_subtracted_data = np.array(original_east) - np.array(smoothed_east)
 
             if self.__do_residual_fft:
-                north_subtracted_data = np.abs(fft(north_subtracted_data))
-                east_subtracted_data = np.abs(fft(east_subtracted_data))
-
                 N = len(north_subtracted_data)  # Number sample points
                 T = 1 / 8  # sample spacing (1/8 of a day)
+                north_subtracted_data = np.abs(fft(north_subtracted_data))[:N//2]
+                east_subtracted_data = np.abs(fft(east_subtracted_data))[:N//2]
 
-                frequency_data = fftfreq(N, T)
-                plt.plot(frequency_data[:N//2], north_subtracted_data[:N//2], label='North Wind', color='tab:blue')
-                plt.plot(frequency_data[:N//2], east_subtracted_data[:N//2], label='East Wind', color='tab:orange')
+                frequency_data = fftfreq(N, T)[:N//2]
+                plt.plot(frequency_data, north_subtracted_data, label='North Wind', color='tab:blue')
+                plt.plot(frequency_data, east_subtracted_data, label='East Wind', color='tab:orange')
             else:
                 plt.plot(day_of_year_list_np, north_subtracted_data, label='North Wind', color='tab:blue')
                 plt.plot(day_of_year_list_np, east_subtracted_data, label='East Wind', color='tab:orange')
