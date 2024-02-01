@@ -764,7 +764,7 @@ def reduce_data_using_date_differences(original_day_of_year_list, edited_day_of_
             current_list_index -= 1
 
 
-def get_location_string(subfolder_string):
+def get_location_string(subfolder_string):  # TODO: Fix this with new file structure
     outstring = subfolder_string
     if "minus" in subfolder_string:
         value = 0

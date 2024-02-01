@@ -132,7 +132,7 @@ def graph_all_locations_one_day(year_filepath, graph_temp, graph_winds, altitude
                  "McMurdo_minus_15#9", "McMurdo_minus_15#10", "McMurdo_minus_15#11", "McMurdo_minus_15#12",
                  "McMurdo_minus_15#13", "McMurdo_minus_15#14", "McMurdo_minus_15#15", "McMurdo_minus_15#16",
                  "McMurdo_minus_15#17", "McMurdo_minus_15#18", "McMurdo_minus_15#19", "McMurdo_minus_15#20",
-                 "McMurdo_minus_15#21", "McMurdo_minus_15#22", "McMurdo_minus_15#23"]
+                 "McMurdo_minus_15#21", "McMurdo_minus_15#22", "McMurdo_minus_15#23"]  # TODO: Fix this
     for location in locations:
         current_merra = Merra(year_filepath, location)
         current_merra.set_altitude_level(altitude_level)
@@ -215,7 +215,7 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     plt.close()
 
 
-def get_location_minus_amount(subfolder_string):
+def get_location_minus_amount(subfolder_string):  # TODO: Fix this for new file structure
     minus_amount = 0
     if "minus" in subfolder_string:
         value = 0
