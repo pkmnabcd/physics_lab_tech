@@ -1,6 +1,6 @@
 def lon_subfolder(minus_amount):
     """
-    Generates the subfolder for changing longitude. If minus_amount > 0, stub is: McMurdo_minus_lon_15
+    Generates the subfolder for changing longitude. If minus_amount > 0, stub is: McMurdo_minus_lon_15#
     :param minus_amount: int number between 0 and 23
     :return: string corresponding to the minus amount inputted
     """

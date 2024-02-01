@@ -764,19 +764,44 @@ def reduce_data_using_date_differences(original_day_of_year_list, edited_day_of_
             current_list_index -= 1
 
 
-def get_location_string(subfolder_string):  # TODO: Fix this with new file structure
-    outstring = subfolder_string
-    if "minus" in subfolder_string:
-        value = 0
-        string_length = len(subfolder_string)
-        for i in range(string_length):
-            current_character = subfolder_string[i]
-            if current_character == "#":
-                value = int(subfolder_string[i + 1:])
-                break
-        minus_amount = str(value * 15)
-        outstring = "McMurdo minus " + minus_amount + " degrees longitude"
-    return outstring
+def get_location_string(subfolder_string):
+    """
+    Currently three types of supported subfolders:
+    McMurdo/Davis: just returns these names
+    McMurdo_minus_lon_15#20_plus_lat_5#num: returns McMurdo minus 300 degrees longitude plus/minus (num*5) degrees
+    latitude
+    McMurdo_minus_lon_15#num: returns McMurdo minus (num*15) degrees longitude
+    :param subfolder_string: one of the supported folder strings
+    :return: corresponding more functional name
+    """
+    if "lat" in subfolder_string:
+        outstring = "McMurdo minus 300 degrees longitude "
+        if "plus" in subfolder_string:
+            outstring += "plus "
+        else:
+            outstring += "minus "
+        amount_index = subfolder_string.find("lat") + 6
+        value = ""
+        while amount_index < len(subfolder_string):
+            value += subfolder_string[amount_index]
+            amount_index += 1
+        plus_or_minus_amount = 5 * int(value)
+        outstring += str(plus_or_minus_amount) + " degrees latitude"
+        return outstring
+
+    elif "lon" in subfolder_string:
+        outstring = "McMurdo minus "
+        amount_index = subfolder_string.find("lon") + 7
+        value = ""
+        while amount_index < len(subfolder_string):
+            value += subfolder_string[amount_index]
+            amount_index += 1
+        plus_or_minus_amount = 15 * int(value)
+        outstring += str(plus_or_minus_amount) + " degrees longitude"
+        return outstring
+
+    else:
+        return subfolder_string
 
 
 def do_smoothing(array, window_size):
