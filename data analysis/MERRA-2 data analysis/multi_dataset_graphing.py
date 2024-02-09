@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from textwrap import wrap
+from subfolder_generation import lon_subfolder, lat_subfolder
+smoothing_window_size = 32
 
 
 def graph_multiple_locations_for_year(list_of_locations, year_filepath, graph_temp, graph_winds, altitude_level,
@@ -23,15 +25,16 @@ def graph_multiple_locations_for_year(list_of_locations, year_filepath, graph_te
         merra_objects.append(current_merra)
 
     if graph_temp:
-        make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude_level, day_emphasis_bar, want_smoothing,
-                                              list_of_locations, specified_day_of_year_range, True)
+        make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude_level, day_emphasis_bar,
+                                              want_smoothing, list_of_locations, specified_day_of_year_range, True)
     if graph_winds:
-        make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude_level, day_emphasis_bar, want_smoothing,
-                                              list_of_locations, specified_day_of_year_range, False)
+        make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude_level, day_emphasis_bar,
+                                              want_smoothing, list_of_locations, specified_day_of_year_range, False)
 
 
-def make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude_level, day_emphasis_bar, want_smoothing,
-                                          list_of_locations, specified_day_of_year_range, graphing_temp):
+def make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude_level,
+                                          day_emphasis_bar, want_smoothing, list_of_locations,
+                                          specified_day_of_year_range, graphing_temp):
     from grapher import do_smoothing
     from grapher import get_location_string
     from grapher import folder_check_and_maker
@@ -45,7 +48,7 @@ def make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude
     make_day_marker = isinstance(day_emphasis_bar, int)
 
     if want_smoothing:
-        day_of_year_list = do_smoothing(day_of_year_list)
+        day_of_year_list = do_smoothing(day_of_year_list, smoothing_window_size)
     day_of_year_list = np.array(day_of_year_list)
 
     # small_figure = graphing_temp or (not graphing_temp and want_smoothing)
@@ -56,7 +59,7 @@ def make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude
         for current_data in merra_objects:
             temp_data = current_data.return_temp_list()
             if want_smoothing:
-                temp_data = do_smoothing(temp_data)
+                temp_data = do_smoothing(temp_data, smoothing_window_size)
             temp_data = np.array(temp_data)
 
             location = get_location_string(current_data.return_subfolder())
@@ -66,12 +69,12 @@ def make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude
         for current_data in merra_objects:
             north_wind_data = current_data.return_north_wind_list()
             if want_smoothing:
-                north_wind_data = do_smoothing(north_wind_data)
+                north_wind_data = do_smoothing(north_wind_data, smoothing_window_size)
             north_wind_data = np.array(north_wind_data)
 
             east_wind_data = current_data.return_east_wind_list()
             if want_smoothing:
-                east_wind_data = do_smoothing(east_wind_data)
+                east_wind_data = do_smoothing(east_wind_data, smoothing_window_size)
             east_wind_data = np.array(east_wind_data)
 
             location = get_location_string(current_data.return_subfolder())
@@ -123,16 +126,21 @@ def make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude
     plt.close()
 
 
-def graph_all_locations_one_day(year_filepath, graph_temp, graph_winds, altitude_level, day):
+def graph_all_locations_one_day(year_filepath, graph_temp, graph_winds, altitude_level, day, do_lon):
     from grapher import Merra
     merra_objects = []
 
-    locations = ["McMurdo", "McMurdo_minus_15#1", "McMurdo_minus_15#2", "McMurdo_minus_15#3", "McMurdo_minus_15#4",
-                 "McMurdo_minus_15#5", "McMurdo_minus_15#6", "McMurdo_minus_15#7", "McMurdo_minus_15#8",
-                 "McMurdo_minus_15#9", "McMurdo_minus_15#10", "McMurdo_minus_15#11", "McMurdo_minus_15#12",
-                 "McMurdo_minus_15#13", "McMurdo_minus_15#14", "McMurdo_minus_15#15", "McMurdo_minus_15#16",
-                 "McMurdo_minus_15#17", "McMurdo_minus_15#18", "McMurdo_minus_15#19", "McMurdo_minus_15#20",
-                 "McMurdo_minus_15#21", "McMurdo_minus_15#22", "McMurdo_minus_15#23"]  # TODO: Fix this
+    if do_lon:
+        locations = []
+        for i in range(24):
+            locations.append(lon_subfolder(i))
+    else:
+        locations = []
+        for i in range(-2, 0):
+            locations.append(lat_subfolder(i, is_plus=False))
+        for i in range(34):
+            locations.append(lat_subfolder(i, is_plus=True))
+
     for location in locations:
         current_merra = Merra(year_filepath, location)
         current_merra.set_altitude_level(altitude_level)
@@ -154,7 +162,6 @@ def graph_all_locations_one_day(year_filepath, graph_temp, graph_winds, altitude
 def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_level, day, graphing_temp):
     from grapher import folder_check_and_maker
 
-    begin_month, end_month = merra_objects[0].return_begin_and_end_months()
     altitude = str(altitude_level)
     year = merra_objects[0].return_year()
     day_of_year_list = merra_objects[0].return_day_of_year_list()
@@ -227,4 +234,3 @@ def get_location_minus_amount(subfolder_string):  # TODO: Fix this for new file 
                 break
         minus_amount = value * 15
     return minus_amount
-
