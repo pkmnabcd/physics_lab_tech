@@ -167,10 +167,14 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     year = merra_objects[0].return_year()
     day_of_year_list = merra_objects[0].return_day_of_year_list()
 
-    minus_amounts = []
+    difference_amounts = []
     for merra in merra_objects:
-        minus_amounts.append(get_location_difference(merra.return_subfolder()))
-        # TODO: update this to handle tuple and negative/positive numbers
+        difference_amounts.append(get_location_difference(merra.return_subfolder()))
+
+    changing_values_index = get_index_from_tuple(difference_amounts)
+    for i in range(len(difference_amounts)):
+        difference_amounts[i] = difference_amounts[i][changing_values_index]
+    # TODO: write code that uses changing_values_index to decide what titles and stuff to use
 
     data_index = day_of_year_list.index(day)
 
@@ -185,7 +189,7 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
             temp_data.append(data[data_index])
         temp_data = np.array(temp_data)
 
-        plt.scatter(minus_amounts, temp_data, label='Temp')
+        plt.scatter(difference_amounts, temp_data, label='Temp')
 
     else:
         north_wind_data = []
@@ -197,8 +201,8 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
             north_wind_data.append(north_data[data_index])
             east_wind_data.append(east_data[data_index])
 
-        plt.scatter(minus_amounts, north_wind_data, label='North Wind')
-        plt.scatter(minus_amounts, east_wind_data, label='East Wind')
+        plt.scatter(difference_amounts, north_wind_data, label='North Wind')
+        plt.scatter(difference_amounts, east_wind_data, label='East Wind')
 
     plt.grid(visible=True, axis="both")
     title_type = "Temperature on day " if graphing_temp else "Wind on day "
@@ -253,3 +257,30 @@ def get_location_difference(subfolder_string):
         lon_difference = 15 * int(value) * -1
 
     return lon_difference, lat_difference
+
+
+def get_index_from_tuple(tup_list):
+    """
+    Takes a list of tuples, and decides if the lon difference number is the changing one, or if the lat number is the
+    changing one.
+    :param: tup_list: List of tuples like this: [(0,0),(3,1),(4352,892)]
+    :return: 0 if lon is the changing value, 1 if lat is the changing value
+    """
+    return_0 = False
+    return_1 = True
+    vals_0 = []
+    vals_1 = []
+    for tup in tup_list:
+        vals_0.append(tup_list[0])
+        vals_1.append(tup_list[1])
+    for i in range(1, len(tup_list)):
+        if vals_0[i-1] == vals_0[i]:
+            return_0 = False
+            return_1 = True
+        elif vals_1[i-1] == vals_1[i]:
+            return_0 = True
+            return_1 = False
+    if return_0:
+        return 0
+    if return_1:
+        return 1
