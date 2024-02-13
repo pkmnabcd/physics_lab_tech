@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from textwrap import wrap
 from subfolder_generation import lon_subfolder, lat_subfolder
+
 smoothing_window_size = 32
 
 
@@ -168,7 +169,8 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
 
     minus_amounts = []
     for merra in merra_objects:
-        minus_amounts.append(get_location_minus_amount(merra.return_subfolder()))
+        minus_amounts.append(get_location_difference(merra.return_subfolder()))
+        # TODO: update this to handle tuple and negative/positive numbers
 
     data_index = day_of_year_list.index(day)
 
@@ -222,15 +224,32 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     plt.close()
 
 
-def get_location_minus_amount(subfolder_string):  # TODO: Fix this for new file structure
-    minus_amount = 0
-    if "minus" in subfolder_string:
-        value = 0
-        string_length = len(subfolder_string)
-        for i in range(string_length):
-            current_character = subfolder_string[i]
-            if current_character == "#":
-                value = int(subfolder_string[i + 1:])
-                break
-        minus_amount = value * 15
-    return minus_amount
+def get_location_difference(subfolder_string):
+    """
+    This returns a tuple of the longitude and latitude differences in degrees
+    :param subfolder_string: McMurdo with a minus lon amount and a plus/minus lat amount
+    :return: (lon_difference, lat_difference)  ex: (-180, 0) or (-300, 55)
+    """
+    lon_difference = 0
+    lat_difference = 0
+
+    if "lat" in subfolder_string:
+        lon_difference = -300
+        amount_index = subfolder_string.find("lat") + 6
+        value = ""
+        while amount_index < len(subfolder_string):
+            value += subfolder_string[amount_index]
+            amount_index += 1
+        lat_difference = 5 * int(value)
+        if "plus" not in subfolder_string:
+            lat_difference *= -1
+
+    elif "lon" in subfolder_string:
+        amount_index = subfolder_string.find("lon") + 7
+        value = ""
+        while amount_index < len(subfolder_string):
+            value += subfolder_string[amount_index]
+            amount_index += 1
+        lon_difference = 15 * int(value) * -1
+
+    return lon_difference, lat_difference
