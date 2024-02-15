@@ -227,7 +227,7 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
 
     change_type = "changing_lon_locations_on_" if lon_changing else "changing_lat_locations_on_"
     data_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
-    filename = "day_" + str(day) + "_" + year + data_type + altitude + ".png"
+    filename = change_type + "day_" + str(day) + "_" + year + data_type + altitude + ".png"
     save_path = save_directory + filename
     plt.savefig(save_path)
 
@@ -277,8 +277,8 @@ def get_index_from_tuple(tup_list):
     vals_0 = []
     vals_1 = []
     for tup in tup_list:
-        vals_0.append(tup_list[0])
-        vals_1.append(tup_list[1])
+        vals_0.append(tup[0])
+        vals_1.append(tup[1])
     for i in range(1, len(tup_list)):
         if vals_0[i-1] == vals_0[i]:
             return_0 = False

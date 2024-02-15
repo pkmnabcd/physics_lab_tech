@@ -945,7 +945,7 @@ def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
             do_all_altitudes=False, do_every_other_altitude=False, specified_altitudes=None, day_emphasis_bar=None,
             smoothing=False, polynomial_best_fit=None, residual_analysis_graph=False, residual_analysis_type="poly",
             do_residual_fft=False, specified_date_range=None,
-            graphing_multiple_locations=None, graph_all_locations_one_day_day=None):
+            graphing_multiple_locations=None, graph_all_locations_one_day_tup=None):
     """
     Graphs MERRA-2 data given after IDE processing
     :param year_filepath: filepath of the year of data (with month sub-folders) to graph
@@ -973,16 +973,18 @@ def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
     :param specified_date_range: None for nothing, [start_int, end_int] to plot that range of data. Ex: [3, 15]
     :param graphing_multiple_locations: None only use subfolder data, input list of subfolder names to graph all of
     that data on the same plot. Ex: ["McMurdo", "Davis", "McMurdo_minus_15#20"]
-    :param graph_all_locations_one_day_day: If int inputted, graph of all locations' data at hour 0 of that day
+    :param graph_all_locations_one_day_tup: None by default. To do this, a tuple (x,y) is needed where x is the day that
+    you want to graph. The data at hour 0 of that day will be used. For y, set y True if you want all locations in the
+    lon direction, and False if you want all locations in the lat direction.
     :return: graphs saved to //output_graphs in the month_filepath / year_filepath
     """
     if isinstance(graphing_multiple_locations, list):
         graph_multiple_locations_for_year(graphing_multiple_locations, year_filepath, graph_temp, graph_winds,
                                           altitude_level, day_emphasis_bar, smoothing, specified_date_range)
         return
-    if isinstance(graph_all_locations_one_day_day, int):
+    if isinstance(graph_all_locations_one_day_tup, tuple):
         graph_all_locations_one_day(year_filepath, graph_temp, graph_winds, altitude_level,
-                                    graph_all_locations_one_day_day)
+                                    graph_all_locations_one_day_tup[0], graph_all_locations_one_day_tup[1])
         return
 
     merra_object = Merra(year_filepath, subfolder)
