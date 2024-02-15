@@ -174,7 +174,8 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     changing_values_index = get_index_from_tuple(difference_amounts)
     for i in range(len(difference_amounts)):
         difference_amounts[i] = difference_amounts[i][changing_values_index]
-    # TODO: write code that uses changing_values_index to decide what titles and stuff to use
+
+    lon_changing = changing_values_index == 0  # Else lat is changing
 
     data_index = day_of_year_list.index(day)
 
@@ -211,7 +212,11 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     title = "\n".join(wrap(title))
     plt.title(title, fontsize=25)
 
-    plt.xlabel("McMurdo minus x degrees longitude", fontsize=20)
+    if lon_changing:
+        label = "Degrees off of McMurdo in longitudinal direction"
+    else:
+        label = "Latitudinal degrees off of McMurdo minus 300 degrees longitude."
+    plt.xlabel(label, fontsize=20)
     plt.xticks(fontsize=15)
     y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
     plt.ylabel(y_label, fontsize=20)
@@ -220,8 +225,9 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     save_directory = year_filepath + "output_graphs//multi_location//"
     folder_check_and_maker(save_directory)
 
-    filename_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
-    filename = "day_" + str(day) + "_" + year + filename_type + altitude + ".png"
+    change_type = "changing_lon_locations_on_" if lon_changing else "changing_lat_locations_on_"
+    data_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
+    filename = "day_" + str(day) + "_" + year + data_type + altitude + ".png"
     save_path = save_directory + filename
     plt.savefig(save_path)
 
