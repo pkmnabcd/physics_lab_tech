@@ -138,7 +138,7 @@ def graph_all_locations_one_day(year_filepath, graph_temp, graph_winds, altitude
     else:
         locations = []
         for i in range(-2, 0):
-            locations.append(lat_subfolder(i, is_plus=False))
+            locations.append(lat_subfolder(abs(i), is_plus=False))
         for i in range(34):
             locations.append(lat_subfolder(i, is_plus=True))
 
