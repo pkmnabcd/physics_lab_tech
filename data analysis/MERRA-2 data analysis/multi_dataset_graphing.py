@@ -155,27 +155,24 @@ def graph_all_locations_one_day(year_filepath, graph_temp, graph_winds, altitude
         merra_objects.append(current_merra)
 
     if graph_temp:
-        make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_level, day, True)
+        make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_level, day, True, do_lon)
     if graph_winds:
-        make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_level, day, False)
+        make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_level, day, False, do_lon)
 
 
-def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_level, day, graphing_temp):
+def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_level, day, graphing_temp, do_lon):
     from grapher import folder_check_and_maker
 
     altitude = str(altitude_level)
     year = merra_objects[0].return_year()
     day_of_year_list = merra_objects[0].return_day_of_year_list()
 
-    difference_amounts = []
+    x_data = []
     for merra in merra_objects:
-        difference_amounts.append(get_location_difference(merra.return_subfolder()))
-
-    changing_values_index = get_index_from_tuple(difference_amounts)
-    for i in range(len(difference_amounts)):
-        difference_amounts[i] = difference_amounts[i][changing_values_index]
-
-    lon_changing = changing_values_index == 0  # Else lat is changing
+        if do_lon:
+            x_data.append(get_longitude(merra.return_subfolder()))
+        else:
+            x_data.append(get_latitude(merra.return_subfolder()))
 
     data_index = day_of_year_list.index(day)
 
@@ -190,7 +187,7 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
             temp_data.append(data[data_index])
         temp_data = np.array(temp_data)
 
-        plt.scatter(difference_amounts, temp_data, label='Temp')
+        plt.scatter(x_data, temp_data, label='Temp')
 
     else:
         north_wind_data = []
@@ -202,8 +199,8 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
             north_wind_data.append(north_data[data_index])
             east_wind_data.append(east_data[data_index])
 
-        plt.scatter(difference_amounts, north_wind_data, label='North Wind')
-        plt.scatter(difference_amounts, east_wind_data, label='East Wind')
+        plt.scatter(x_data, north_wind_data, label='North Wind')
+        plt.scatter(x_data, east_wind_data, label='East Wind')
 
     plt.grid(visible=True, axis="both")
     title_type = "Temperature on day " if graphing_temp else "Wind on day "
@@ -212,10 +209,10 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     title = "\n".join(wrap(title))
     plt.title(title, fontsize=25)
 
-    if lon_changing:
-        label = "Degrees off of McMurdo in longitudinal direction"
+    if do_lon:
+        label = "X Degrees Longitude at -77.85 Degrees Latitude (McMurdo is 166.67 Deg Lon)"
     else:
-        label = "Latitudinal degrees off of McMurdo minus 300 degrees longitude."
+        label = "X Degrees Latitude at -133.33 Degrees Latitude"
     plt.xlabel(label, fontsize=20)
     plt.xticks(fontsize=15)
     y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
@@ -225,7 +222,7 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     save_directory = year_filepath + "output_graphs//multi_location//"
     folder_check_and_maker(save_directory)
 
-    change_type = "changing_lon_locations_on_" if lon_changing else "changing_lat_locations_on_"
+    change_type = "changing_lon_locations_on_" if do_lon else "changing_lat_locations_on_"
     data_type = "_temp_at_altitude_" if graphing_temp else "_wind_at_altitude_"
     filename = change_type + "day_" + str(day) + "_" + year + data_type + altitude + ".png"
     save_path = save_directory + filename
@@ -263,6 +260,36 @@ def get_location_difference(subfolder_string):
         lon_difference = 15 * int(value) * -1
 
     return lon_difference, lat_difference
+
+
+def get_raw_lat_from_lat_diff(lat_difference):
+    """
+    Returns the latitude from the inputted lat_difference, using McMurdo lat as a reference
+    :param lat_difference: positive or negative int difference between McMurdo lat
+    :return: latitude in degrees
+    """
+    BASE_LAT = -77.85
+    return BASE_LAT + lat_difference
+
+
+def get_raw_lon_from_lon_diff(lon_difference):
+    """
+    Returns the longitude from the inputted lon_difference, using McMurdo lon as a reference
+    :param lon_difference: positive or negative int difference between McMurdo lon
+    :return: longitude in degrees
+    """
+    BASE_LAT = 166.67
+    return BASE_LAT + lon_difference
+
+
+def get_latitude(subfolder):
+    difference = get_location_difference(subfolder)[1]
+    return get_raw_lat_from_lat_diff(difference)
+
+
+def get_longitude(subfolder):
+    difference = get_location_difference(subfolder)[0]
+    return get_raw_lon_from_lon_diff(difference)
 
 
 def get_index_from_tuple(tup_list):
