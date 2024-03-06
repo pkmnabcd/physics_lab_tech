@@ -187,7 +187,7 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
             temp_data.append(data[data_index])
         temp_data = np.array(temp_data)
 
-        plt.scatter(x_data, temp_data, label='Temp')
+        plt.plot(x_data, temp_data, '-o', label='Temp')
 
     else:
         north_wind_data = []
@@ -199,8 +199,8 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
             north_wind_data.append(north_data[data_index])
             east_wind_data.append(east_data[data_index])
 
-        plt.scatter(x_data, north_wind_data, label='North Wind')
-        plt.scatter(x_data, east_wind_data, label='East Wind')
+        plt.plot(x_data, north_wind_data, '-o', label='North Wind')
+        plt.plot(x_data, east_wind_data, '-o', label='East Wind')
 
     plt.grid(visible=True, axis="both")
     title_type = "Temperature on day " if graphing_temp else "Wind on day "
