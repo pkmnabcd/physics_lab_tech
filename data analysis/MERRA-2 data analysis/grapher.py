@@ -58,6 +58,7 @@ class Merra:
         self.__want_smoothing = False
         self.__smoothing_window_size = 32
         self.__do_polynomial_best_fit = False
+        self.__do_smoothing_line = False
         self.__polynomial_best_fit_order = 0
 
         self.__do_residual_analysis_graph = False
@@ -100,6 +101,10 @@ class Merra:
         self.__do_polynomial_best_fit = True
         self.__polynomial_best_fit_order = order
 
+    def set_smoothing_line_toggle(self, toggle):
+        assert isinstance(toggle, bool)
+        self.__do_smoothing_line = toggle
+
     def set_residual_analysis_toggle(self, toggle, residual_type, do_fft):
         assert isinstance(toggle, bool)
         if self.__polynomial_best_fit_order == 0:
@@ -107,6 +112,7 @@ class Merra:
         self.__do_residual_analysis_graph = True
 
         self.__do_polynomial_best_fit = False
+        self.__do_smoothing_line = False
         self.__make_graph_for_year = False
         self.__make_monthly_graphs = False
 
@@ -259,7 +265,8 @@ class Merra:
             if self.__do_polynomial_best_fit:
                 polynomials = np.polyfit(day_of_year_list, temp_data, self.__polynomial_best_fit_order)
                 add_best_fit_to_graph(plt, day_of_year_list, polynomials, "Temp")
-
+            if self.__do_smoothing_line:
+                add_smoothing_line_to_graph(plt, day_of_year_list, temp_data, "Temp", color="tab:green")
         else:
             north_wind_data = self.return_north_wind_list()
             if self.__want_smoothing:
@@ -280,6 +287,9 @@ class Merra:
 
                 east_polynomials = np.polyfit(day_of_year_list, east_wind_data, self.__polynomial_best_fit_order)
                 add_best_fit_to_graph(plt, day_of_year_list, east_polynomials, "East", color="tab:brown")
+            if self.__do_smoothing_line:
+                add_smoothing_line_to_graph(plt, day_of_year_list, north_wind_data, "North", color="tab:green")
+                add_smoothing_line_to_graph(plt, day_of_year_list, east_wind_data, "East", color="tab:brown")
 
         plt.grid(visible=True, axis="both")
         title_type = "Temperature between " if graphing_temp else "Wind between "
@@ -298,7 +308,7 @@ class Merra:
                 if begin_day <= self.__day_marker_value <= end_day:
                     plt.axvline(x=self.__day_marker_value, color='r',
                                 label="Marker for day " + str(self.__day_marker_value))
-        plt.legend()
+        plt.legend(fontsize=15)
 
         plt.xlabel("Day of Year", fontsize=20)
         plt.xticks(fontsize=15)
@@ -363,7 +373,7 @@ class Merra:
         plt.title(title, fontsize=25)
         if self.__make_day_marker and self.__day_marker_value in day_of_year_list:
             plt.axvline(x=self.__day_marker_value, color='r', label="Marker for day " + str(self.__day_marker_value))
-        plt.legend()
+        plt.legend(fontsize=15)
 
         plt.xlabel("Day of Year", fontsize=20)
         plt.xticks(fontsize=15)
@@ -389,7 +399,7 @@ class Merra:
             day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
         day_of_year_list_np = np.array(day_of_year_list)
 
-        plt.figure(figsize=(15, 10))
+        plt.figure(figsize=(10, 8))
 
         if graphing_temp:
             temp_data = self.return_temp_list()
@@ -506,10 +516,10 @@ class Merra:
         plt.axhline(y=0, color='black')
         y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
         if self.__do_residual_fft:
-            y_label = "Power (?)"
+            y_label = "Power"
         plt.ylabel(y_label, fontsize=20)
         plt.yticks(fontsize=15)
-        plt.legend()
+        plt.legend(fontsize=15)
 
         save_path = self.__generate_graph_filename(False, True, graphing_temp, begin_month, end_month, altitude,
                                                    year, use_polynomials=use_polynomials)
@@ -863,6 +873,21 @@ def add_best_fit_to_graph(plot, x_data, polynomials, data_type, color="tab:green
     plot.plot(x_fit, y_fit, label='Order ' + str(poly_order) + ' best fit - ' + data_type, color=color)
 
 
+def add_smoothing_line_to_graph(plot, x_data, y_data, data_type, color="tab:green"):
+    """
+    Adds the smoothed line of the data to the given plot
+    :param plot: plt object to add the line to
+    :param x_data: x-axis data to use, should be same len as y_data
+    :param y_data: y-axis data to use, should be same len as x_data
+    :param data_type: Temp, North, or East
+    :param color: default: "tab:green", other options include "tab:brown", "tab:gray", etc
+    :return: None, just changes the plt object
+    """
+    x_data = do_smoothing(x_data, 32)
+    y_data = do_smoothing(y_data, 32)
+    plot.plot(x_data, y_data, label='4-Day Smoothed -' + data_type, color=color)
+
+
 def folder_check_and_maker(path):
     if exists(path):
         return
@@ -943,8 +968,8 @@ def save_datasets(x_data, y_data, save_directory):
 def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
             graph_months=False, graph_year=False, altitude_level=1,
             do_all_altitudes=False, do_every_other_altitude=False, specified_altitudes=None, day_emphasis_bar=None,
-            smoothing=False, polynomial_best_fit=None, residual_analysis_graph=False, residual_analysis_type="poly",
-            do_residual_fft=False, specified_date_range=None,
+            smoothing=False, graph_smoothing_line=False, polynomial_best_fit=None, residual_analysis_graph=False,
+            residual_analysis_type="poly", do_residual_fft=False, specified_date_range=None,
             graphing_multiple_locations=None, graph_all_locations_one_day_tup=None):
     """
     Graphs MERRA-2 data given after IDE processing
@@ -960,6 +985,7 @@ def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
     :param specified_altitudes: Pass a list of integers from 1-72 to have those altitude levels graphed
     :param day_emphasis_bar: input int to get a bar on the day you put in
     :param smoothing: True to get a graph that has moving average smoothing done to it
+    :param graph_smoothing_line: True to put the smoothed line on top of the normal year graph.
     :param polynomial_best_fit: Put int int (2,3,etc) for a best-fit line of the data of that order
     :param residual_analysis_graph: True to get a graph of the residual analysis. (The graph subtracted by the best-fit
     base) If using a polynomials as the base, specify order in polynomial_best_fit variable. 2nd order default. Won't
@@ -1007,6 +1033,8 @@ def grapher(year_filepath, subfolder, graph_temp=True, graph_winds=True,
         merra_object.set_smoothing_toggle(smoothing)
     if isinstance(polynomial_best_fit, int):
         merra_object.set_polynomial_fit_order(polynomial_best_fit)
+    if graph_smoothing_line:
+        merra_object.set_smoothing_line_toggle(True)
 
     if residual_analysis_graph:
         merra_object.set_residual_analysis_toggle(residual_analysis_graph, residual_analysis_type, do_residual_fft)
