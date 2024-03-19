@@ -211,8 +211,10 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
 
     if do_lon:
         label = "X Degrees Longitude at -77.85 Degrees Latitude (McMurdo is 166.67 Deg Lon)"
+        label = "\n".join(wrap(label))
     else:
         label = "X Degrees Latitude at -133.33 Degrees Longitude"
+        label = "\n".join(wrap(label))
     plt.xlabel(label, fontsize=23)
     plt.xticks(fontsize=25)
     y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
