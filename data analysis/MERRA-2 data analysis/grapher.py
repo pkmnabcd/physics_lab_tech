@@ -252,7 +252,7 @@ class Merra:
         day_of_year_list = np.array(day_of_year_list)
 
         small_figure = graphing_temp or (not graphing_temp and self.__want_smoothing)
-        plt.figure(figsize=(15, 10)) if small_figure else plt.figure(figsize=(25, 15))
+        plt.figure(figsize=(10, 8)) if small_figure else plt.figure(figsize=(10, 8))
 
         if graphing_temp:
             temp_data = self.return_temp_list()
@@ -300,8 +300,8 @@ class Merra:
             begin_day, end_day = str(self.__specified_day_of_year_range[0]), str(self.__specified_day_of_year_range[1])
             title = title_type + "day " + begin_day + " and day " + end_day + " " + year + " at " + location
         title += " at altitude level " + altitude
-        title = "\n".join(wrap(title))
-        plt.title(title, fontsize=25)
+        title = "\n".join(wrap(title, 50))
+        plt.title(title, fontsize=26)
         if self.__make_day_marker:
             if self.__do_specified_day_of_year_range:
                 begin_day, end_day = self.__specified_day_of_year_range[0], self.__specified_day_of_year_range[1]
@@ -310,11 +310,11 @@ class Merra:
                                 label="Marker for day " + str(self.__day_marker_value))
         plt.legend(fontsize=15)
 
-        plt.xlabel("Day of Year", fontsize=20)
-        plt.xticks(fontsize=15)
+        plt.xlabel("Day of Year", fontsize=25)
+        plt.xticks(fontsize=25)
         y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
-        plt.ylabel(y_label, fontsize=20)
-        plt.yticks(fontsize=15)
+        plt.ylabel(y_label, fontsize=25)
+        plt.yticks(fontsize=25)
 
         save_path = self.__generate_graph_filename(False, False, graphing_temp, begin_month, end_month, altitude, year)
         plt.savefig(save_path)
@@ -334,7 +334,7 @@ class Merra:
             day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
         day_of_year_list = np.array(day_of_year_list)
 
-        plt.figure(figsize=(12, 8))
+        plt.figure(figsize=(10, 8))
 
         if graphing_temp:
             temp_data = get_1d_list_from_2d(self.__temperature_data[month_index])
@@ -369,17 +369,17 @@ class Merra:
         title_type = "Temp in " if graphing_temp else "Wind in "
         location = get_location_string(self.__subfolder)
         title = title_type + month + ' ' + year + " at " + location + " at altitude level " + altitude
-        title = "\n".join(wrap(title))
-        plt.title(title, fontsize=25)
+        title = "\n".join(wrap(title, 50))
+        plt.title(title, fontsize=26)
         if self.__make_day_marker and self.__day_marker_value in day_of_year_list:
             plt.axvline(x=self.__day_marker_value, color='r', label="Marker for day " + str(self.__day_marker_value))
         plt.legend(fontsize=15)
 
-        plt.xlabel("Day of Year", fontsize=20)
-        plt.xticks(fontsize=15)
+        plt.xlabel("Day of Year", fontsize=25)
+        plt.xticks(fontsize=25)
         y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
-        plt.ylabel(y_label, fontsize=20)
-        plt.yticks(fontsize=15)
+        plt.ylabel(y_label, fontsize=25)
+        plt.yticks(fontsize=25)
 
         save_path = self.__generate_graph_filename(True, False, graphing_temp, None, None, altitude, year, month=month)
         plt.savefig(save_path)
@@ -502,7 +502,7 @@ class Merra:
         if self.__do_residual_fft:
             title = "FFT of " + title
 
-        plt.title("\n".join(wrap(title)), fontsize=25)
+        plt.title("\n".join(wrap(title, 50)), fontsize=26)
 
         if self.__make_day_marker:
             if self.__do_specified_day_of_year_range:
@@ -511,15 +511,15 @@ class Merra:
                     plt.axvline(x=self.__day_marker_value, color='r',
                                 label="Marker for day " + str(self.__day_marker_value))
 
-        plt.xlabel("Day of Year", fontsize=20) if not self.__do_residual_fft else plt.xlabel("Frequency", fontsize=20)
-        plt.xticks(fontsize=15)
+        plt.xlabel("Day of Year", fontsize=25) if not self.__do_residual_fft else plt.xlabel("Frequency", fontsize=25)
+        plt.xticks(fontsize=25)
         plt.axhline(y=0, color='black')
         y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
         if self.__do_residual_fft:
             y_label = "Power"
-        plt.ylabel(y_label, fontsize=20)
-        plt.yticks(fontsize=15)
-        plt.legend(fontsize=15)
+        plt.ylabel(y_label, fontsize=25)
+        plt.yticks(fontsize=25)
+        plt.legend(fontsize=25)
 
         save_path = self.__generate_graph_filename(False, True, graphing_temp, begin_month, end_month, altitude,
                                                    year, use_polynomials=use_polynomials)

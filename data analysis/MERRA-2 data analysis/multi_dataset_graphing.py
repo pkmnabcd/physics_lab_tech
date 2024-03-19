@@ -206,19 +206,19 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     title_type = "Temperature on day " if graphing_temp else "Wind on day "
 
     title = title_type + str(day) + " in the year " + year + " at altitude level " + altitude
-    title = "\n".join(wrap(title))
-    plt.title(title, fontsize=27)
+    title = "\n".join(wrap(title, 50))
+    plt.title(title, fontsize=26)
 
     if do_lon:
         label = "X Degrees Longitude at -77.85 Degrees Latitude (McMurdo is 166.67 Deg Lon)"
-        label = "\n".join(wrap(label))
+        label = "\n".join(wrap(label, 50))
     else:
         label = "X Degrees Latitude at -133.33 Degrees Longitude"
-        label = "\n".join(wrap(label))
-    plt.xlabel(label, fontsize=23)
+        label = "\n".join(wrap(label, 50))
+    plt.xlabel(label, fontsize=25)
     plt.xticks(fontsize=25)
     y_label = "Temperature (K)" if graphing_temp else "Wind Speed (m / s)"
-    plt.ylabel(y_label, fontsize=27)
+    plt.ylabel(y_label, fontsize=25)
     plt.yticks(fontsize=25)
 
     save_directory = year_filepath + "output_graphs//multi_location//"
