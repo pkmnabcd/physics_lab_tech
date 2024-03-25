@@ -399,7 +399,7 @@ class Merra:
             day_of_year_list = do_day_of_year_smoothing(day_of_year_list, self.__smoothing_window_size)
         day_of_year_list_np = np.array(day_of_year_list)
 
-        plt.figure(figsize=(10, 8))
+        fig = plt.figure(figsize=(10, 8))
 
         if graphing_temp:
             temp_data = self.return_temp_list()
@@ -503,6 +503,7 @@ class Merra:
             title = "FFT of " + title
 
         plt.title("\n".join(wrap(title, 50)), fontsize=26)
+        fig.subplots_adjust(top=.3)
 
         if self.__make_day_marker:
             if self.__do_specified_day_of_year_range:
