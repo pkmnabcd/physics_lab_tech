@@ -89,7 +89,10 @@ def make_multiple_location_graph_for_year(merra_objects, year_filepath, altitude
     if do_specified_day_of_year_range:
         begin_day, end_day = str(specified_day_of_year_range[0]), str(specified_day_of_year_range[1])
         title = title_type + "day " + begin_day + " and day " + end_day + " " + year
-    title += " at altitude level " + altitude
+    title_altitude = " at altitude level " + altitude
+    if altitude == '1':
+        title_altitude = " at pressure level 0.0100hPa"
+    title += title_altitude
     title = "\n".join(wrap(title))
     plt.title(title, fontsize=25)
     if make_day_marker:
@@ -205,7 +208,11 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     plt.grid(visible=True, axis="both")
     title_type = "Temperature on day " if graphing_temp else "Wind on day "
 
-    title = title_type + str(day) + " in the year " + year + " at altitude level " + altitude
+    title = title_type + str(day) + " in the year " + year
+    title_altitude = " at altitude level " + altitude
+    if altitude == '1':
+        title_altitude = " at pressure level 0.0100hPa"
+    title += title_altitude
     title = "\n".join(wrap(title, 50))
     plt.title(title, fontsize=26)
 

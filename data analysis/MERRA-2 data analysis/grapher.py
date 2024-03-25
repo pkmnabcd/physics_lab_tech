@@ -299,7 +299,10 @@ class Merra:
         if self.__do_specified_day_of_year_range:
             begin_day, end_day = str(self.__specified_day_of_year_range[0]), str(self.__specified_day_of_year_range[1])
             title = title_type + "day " + begin_day + " and day " + end_day + " " + year + " at " + location
-        title += " at altitude level " + altitude
+        title_altitude = " at altitude level " + altitude
+        if altitude == '1':
+            title_altitude = " at pressure level 0.0100hPa"
+        title += title_altitude
         title = "\n".join(wrap(title, 50))
         plt.title(title, fontsize=26)
         if self.__make_day_marker:
@@ -368,7 +371,11 @@ class Merra:
         plt.grid(visible=True, axis='both')
         title_type = "Temp in " if graphing_temp else "Wind in "
         location = get_location_string(self.__subfolder)
-        title = title_type + month + ' ' + year + " at " + location + " at altitude level " + altitude
+        title = title_type + month + ' ' + year + " at " + location
+        title_altitude = " at altitude level " + altitude
+        if altitude == '1':
+            title_altitude = " at pressure level 0.0100hPa"
+        title += title_altitude
         title = "\n".join(wrap(title, 50))
         plt.title(title, fontsize=26)
         if self.__make_day_marker and self.__day_marker_value in day_of_year_list:
@@ -422,9 +429,9 @@ class Merra:
 
             if self.__do_residual_fft:
                 N = len(subtracted_data)  # Number sample points
-                T = 1/8  # sample spacing (1/8 of a day)
-                subtracted_data = np.abs(fft(subtracted_data))[:N//2]
-                frequency_data = fftfreq(N, T)[:N//2]
+                T = 1 / 8  # sample spacing (1/8 of a day)
+                subtracted_data = np.abs(fft(subtracted_data))[:N // 2]
+                frequency_data = fftfreq(N, T)[:N // 2]
                 plt.plot(frequency_data, subtracted_data, label='Temp', color='tab:blue')
 
             else:
@@ -440,8 +447,10 @@ class Merra:
             east_wind_data_np = np.array(east_wind_data)
 
             if use_polynomials:
-                north_polynomials = np.polyfit(day_of_year_list_np, north_wind_data_np, self.__polynomial_best_fit_order)
-                north_subtracted_data = subtract_best_fit_from_data(north_wind_data, north_polynomials, day_of_year_list)
+                north_polynomials = np.polyfit(day_of_year_list_np, north_wind_data_np,
+                                               self.__polynomial_best_fit_order)
+                north_subtracted_data = subtract_best_fit_from_data(north_wind_data, north_polynomials,
+                                                                    day_of_year_list)
                 north_subtracted_data = np.array(north_subtracted_data)
 
                 east_polynomials = np.polyfit(day_of_year_list_np, east_wind_data_np, self.__polynomial_best_fit_order)
@@ -464,10 +473,10 @@ class Merra:
             if self.__do_residual_fft:
                 N = len(north_subtracted_data)  # Number sample points
                 T = 1 / 8  # sample spacing (1/8 of a day)
-                north_subtracted_data = np.abs(fft(north_subtracted_data))[:N//2]
-                east_subtracted_data = np.abs(fft(east_subtracted_data))[:N//2]
+                north_subtracted_data = np.abs(fft(north_subtracted_data))[:N // 2]
+                east_subtracted_data = np.abs(fft(east_subtracted_data))[:N // 2]
 
-                frequency_data = fftfreq(N, T)[:N//2]
+                frequency_data = fftfreq(N, T)[:N // 2]
                 plt.plot(frequency_data, north_subtracted_data, label='North Wind', color='tab:blue')
                 plt.plot(frequency_data, east_subtracted_data, label='East Wind', color='tab:orange')
             else:
@@ -481,29 +490,35 @@ class Merra:
         location = get_location_string(self.__subfolder)
         if use_polynomials:
             title = "Order " + poly_order + " Residual Analysis of " + title_type + begin_month + " and " + \
-                                   end_month + " " + year + " at " + location + " at altitude level " + altitude
+                    end_month + " " + year + " at " + location + " at altitude level " + altitude
             if self.__do_specified_day_of_year_range:
                 begin_day = str(self.__specified_day_of_year_range[0])
                 end_day = str(self.__specified_day_of_year_range[1])
                 title = "Order " + poly_order + " Residual Analysis of " + title_type + "day " + \
-                        begin_day + " and day " + end_day + " " + year + " at " + location + \
-                        " at altitude level " + altitude
+                        begin_day + " and day " + end_day + " " + year + " at " + location
+                title_altitude = " at altitude level " + altitude
+                if altitude == '1':
+                    title_altitude = " at pressure level 0.0100hPa"
+                title += title_altitude
         else:
             title = "Residual Analysis from 4-day smoothed graph of " + title_type + begin_month + \
-                                   " and " + end_month + " " + year + " at " + location + " at altitude level " + \
-                                   altitude
+                    " and " + end_month + " " + year + " at " + location + " at altitude level " + \
+                    altitude
             if self.__do_specified_day_of_year_range:
                 begin_day = str(self.__specified_day_of_year_range[0])
                 end_day = str(self.__specified_day_of_year_range[1])
                 title = "Residual Analysis from 4-day smoothed graph of " + title_type + "day " + \
-                        begin_day + " and day " + end_day + " " + year + " at " + location + \
-                        " at altitude level " + altitude
+                        begin_day + " and day " + end_day + " " + year + " at " + location
+                title_altitude = " at altitude level " + altitude
+                if altitude == '1':
+                    title_altitude = " at pressure level 0.0100hPa"
+                title += title_altitude
 
         if self.__do_residual_fft:
             title = "FFT of " + title
 
-        plt.title("\n".join(wrap(title, 50)), fontsize=26)
-        fig.subplots_adjust(top=.3)
+        plt.title("\n".join(wrap(title, 48)), fontsize=26)
+        fig.subplots_adjust(top=.8)
 
         if self.__make_day_marker:
             if self.__do_specified_day_of_year_range:
@@ -520,7 +535,7 @@ class Merra:
             y_label = "Power"
         plt.ylabel(y_label, fontsize=25)
         plt.yticks(fontsize=25)
-        plt.legend(fontsize=25)
+        if not self.__do_residual_fft: plt.legend(fontsize=25)
 
         save_path = self.__generate_graph_filename(False, True, graphing_temp, begin_month, end_month, altitude,
                                                    year, use_polynomials=use_polynomials)
@@ -831,7 +846,7 @@ def do_day_of_year_smoothing(array, window_size):
     out_list = []
     for value in array:  # Copy the array to not modify the original
         out_list.append(value)
-    assert(window_size % 16 == 0)  # Want whole days taken from each side only
+    assert (window_size % 16 == 0)  # Want whole days taken from each side only
     front_pop_count = window_size // 2
     back_pop_count = window_size // 2
     for i in range(front_pop_count):
