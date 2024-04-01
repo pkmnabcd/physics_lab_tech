@@ -217,11 +217,11 @@ def make_all_locations_graph_one_day(merra_objects, year_filepath, altitude_leve
     plt.title(title, fontsize=26)
 
     if do_lon:
-        label = "X Degrees Longitude at -77.85 Degrees Latitude (McMurdo is 166.67 Deg Lon)"
+        label = "Longitude at -77.85 Degrees Latitude (McMurdo is 166.67 Deg Lon)"
         label = "\n".join(wrap(label, 50))
         fig.subplots_adjust(bottom=.2)
     else:
-        label = "X Degrees Latitude at -133.33 Degrees Longitude"
+        label = "Latitude at -133.33 Degrees Longitude"
         label = "\n".join(wrap(label, 50))
     plt.xlabel(label, fontsize=25)
     plt.xticks(fontsize=25)
