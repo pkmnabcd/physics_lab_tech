@@ -4,6 +4,7 @@ def read_file(filename):
     :param filename: the filename of the data file to be read
     :return: a list of the data at the file and the column headers of the file in a tuple (data, col_headers)
     """
+    # TODO: add code to parse NaN and ***** data
     file = open(filename, 'r')
     lines = file.readlines()
     header_line = lines.pop(0)
@@ -34,3 +35,19 @@ def read_file(filename):
         header_list.append(substring)
 
     return output_list, header_list
+
+
+def get_metadata(filename: str):
+    """
+    Filenames are like this: OH_Andover_ALO23day291.dat
+    or OH_Andover_ALOYYdayDDD.dat
+    :param filename:
+    :return:
+    """
+    metadata = {}
+    date = filename.replace("OH_Andover_ALO", "").replace(".dat", "")
+    year_stub, day_of_year = tuple(date.split("day"))
+
+    metadata["year"] = "20" + year_stub
+    metadata["day_of_year"] = day_of_year
+    return metadata
