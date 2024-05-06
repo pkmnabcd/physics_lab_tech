@@ -1,10 +1,9 @@
 def read_file(filename):
     """
-    This reads the data from the given file
+    This reads the data from the given file. If invalid data is given, float("NaN") is used.
     :param filename: the filename of the data file to be read
     :return: a list of the data at the file and the column headers of the file in a tuple (data, col_headers)
     """
-    # TODO: add code to parse NaN and ***** data
     file = open(filename, 'r')
     lines = file.readlines()
     header_line = lines.pop(0)
@@ -41,10 +40,9 @@ def read_file(filename):
 
 def get_metadata(filename: str):
     """
-    Filenames are like this: OH_Andover_ALO23day291.dat
-    or OH_Andover_ALOYYdayDDD.dat
-    :param filename:
-    :return:
+    Takes a zenus data filename and outputs a dictionary with the day of year and year inside.
+    :param filename: filename like this: OH_Andover_ALO23day1.dat or OH_Andover_ALO08day300.dat
+    :return: a dict with the key:values  "year" and "day_of_year", where "year" is 20YY.
     """
     metadata = {}
     date = filename.replace("OH_Andover_ALO", "").replace(".dat", "")
