@@ -23,6 +23,8 @@ def read_file(filename):
             index_start = i * column_length
             index_end = index_start + column_length
             substring = line[index_start: index_end]
+            if substring == "***************":
+                line_data.append(float("NaN"))
             line_data.append(float(substring))
         output_list.append(line_data)
 

@@ -1,0 +1,3 @@
+Test files with ****** in them
+Test NaN in ActDark
+Test NaN in the middle of the file
