@@ -1,4 +1,5 @@
 import sys
+
 from parser import read_file, get_metadata
 
 
@@ -7,9 +8,6 @@ def add_date_to_metadata(date_col_header: str, metadata_dict: dict):
     date = date_col_header[0:date_end]
     metadata_dict["date"] = date
 
-
-class Graph:
-    def __init__(self, data_array, ):
 
 if __name__ == "__main__":
     filename = sys.argv[1]
@@ -23,5 +21,7 @@ if __name__ == "__main__":
     if not (OH_headers_present and CCD_present and filters_present):
         print("ERROR: At least one column is missing or misspelled.")
         exit(1)
+
+    # TODO: Add the code that interfaces with the grapher. Have the grapher return an object that main stores.
 
 
