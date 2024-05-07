@@ -21,18 +21,22 @@ def get_beginning_and_end():
 
 # This function picks the filter that is used
 def filter_chooser():
-    print('Filters:\n\t1) BG\n\t2) P12A\n\t3) P14A\n\t4) Quit')
+    print('Filters:\n\t1) 866\n\t2) 868\n\t3) BG\n\t4) P12A\n\t5) P14A\n\t6) Quit')
     filter_chosen = input('Which filter? ')
     if not filter_chosen.isdigit():
         filter_name = 'None'
         return filter_name
     if int(filter_chosen) == 1:
-        filter_name = 'BG'
+        filter_name = '866'
     elif int(filter_chosen) == 2:
-        filter_name = 'P12A'
+        filter_name = '868'
     elif int(filter_chosen) == 3:
-        filter_name = 'P14A'
+        filter_name = 'BG'
     elif int(filter_chosen) == 4:
+        filter_name = 'P12A'
+    elif int(filter_chosen) == 5:
+        filter_name = 'P14A'
+    elif int(filter_chosen) == 6:
         filter_name = 'Quit'
     else:
         filter_name = 'None'
@@ -41,7 +45,7 @@ def filter_chooser():
 
 def mode1():
     while True:
-        FILTER_LIST = ["P14A", "P12A", "BG"]
+        FILTER_LIST = ["P14A", "P12A", "BG", "868", "866"]
         done = False
         start = end = 0
         while not done:
