@@ -26,3 +26,15 @@ class SingleGraph4Sets(SingleGraph):
             data_type2: data2,
             data_type3: data3
         })
+
+
+class CombinedGraph:
+    def __init__(self, graph0: SingleGraph, graph1: SingleGraph,
+                 graph2: SingleGraph, graph3: SingleGraph, metadata: dict):
+        pass
+
+    def generate_graph(self):
+        pass
+
+    def save_graph(self, save_dir):
+        pass
