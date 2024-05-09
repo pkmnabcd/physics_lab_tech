@@ -35,8 +35,53 @@ class CombinedGraph:
         self.metadata = metadata
         self.x_axis = x_axis
 
+        self.P12_data = graph0.datasets["P12"]
+        self.P14_data = graph0.datasets["P14"]
+        self.BG_data = graph0.datasets["BG"]
+        self.Dark_data = graph0.datasets["ActDark"]
+
+        self.OH_temp_data = graph1.datasets["OHTemp"]
+        self.OH_band_data = graph2.datasets["OHBand"]
+        self.CCD_temp_data = graph3.datasets["CCDTemp"]
+
+        self.fig = self.axes = None
+
     def generate_graph(self):
-        pass
+        # Create a figure with 2 rows and 2 columns of subplots
+        self.fig, self.axes = plt.subplots(2, 2, figsize=(10, 6))  # Adjust figsize as needed
+
+        filter_plot = self.axes[0, 0]
+        OHTemp_plot = self.axes[0, 1]
+        OHBand_plot = self.axes[1, 0]
+        CCDTemp_plot = self.axes[1, 1]
+
+        filter_plot.plot(self.x_axis, self.P12_data, label="P12")
+        filter_plot.plot(self.x_axis, self.P14_data, label="P14")
+        filter_plot.plot(self.x_axis, self.BG_data, label="BG")
+        filter_plot.plot(self.x_axis, self.Dark_data, label="ActDark")
+
+        OHTemp_plot.plot(self.x_axis, self.OH_temp_data, label="OHTemp")  # TODO: Check with paper copies that the order is right
+        OHBand_plot.plot(self.x_axis, self.OH_band_data, label="OHBand")
+        CCDTemp_plot.plot(self.x_axis, self.CCD_temp_data, label="CCDTemp")
+
+        filter_plot.set_ylabel('y1')
+        filter_plot.set_xlabel("x")
+        OHTemp_plot.set_ylabel('y2')
+        OHTemp_plot.set_xlabel("x")
+        OHBand_plot.set_ylabel('y2')
+        OHBand_plot.set_xlabel("x")
+        CCDTemp_plot.set_ylabel('y2')
+        CCDTemp_plot.set_xlabel("x")
+
+        self.fig.suptitle('Four Different Plots')
+
+        for ax in self.axes.flat:
+            ax.legend()
+
+        plt.tight_layout()  # Adjust spacing between plots
+        plt.show()
 
     def save_graph(self, save_dir):
-        pass
+        save_path = save_dir
+        # Add to save_path with info about this graph
+        self.fig.savefig(save_path)

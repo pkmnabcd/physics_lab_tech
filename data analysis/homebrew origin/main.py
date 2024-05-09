@@ -60,4 +60,3 @@ if __name__ == "__main__":
     save_dir = os.curdir + "//output_graphs//"
     check_or_make_dir(save_dir)
     combined_graph.save_graph(save_dir)
-
