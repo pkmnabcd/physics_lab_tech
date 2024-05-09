@@ -30,8 +30,10 @@ class SingleGraph4Sets(SingleGraph):
 
 class CombinedGraph:
     def __init__(self, graph0: SingleGraph, graph1: SingleGraph,
-                 graph2: SingleGraph, graph3: SingleGraph, metadata: dict):
-        pass
+                 graph2: SingleGraph, graph3: SingleGraph, metadata: dict, x_axis: list):
+        self.graph0, self.graph1, self.graph2, self.graph3 = graph0, graph1, graph2, graph3
+        self.metadata = metadata
+        self.x_axis = x_axis
 
     def generate_graph(self):
         pass

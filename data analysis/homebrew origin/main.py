@@ -53,7 +53,8 @@ if __name__ == "__main__":
     OH_band_graph = grapher.SingleGraph1Set(data[OH_band_index], col_headers[OH_band_index])
     CCD_temp_graph = grapher.SingleGraph1Set(data[CCD_temp_index], col_headers[CCD_temp_index])
 
-    combined_graph = grapher.CombinedGraph(filter_graph, OH_temp_graph, OH_band_graph, CCD_temp_graph, metadata)
+    combined_graph = grapher.CombinedGraph(filter_graph, OH_temp_graph, OH_band_graph, CCD_temp_graph,
+                                           metadata, data[0])
     combined_graph.generate_graph()
 
     save_dir = os.curdir + "//output_graphs//"
