@@ -25,7 +25,7 @@ def read_file(filename):
             if substring == "***************":
                 line_data.append(float("NaN"))
             line_data.append(float(substring))
-        output_list.append(line_data)
+        output_list.append(line_data)  # TODO: Fix this. The data is in lists of rows, not columns.
 
     header_list = []
     for i in range(number_of_columns):

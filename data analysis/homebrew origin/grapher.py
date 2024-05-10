@@ -78,7 +78,7 @@ class CombinedGraph:
         doy = self.metadata["day_of_year"]
         year = self.metadata["year"]
         date = self.metadata["date"]
-        self.fig.suptitle(f"ALO, Chile\nUT Day {doy} {year} (LT {date} δt = -4 hrs")
+        self.fig.suptitle(f"ALO, Chile\nUT Day {doy} {year} (LT {date} δt = -4 hrs)")
 
         for ax in self.axes.flat:
             ax.legend()
@@ -91,6 +91,8 @@ class CombinedGraph:
 
         year = self.metadata["year"]
         date = self.metadata["date"]
-        save_path += f"{date}_{year}.png"
+        filename = f"{date}_{year}.png"
+        save_path += filename
 
+        print(f"Saving {filename} to {save_path}")
         self.fig.savefig(save_path)
