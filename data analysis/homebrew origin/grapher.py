@@ -41,7 +41,7 @@ class CombinedGraph:
         self.Dark_data = graph0.datasets["ActDark"]
 
         self.OH_temp_data = graph1.datasets["OHTemp"]
-        self.OH_band_data = graph2.datasets["OHBand"]
+        self.OH_band_data = graph2.datasets["OHBandInt"]
         self.CCD_temp_data = graph3.datasets["CCDTemp"]
 
         self.fig = self.axes = None
@@ -64,16 +64,21 @@ class CombinedGraph:
         OHBand_plot.plot(self.x_axis, self.OH_band_data, label="OHBand")
         CCDTemp_plot.plot(self.x_axis, self.CCD_temp_data, label="CCDTemp")
 
-        filter_plot.set_ylabel('y1')
-        filter_plot.set_xlabel("x")
-        OHTemp_plot.set_ylabel('y2')
-        OHTemp_plot.set_xlabel("x")
-        OHBand_plot.set_ylabel('y2')
-        OHBand_plot.set_xlabel("x")
-        CCDTemp_plot.set_ylabel('y2')
-        CCDTemp_plot.set_xlabel("x")
+        x_label = "UT Time (hr)"
 
-        self.fig.suptitle('Four Different Plots')
+        filter_plot.set_ylabel("Intensity (counts)")
+        filter_plot.set_xlabel(x_label)
+        OHTemp_plot.set_ylabel("Temperature (K)")
+        OHTemp_plot.set_xlabel(x_label)
+        OHBand_plot.set_ylabel("Band Intensity (counts)")
+        OHBand_plot.set_xlabel(x_label)
+        CCDTemp_plot.set_ylabel("°C")
+        CCDTemp_plot.set_xlabel(x_label)
+
+        doy = self.metadata["day_of_year"]
+        year = self.metadata["year"]
+        date = self.metadata["date"]
+        self.fig.suptitle(f"ALO, Chile\nUT Day {doy} {year} (LT {date} δt = -4 hrs")
 
         for ax in self.axes.flat:
             ax.legend()
@@ -83,5 +88,9 @@ class CombinedGraph:
 
     def save_graph(self, save_dir):
         save_path = save_dir
-        # Add to save_path with info about this graph
+
+        year = self.metadata["year"]
+        date = self.metadata["date"]
+        save_path += f"{date}_{year}.png"
+
         self.fig.savefig(save_path)
