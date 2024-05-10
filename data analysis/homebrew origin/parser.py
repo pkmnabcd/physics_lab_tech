@@ -12,7 +12,7 @@ def read_file(filename):
     column_length = 15
     number_of_columns = line_length // column_length
 
-    output_list = []
+    row_set = []
 
     for line in lines:
         line = line.strip("\n")
@@ -25,7 +25,8 @@ def read_file(filename):
             if substring == "***************":
                 line_data.append(float("NaN"))
             line_data.append(float(substring))
-        output_list.append(line_data)  # TODO: Fix this. The data is in lists of rows, not columns.
+        row_set.append(line_data)
+        col_set = convert_row_set_to_col_set(row_set)
 
     header_list = []
     for i in range(number_of_columns):
@@ -35,7 +36,7 @@ def read_file(filename):
         substring = substring.replace(" ", "")
         header_list.append(substring)
 
-    return output_list, header_list
+    return col_set, header_list
 
 
 def get_metadata(filename: str):
@@ -51,3 +52,16 @@ def get_metadata(filename: str):
     metadata["year"] = "20" + year_stub
     metadata["day_of_year"] = day_of_year
     return metadata
+
+
+def convert_row_set_to_col_set(dataset):
+    row_total = len(dataset)
+    col_total = len(dataset[0])
+    col_set = []
+    for i in range(col_total):
+        col_set.append([])
+
+    for i in range(row_total):
+        for j in range(col_total):
+            col_set[j].append(dataset[i][j])
+    return col_set
