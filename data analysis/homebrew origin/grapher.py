@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-# Useful website: https://stackoverflow.com/questions/11159436/multiple-figures-in-a-single-window
 
 
 class SingleGraph:
@@ -48,7 +47,7 @@ class CombinedGraph:
 
     def generate_graph(self):
         # Create a figure with 2 rows and 2 columns of subplots
-        self.fig, self.axes = plt.subplots(2, 2, figsize=(10, 6))  # Adjust figsize as needed
+        self.fig, self.axes = plt.subplots(2, 2, figsize=(20, 12))
 
         filter_plot = self.axes[0, 0]
         OHTemp_plot = self.axes[0, 1]
@@ -60,28 +59,26 @@ class CombinedGraph:
         filter_plot.plot(self.x_axis, self.BG_data, label="BG")
         filter_plot.plot(self.x_axis, self.Dark_data, label="ActDark")
 
-        OHTemp_plot.plot(self.x_axis, self.OH_temp_data, label="OHTemp")  # TODO: Check with paper copies that the order is right
+        OHTemp_plot.plot(self.x_axis, self.OH_temp_data, label="OHTemp")
         OHBand_plot.plot(self.x_axis, self.OH_band_data, label="OHBand")
         CCDTemp_plot.plot(self.x_axis, self.CCD_temp_data, label="CCDTemp")
 
         x_label = "UT Time (hr)"
 
-        filter_plot.set_ylabel("Intensity (counts)")
-        filter_plot.set_xlabel(x_label)
-        OHTemp_plot.set_ylabel("Temperature (K)")
-        OHTemp_plot.set_xlabel(x_label)
-        OHBand_plot.set_ylabel("Band Intensity (counts)")
-        OHBand_plot.set_xlabel(x_label)
-        CCDTemp_plot.set_ylabel("°C")
-        CCDTemp_plot.set_xlabel(x_label)
+        filter_plot.set_ylabel("Intensity (counts)", fontsize=20)
+        OHTemp_plot.set_ylabel("Temperature (K)", fontsize=20)
+        OHBand_plot.set_ylabel("Band Intensity (counts)", fontsize=20)
+        CCDTemp_plot.set_ylabel("°C", fontsize=20)
 
         doy = self.metadata["day_of_year"]
         year = self.metadata["year"]
         date = self.metadata["date"]
-        self.fig.suptitle(f"ALO, Chile\nUT Day {doy} {year} (LT {date} δt = -4 hrs)")
+        self.fig.suptitle(f"ALO, Chile\nUT Day {doy} {year} (LT {date} δt = -4 hrs)", fontsize=20)
 
         for ax in self.axes.flat:
-            ax.legend()
+            ax.legend(fontsize=16)
+            ax.set_xlabel(x_label, fontsize=20)
+            ax.tick_params(labelsize=16)
 
         plt.tight_layout()  # Adjust spacing between plots
         plt.show()
