@@ -81,7 +81,6 @@ class CombinedGraph:
             ax.tick_params(labelsize=16)
 
         plt.tight_layout()  # Adjust spacing between plots
-        plt.show()
 
     def save_graph(self, save_dir):
         save_path = save_dir
