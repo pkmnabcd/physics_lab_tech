@@ -26,25 +26,6 @@ def read_dat_file(filename, altitude_number):
     return number_list
 
 
-# def selection_sort(number_list, filename_list):
-#     for i in range(len(number_list) - 2):
-#         start_index = i
-#         current_min_index = start_index
-#         test_index = start_index + 1
-#         swap_needed = False
-#
-#         while test_index < len(number_list) - 1:
-#             if number_list[test_index] < number_list[current_min_index]:
-#                 swap_needed = True
-#                 current_min_index = test_index
-#             test_index += 1
-#         if swap_needed:
-#             number_temp = number_list[current_min_index]
-#             filename_temp = filename_list[current_min_index]
-#             number_list[current_min_index] = number_list[start_index]
-#             filename_list[current_min_index] = filename_list[start_index]
-#             number_list[start_index] = number_temp
-#             filename_list[start_index] = filename_temp
 def selection_sort(obj_list):
     for start_index in range(len(obj_list) - 1):
         current_min_index = start_index
@@ -74,19 +55,6 @@ def get_relevant_filenames(path, data_category):
 
     files_with_this_data_category.sort()
 
-    # # Properly sort the days
-    # metadata_list = []
-    # for filename in files_with_this_data_category:
-    #     metadata_list.append(get_file_metadata(filename))
-    # # Make list of day of year numbers
-    # day_of_year_list = []
-    # for item in metadata_list:
-    #     day_of_year_list.append(item[0])
-    #
-    # # Sort that list of numbers, and everything I move in this list, also move in the output list
-    # selection_sort(day_of_year_list, files_with_this_data_category)
-    #
-    # return files_with_this_data_category
     filename_obj_list = []
     for filename in files_with_this_data_category:
         filename_obj_list.append(Filename(filename))
