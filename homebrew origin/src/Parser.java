@@ -7,6 +7,7 @@ public class Parser {
     /**
      * This reads the data from the given file. If invalid data is given, null object is used instead of a Double object in that position in the output data.
      *  @param filename the path to and the name of the file that you want read.
+     *  @return 2D ArrayList<ArrayList<Double>> where each inner array has a column of data.
      */
     public static ArrayList<ArrayList<Double>> parseFile(String filename) {
         File file = new File(filename);
