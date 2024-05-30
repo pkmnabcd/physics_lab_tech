@@ -1,4 +1,4 @@
-showyourwork/
+**/showyourwork/
 .idea/
 **/__pycache__/
 *.png
@@ -6,4 +6,6 @@ showyourwork/
 .idea
 /.idea
 *.dat
+*.csv
+*.xlsx
 *.class
