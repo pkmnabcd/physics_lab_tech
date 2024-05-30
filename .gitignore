@@ -3,3 +3,7 @@ showyourwork/
 **/__pycache__/
 *.png
 *.dat
+.idea
+/.idea
+*.dat
+*.class
