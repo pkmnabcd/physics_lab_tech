@@ -27,7 +27,8 @@ def read_file(filename):
             else:
                 line_data.append(float(substring))
         row_set.append(line_data)
-        col_set = convert_row_set_to_col_set(row_set)
+
+    col_set = convert_row_set_to_col_set(row_set)
 
     header_list = []
     for i in range(number_of_columns):

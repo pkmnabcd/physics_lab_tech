@@ -1,4 +1,5 @@
 showyourwork/
 .idea/
 **/__pycache__/
-
+*.png
+*.dat
