@@ -1,14 +1,11 @@
 import java.util.ArrayList;
 public class StandardDeviationCleaner extends AbstractCleaner {
-    public void runCleaningAlgorithm(ArrayList<ArrayList<Double>> data) {
+    public ArrayList<Integer> runCleaningAlgorithm(ArrayList<ArrayList<Double>> data) {
 	int index = 4;  // 4 is the P12 col index
 	double mean = getMean(data.get(index));
-	System.out.println(mean);
 	double stdDev = getStdDev(data.get(index), mean);
-	System.out.println(stdDev);
 	ArrayList<Integer> toRemove = getIndexesToRemove(data.get(index), mean, stdDev);
-	printArrayList(toRemove);
-	removeElements(data, toRemove);
+	return toRemove;
     }
     private double getMean(ArrayList<Double> column) {
 	int valCount = column.size();
@@ -38,16 +35,11 @@ public class StandardDeviationCleaner extends AbstractCleaner {
 	ArrayList<Integer> indexes = new ArrayList<Integer>();
 	for (int i = 0; i < column.size(); i++) {
 	    Double val = column.get(i);
-	    if (val > upperLimit || val < lowerLimit) {
+	    if (val == null || (val > upperLimit || val < lowerLimit)) {
 		indexes.add(i);
 	    }
 	}
 	return indexes;
-    }
-    private <E> void printArrayList(ArrayList<E> input) {
-	for (E val : input) {
-	    System.out.println(val);
-	}
     }
     private <E> void removeElements(ArrayList<ArrayList<E>> input, ArrayList<Integer> removeList) {
 	int colCount = input.size();
@@ -57,5 +49,21 @@ public class StandardDeviationCleaner extends AbstractCleaner {
 		input.get(j).remove(index);
 	    }
 	}
+    }
+    private <E> void printArrayList(ArrayList<E> input) {
+	for (E val : input) {
+	    System.out.println(val);
+	}
+	System.out.println();
+    }
+    private <E> void print2DArrayList(ArrayList<ArrayList<E>> input) {
+	for (ArrayList<E> innerArray : input) {
+	    System.out.println(innerArray.size());
+	    for (E val : innerArray) {
+		System.out.printf("%s ", val);
+	    }
+	    System.out.println();
+	}
+	System.out.println();
     }
 }
