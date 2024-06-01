@@ -41,15 +41,6 @@ public class StandardDeviationCleaner extends AbstractCleaner {
 	}
 	return indexes;
     }
-    private <E> void removeElements(ArrayList<ArrayList<E>> input, ArrayList<Integer> removeList) {
-	int colCount = input.size();
-	for (int i = removeList.size() - 1; i > -1; i--) {
-	    int index = removeList.get(i);
-	    for (int j = 0; j < colCount; j++) {
-		input.get(j).remove(index);
-	    }
-	}
-    }
     private <E> void printArrayList(ArrayList<E> input) {
 	for (E val : input) {
 	    System.out.println(val);

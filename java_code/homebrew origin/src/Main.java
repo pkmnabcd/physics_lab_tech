@@ -10,6 +10,8 @@ public class Main {
 	ArrayList<Integer> removeIndexes = cleaner.runCleaningAlgorithm(inData);
 	printInput(inData);
 	printArrayList(removeIndexes);
+	boolean success = Write.writeCleanFile(removeIndexes, filename);
+	if (success) System.out.println("The cleaned file was written");
     }
     private static void printInput(ArrayList<ArrayList<Double>> inArray) {
 	for (ArrayList<Double> col : inArray) {
