@@ -8,7 +8,6 @@ public class Main {
         
         AbstractCleaner cleaner = new StandardDeviationCleaner();
 	ArrayList<Integer> removeIndexes = cleaner.runCleaningAlgorithm(inData);
-	printInput(inData);
 	printArrayList(removeIndexes);
 	boolean success = Write.writeCleanFile(removeIndexes, filename);
 	if (success) System.out.println("The cleaned file was written");

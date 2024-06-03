@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
 import java.lang.Double;
+import java.io.IOException;
+import java.io.FileWriter;
 
 public class Write {
     public static boolean writeCleanFile(ArrayList<Integer> toRemove, String filename) {
@@ -23,7 +25,8 @@ public class Write {
 	printArrayList(lines);
 	removeLines(lines, toRemove);
 	printArrayList(lines);
-	return true;
+	filename = editFilename(filename);
+	return writeFile(lines, filename);
     }
     /**
      * This method is needed because the toRemove indexes are based on just the data, and
@@ -45,5 +48,27 @@ public class Write {
 	    System.out.println(val);
 	}
 	System.out.println();
+    }
+    /**
+     * This method adds e to the end of the filename before .dat to signify this is the
+     * edited version of the input file.
+    */
+    private static String editFilename(String filename) {
+	filename = filename.replaceFirst(".dat", "e.dat");
+	return filename;
+    }
+    private static boolean writeFile(ArrayList<String> lines, String filename) {
+	try {
+	    File file = new File(filename);
+	    file.createNewFile();
+	    FileWriter writer = new FileWriter(filename);
+	    writer.write// continue from here
+
+	} catch (IOException e) {
+	    System.out.println("An error occurred.");
+	    e.printStackTrace();
+	    return false;
+	}
+	return true;
     }
 }
