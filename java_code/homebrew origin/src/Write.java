@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.lang.Double;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.lang.StringBuilder;
 
 public class Write {
     public static boolean writeCleanFile(ArrayList<Integer> toRemove, String filename) {
@@ -62,7 +63,9 @@ public class Write {
 	    File file = new File(filename);
 	    file.createNewFile();
 	    FileWriter writer = new FileWriter(filename);
-	    writer.write// continue from here
+	    String combinedLines = combineLines(lines);
+	    writer.write(combinedLines);
+	    writer.close();
 
 	} catch (IOException e) {
 	    System.out.println("An error occurred.");
@@ -70,5 +73,16 @@ public class Write {
 	    return false;
 	}
 	return true;
+    }
+    private static String combineLines(ArrayList<String> lines) {
+	StringBuilder outString = new StringBuilder();
+	for (int i = 0; i < lines.size(); i++) {
+	    String line = lines.get(i);
+	    outString.append(line);
+	    if (i != lines.size() - 1) {
+	        outString.append("\n");
+	    }
+	}
+	return outString.toString();
     }
 }
