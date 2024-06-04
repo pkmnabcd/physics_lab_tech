@@ -8,9 +8,11 @@ public class Main {
         
         AbstractCleaner cleaner = new StandardDeviationCleaner();
 	ArrayList<Integer> removeIndexes = cleaner.runCleaningAlgorithm(inData);
-	printArrayList(removeIndexes);
-	boolean success = Write.writeCleanFile(removeIndexes, filename);
-	if (success) System.out.println("The cleaned file was written");
+	String write_file = Write.writeCleanFile(removeIndexes, filename);
+
+	if (write_file != "") {
+	    System.out.printf("The cleaned file was successfully written to \"%s\" with %d lines removed.\n", write_file, removeIndexes.size());
+	}
     }
     private static void printInput(ArrayList<ArrayList<Double>> inArray) {
 	for (ArrayList<Double> col : inArray) {

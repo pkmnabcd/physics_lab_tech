@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.lang.StringBuilder;
 
 public class Write {
-    public static boolean writeCleanFile(ArrayList<Integer> toRemove, String filename) {
+    public static String writeCleanFile(ArrayList<Integer> toRemove, String filename) {
         File file = new File(filename);
         ArrayList<String> lines = new ArrayList<String>();
 
@@ -20,14 +20,16 @@ public class Write {
         } catch (java.io.FileNotFoundException e) {
             System.out.println("There was an error with opening the file:");
             System.out.println(e);
-	    return false;
+	    return "";
         }
 	add1(toRemove);
-	printArrayList(lines);
 	removeLines(lines, toRemove);
-	printArrayList(lines);
 	filename = editFilename(filename);
-	return writeFile(lines, filename);
+	if (writeFile(lines, filename)) {
+	    return filename;
+	} else {
+	    return "";
+	}
     }
     /**
      * This method is needed because the toRemove indexes are based on just the data, and
