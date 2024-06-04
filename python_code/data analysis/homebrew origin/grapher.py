@@ -88,6 +88,8 @@ class CombinedGraph:
         year = self.metadata["year"]
         date = self.metadata["date"]
         filename = f"{date}_{year}.png"
+        if metadata["edited"]:
+            filename = f"{date}_{year}e.png"
         save_path += filename
 
         print(f"Saving {filename} to {save_path}")
