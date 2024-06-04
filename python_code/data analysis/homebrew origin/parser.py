@@ -45,9 +45,16 @@ def get_metadata(filename: str):
     """
     Takes a zenus data filename and outputs a dictionary with the day of year and year inside.
     :param filename: filename like this: OH_Andover_ALO23day1.dat or OH_Andover_ALO08day300.dat
-    :return: a dict with the key:values  "year" and "day_of_year", where "year" is 20YY.
+    :return: a dict with the keys: "year":20XX str, "day_of_year":1-3 char str, and "edited":bool.
     """
     metadata = {}
+    dat_index = filename.index(".dat")
+    if ('e' == filename[dat_index - 1]):
+        filename = remove_edit_tags(filename)
+        metadata["edited"] = True
+    else:
+        metadata["edited"] = False
+
     date = filename.replace("OH_Andover_ALO", "").replace(".dat", "")
     year_stub, day_of_year = tuple(date.split("day"))
 
@@ -67,3 +74,11 @@ def convert_row_set_to_col_set(dataset):
         for j in range(col_total):
             col_set[j].append(dataset[i][j])
     return col_set
+
+
+def remove_edit_tags(filename: str):
+    dat_index = filename.index(".dat")
+    check_index = dat_index - 1
+    while filename[check_index] == 'e':
+        filename = filename[:check_index] + filename[dat_index :]
+    return filename
