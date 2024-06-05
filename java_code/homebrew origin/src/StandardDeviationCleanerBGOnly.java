@@ -2,13 +2,13 @@ import java.util.ArrayList;
 public class StandardDeviationCleanerBGOnly extends StandardDeviationCleaner {
     public ArrayList<Integer> runCleaningAlgorithm(ArrayList<ArrayList<Double>> data) {
 	System.out.println("Running STDEV cleaning on BG filter");
-	ArrayList<Integer> p14ToRemove = getToRemove(data.get(5));  // 5 is the P14 col index
+	ArrayList<Integer> bgToRemove = getToRemove(data.get(6));  // 6 is the BG col index
 
-	return p14ToRemove;
+	return bgToRemove;
     }
     @Override
     protected ArrayList<Integer> getIndexesToRemove(ArrayList<Double> column, double mean, double stdDev) {
-	double upperLimit = mean + stdDev;
+	double upperLimit = mean;
 	double lowerLimit = mean - stdDev;
 	System.out.printf("Upper Limit: %f\nLower Limit: %f\n", upperLimit, lowerLimit);
 	ArrayList<Integer> indexes = new ArrayList<Integer>();
