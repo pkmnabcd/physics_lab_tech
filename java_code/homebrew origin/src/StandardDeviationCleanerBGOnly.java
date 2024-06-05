@@ -7,8 +7,10 @@ public class StandardDeviationCleanerBGOnly extends StandardDeviationCleaner {
     }
     @Override
     protected ArrayList<Integer> getIndexesToRemove(ArrayList<Double> column, double mean, double stdDev) {
-	double upperLimit = mean + 2 * stdDev;
-	double lowerLimit = mean + 2 * stdDev;
+	System.out.printf("Mean: %f\nSTDEV: %f\n", mean, stdDev);
+	double upperLimit = mean + stdDev;
+	double lowerLimit = mean - stdDev;
+	System.out.printf("upperLimit: %f\nlowerLimit: %f\n", upperLimit, lowerLimit);
 	ArrayList<Integer> indexes = new ArrayList<Integer>();
 	for (int i = 0; i < column.size(); i++) {
 	    Double val = column.get(i);
