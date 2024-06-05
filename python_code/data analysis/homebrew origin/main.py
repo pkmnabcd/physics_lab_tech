@@ -21,10 +21,22 @@ def add_date_to_metadata(date_col_header: str, metadata_dict: dict):
     metadata_dict["date"] = date
 
 
+def separateFilenameAndDirectory(file_path: str):
+    last_slash_index = -1
+    for i in range(len(file_path)):
+        if file_path[i] == '/':
+            last_slash_index = i
+
+    file_dir = file_path[:last_slash_index + 1]
+    filename = file_path[last_slash_index + 1:]
+    return filename, file_dir
+
+
 if __name__ == "__main__":
     file_path = sys.argv[1]
-    filename = sys.argv[2]
-    data, col_headers = read_file(file_path + filename)
+    filename, file_dir = separateFilenameAndDirectory(file_path)
+
+    data, col_headers = read_file(file_path)
     metadata = get_metadata(filename)
     add_date_to_metadata(col_headers[0], metadata)
 
@@ -58,6 +70,6 @@ if __name__ == "__main__":
                                            metadata, data[0])
     combined_graph.generate_graph()
 
-    save_dir = file_path + "//output_graphs//"
+    save_dir = file_dir + "//output_graphs//"
     check_or_make_dir(save_dir)
     combined_graph.save_graph(save_dir)
