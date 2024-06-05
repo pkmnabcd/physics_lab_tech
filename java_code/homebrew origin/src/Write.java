@@ -57,13 +57,16 @@ public class Write {
      * edited version of the input file.
     */
     private static String editFilename(String filename) {
-	filename = filename.replaceFirst(".dat", "e.dat");
+	System.out.println(filename);
+	filename = filename.replace(".dat", "e.dat");
+	System.out.println(filename);
 	return filename;
     }
     private static boolean writeFile(ArrayList<String> lines, String filename) {
 	try {
 	    File file = new File(filename);
-	    file.createNewFile();
+	    System.out.println(filename);
+	    if (! file.exists()) file.createNewFile();
 	    FileWriter writer = new FileWriter(filename);
 	    String combinedLines = combineLines(lines);
 	    writer.write(combinedLines);

@@ -6,7 +6,7 @@ public class Main {
         String filename = args[0];
         ArrayList<ArrayList<Double>> inData = Parser.parseFile(filename);
         
-        AbstractCleaner cleaner = new StandardDeviationCleaner();
+        AbstractCleaner cleaner = new StandardDeviationCleanerBGOnly();
 	ArrayList<Integer> removeIndexes = cleaner.runCleaningAlgorithm(inData);
 	String write_file = Write.writeCleanFile(removeIndexes, filename);
 
