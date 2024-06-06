@@ -11,7 +11,7 @@ public class Main {
 	String write_file = Write.writeCleanFile(removeIndexes, filename);
 
 	if (write_file != "") {
-	    System.out.printf("The cleaned file was successfully written to \"%s\" with %d lines removed.\n", write_file, removeIndexes.size());
+	    System.out.printf("The cleaned file was successfully written to \"%s\" with %d lines removed.\n\n", write_file, removeIndexes.size());
 	    System.out.println("The following line indexes were removed from the original file:");
 	    printArrayList(removeIndexes);
 	}
