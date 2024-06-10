@@ -16,8 +16,19 @@ echo Graphing the original data
 python "%PYTHON_SCRIPT%" %INPUT%
 
 setlocal enabledelayedexpansion
-SET EDITED_INPUT=!INPUT:~0,-5!e.dat
+echo.
+if "!INPUT:~-4!" == ".dat" (
+  echo INPUT ends with .dat
+  SET EDITED_INPUT=!INPUT:~0,-4!e.dat
+) else (
+  echo INPUT doesn't end with .dat
+  SET EDITED_INPUT=!INPUT:~0,-5!e.dat"
+)
+
 setlocal disabledelayedexpansion
 echo.
 echo Graphing the edited data
+echo Edited input file: %EDITED_INPUT%
 python "%PYTHON_SCRIPT%" %EDITED_INPUT%
+echo.
+echo.
