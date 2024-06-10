@@ -18,10 +18,10 @@ python "%PYTHON_SCRIPT%" %INPUT%
 setlocal enabledelayedexpansion
 echo.
 if "!INPUT:~-4!" == ".dat" (
-  echo INPUT ends with .dat
+  REM INPUT ends with .dat
   SET EDITED_INPUT=!INPUT:~0,-4!e.dat
 ) else (
-  echo INPUT doesn't end with .dat
+  REM Assuming INPUT ends with .dat"
   SET EDITED_INPUT=!INPUT:~0,-5!e.dat"
 )
 

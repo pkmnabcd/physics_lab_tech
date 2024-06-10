@@ -70,6 +70,6 @@ if __name__ == "__main__":
                                            metadata, data[0])
     combined_graph.generate_graph()
 
-    save_dir = file_dir + "//output_graphs//"
+    save_dir = file_dir
     check_or_make_dir(save_dir)
     combined_graph.save_graph(save_dir)
