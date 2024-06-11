@@ -38,7 +38,7 @@ public class Parser {
 		int indexEnd = indexStart + colLength;
 		String substring = line.substring(indexStart, indexEnd);
 		substring = substring.replace(" ", "");
-		if (substring == "***************") {
+		if (substring.contains("*")) {
 		    lineData.add(null);
 		} else if (substring.contains("NaN")) {
 		    lineData.add(null);
