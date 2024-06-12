@@ -14,7 +14,7 @@ public class StandardDeviationCleanerBGOnly extends StandardDeviationCleaner {
 	boolean twilightAtFinish = twilightAtEnd(column);
 	if (twilightAtStart && twilightAtFinish) {
 	    System.out.println("Aggressive bounds used.");
-	    upperLimit = mean;
+	    upperLimit = mean + (0.05 * stdDev);
 	    lowerLimit = mean - stdDev;
 	} else if (twilightAtStart || twilightAtFinish) {
 	    System.out.println("Medium aggressive bounds used.");
