@@ -10,12 +10,12 @@ public class Main {
         AbstractCleaner cleaner = new StandardDeviationCleanerBGOnly();
 	ArrayList<Integer> removeIndexesTemp = cleaner.runCleaningAlgorithm(inData, removeIndexesMain);
 	removeIndexesMain = combineToRemove(removeIndexesTemp, removeIndexesMain);
-	String write_file = Write.writeCleanFile(removeIndexes, filename);
+	String write_file = Write.writeCleanFile(removeIndexesMain, filename);
 
 	if (write_file != "") {
-	    System.out.printf("The cleaned file was successfully written to \"%s\" with %d lines removed.\n\n", write_file, removeIndexes.size());
+	    System.out.printf("The cleaned file was successfully written to \"%s\" with %d lines removed.\n\n", write_file, removeIndexesMain.size());
 	    System.out.println("The following line indexes were removed from the original file:");
-	    printArrayList(removeIndexes);
+	    printArrayList(removeIndexesMain);
 	}
     }
     private static void printInput(ArrayList<ArrayList<Double>> inArray) {
@@ -35,17 +35,14 @@ public class Main {
 	}
 	System.out.println();
     }
-    private ArrayList<Integer> combineToRemove(ArrayList<Integer> toRemove1, ArrayList<Integer> toRemove2) {
+    private static ArrayList<Integer> combineToRemove(ArrayList<Integer> toRemove1, ArrayList<Integer> toRemove2) {
 	ArrayList<Integer> toRemoveOutput = toRemove1;
 	for (Integer val : toRemove2) {
 	    if (! toRemoveOutput.contains(val)) insertIndex(toRemoveOutput, val);
 	}
-	for (Integer val : toRemove3) {
-	    if (! toRemoveOutput.contains(val)) insertIndex(toRemoveOutput, val);
-	}
 	return toRemoveOutput;
     }
-    private void insertIndex(ArrayList<Integer> toRemove, Integer val) {
+    private static void insertIndex(ArrayList<Integer> toRemove, Integer val) {
 	int addIndex = -1;
 	for (int i = 0; i < toRemove.size(); i++) {
 	    if (toRemove.get(i) > val) {

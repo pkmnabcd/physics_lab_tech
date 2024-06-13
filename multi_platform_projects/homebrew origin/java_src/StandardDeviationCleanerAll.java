@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 public class StandardDeviationCleanerAll extends StandardDeviationCleaner {
-    public ArrayList<Integer> runCleaningAlgorithm(ArrayList<ArrayList<Double>> data) {
-	ArrayList<Integer> p12ToRemove = getToRemove(data.get(4));  // 4 is the P12 col index
-	ArrayList<Integer> p14ToRemove = getToRemove(data.get(5));  // 5 is the P14 col index
-	ArrayList<Integer> bgToRemove = getToRemove(data.get(6));  // 6 is the BG col index
+    public ArrayList<Integer> runCleaningAlgorithm(ArrayList<ArrayList<Double>> data, ArrayList<Integer> alreadyRemoved) {
+	ArrayList<Integer> p12ToRemove = getToRemove(data.get(4), alreadyRemoved);  // 4 is the P12 col index
+	ArrayList<Integer> p14ToRemove = getToRemove(data.get(5), alreadyRemoved);  // 5 is the P14 col index
+	ArrayList<Integer> bgToRemove = getToRemove(data.get(6), alreadyRemoved);  // 6 is the BG col index
 
 	ArrayList<Integer> combinedToRemove = combineToRemove(p12ToRemove, p14ToRemove, bgToRemove);
 	return combinedToRemove;
