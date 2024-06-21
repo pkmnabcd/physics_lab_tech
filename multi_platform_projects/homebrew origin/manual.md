@@ -11,10 +11,29 @@ The design philosophy of this program maintains that you shouldn't need to edit 
 ### Python and Java files
 To run this program, you need the python and java source code in the right directory. The right directory is specified in the main script: chileTempCleanerAndGrapher.bat , which says that the python files should be in the same directory as main.py which has the path `SET PYTHON_SCRIPT=C:\Gabe's_stuff\Gabe_programs\Data Analysis\homebrew origin\python_src\main.py`. The java files should be located in the directory `SET JAVA_PATH=C:\Gabe's_stuff\Gabe_programs\Data Analysis\homebrew origin\java_src`. If you're on a different system than the one this program was written for, you can specify your own path by changing these values in `chileTempCleanerAndGrapher.bat`.
 
+You need the following python files in the same folder (specified by `PYTHON_SCRIPT`) to run the program:
+* main.py
+* parser.py
+* grapher.py
+
+You need the following java files in the same folder (specified by `JAVA_PATH`) to run the program:
+* AbstractCleaner.class
+* CloudCleaner.class
+* Main.class
+* Parser.class
+* StandardDeviationCleaner.class
+* StandardDeviationCleanerBGOnly.class
+* Write.class
+
 ### Java Installed
 Make sure you have Java installed by opening a windows terminal (this can be done by hitting the windows key and typing `command` and clicking what pops up) and entering `javac`. If a long message is printed, describing how to use the command, then you have java already and can skip this step. If a *command not found* message is printed, you need to install it. 
 #### Installing Java
 You can install Java by looking up Java JDK Windows and downloading the installer. You can also find it at [this link](https://www.oracle.com/java/technologies/downloads/).
+
+### Matplotlib
+You may have to install the python package matplotlib to run the script from the command line. Do this by running the following command: `python -m pip install matplotlib`.
+
+Also try `python3 -m pip install matplotlib` if the above command doesn't work.
 
 ### The Correct Files
 The inputted data files are those outputted by Dr. Yucheng Zhao's IDL code called `ALO_OH_Andover.pro` which is usually kept in the Chile MTM drive in the same directory as the year folders.
@@ -54,3 +73,26 @@ Here's an example if I'm in the 2023 ChileMTM folder:
 
 `./chileTempCleanerAndGrapher.bat Oct2023/processed/OH_Andover_ALO23day276.dat`
 
+One you run the script for the first time, instead of manually typing in the entire command again for the next file, you can instead press the up arrow to get the most recently used command, then change a number or two, then press enter to run the script again.
+
+## Common Errors
+### File Errors
+* `Error: Could not find or load main class Main`
+    * Java can't find the file `Main.class` in the directory assigned to `JAVA_PATH`.
+    * Make sure that there isn't a `\` (backslash) at the end of the `JAVA_PATH`.
+    * Double check that the path to the java .class files is correct, formatted correctly, and is hardcoded.
+        * Ex: `SET JAVA_PATH=C:\Gabe's_stuff\Gabe_programs\Data Analysis\homebrew origin\java_src`
+* `python: can't open file .....`
+    * Python can't find the file that the script is trying to run.
+    * Make sure that the file path to main.py is correct, formatted correctly, and hardcoded.
+        * Ex: `SET PYTHON_SCRIPT=C:\Gabe's_stuff\Gabe_programs\Data Analysis\homebrew origin\python_src\main.py`
+* `java.io.FileNotFoundException` and `FileNotFoundError`
+    * The python and java files were found, but the inputted .dat file wasn't found.
+    * Make sure that the file path that you inputted in the command line is correct and that it's formatted correctly.
+        * Directories should be separated by forward slashes: `/`. 
+        * Surround the file path with quotation marks `""`. Technically this is only needed when there is a space in the file path, but it's best to keep them just in case.
+        * Double check that the file path is correct
+### Other Errors
+* `ModuleNotFoundError`
+    * Make sure that you have all of the python and java files as specified above.
+    * Make sure that you have matplotlib installed, following the above instructions
