@@ -6,6 +6,7 @@ public class CloudCleaner extends AbstractCleaner {
 
 	Graph inputGraph = new Graph(timeData, tempData);
 	Graph residualGraph = getResidualAnalysisGraph(inputGraph, alreadyRemoved);
+	//printGraph(residualGraph);
 
 	return new ArrayList<Integer>();
     }
@@ -13,6 +14,7 @@ public class CloudCleaner extends AbstractCleaner {
 
     private Graph getResidualAnalysisGraph(Graph inputData, ArrayList<Integer> alreadyRemoved) {
 	Graph smoothedLine = getSmoothedLine(inputData, alreadyRemoved);
+	printGraph(smoothedLine);
 
 	// TODO: Make sure that null objects are accounted for (probably removed).
 
@@ -27,7 +29,8 @@ public class CloudCleaner extends AbstractCleaner {
 	ArrayList<Double> inputTime = inputData.getXData();
 	ArrayList<Double> inputTemp = inputData.getYData();
 
-	while (i < inputTemp.size() - windowSize) {
+	// Since it's hard to know how many indexes are alreadyRemoved, letting the exception handling break the loop
+	while (true) {
 	    if (alreadyRemoved.contains(i)) {i++; continue;}
 	    try {
 		double windowSum = getWindowSum(windowSize, i, inputTemp, alreadyRemoved);
@@ -45,6 +48,7 @@ public class CloudCleaner extends AbstractCleaner {
     }
     private ArrayList<Double> getTimeValsRemovedBySmoothing(ArrayList<Double> inputTime, int lenRemovedFromEachSide, ArrayList<Integer> alreadyRemoved) {
 	ArrayList<Double> output = new ArrayList<Double>();
+
 	int removeFromStart = lenRemovedFromEachSide;
 	int removeFromEnd = lenRemovedFromEachSide;
 
@@ -68,6 +72,7 @@ public class CloudCleaner extends AbstractCleaner {
 	    if (alreadyRemoved.contains(i)) {i++; continue;}
 	    sum += data.get(i);
 	    valuesAdded++;
+	    i++;
 	}
 	return sum;
     }
@@ -100,5 +105,13 @@ public class CloudCleaner extends AbstractCleaner {
 	    }
 	    return output;
 	}
+    }
+    private void printGraph(Graph graph) {
+	ArrayList<Double> xData = graph.getXData();
+	ArrayList<Double> yData = graph.getYData();
+	System.out.println("X-Data:");
+	printArrayList(xData);
+	System.out.println("Y-Data:");
+	printArrayList(yData);
     }
 }
