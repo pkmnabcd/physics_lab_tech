@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class STDEV {
-    public double getMean(ArrayList<Double> column, ArrayList<Integer> alreadyRemoved) {
+    public static double getMean(ArrayList<Double> column, ArrayList<Integer> alreadyRemoved) {
 	int valCount = column.size();
 	double total = 0;
         for (int i = 0; i < column.size(); i++) {
@@ -14,7 +14,7 @@ public class STDEV {
 	double mean = total / valCount;
 	return mean;
     }
-    private double getErrorSum(ArrayList<Double> column, double mean, ArrayList<Integer> alreadyRemoved) {
+    private static double getErrorSum(ArrayList<Double> column, double mean, ArrayList<Integer> alreadyRemoved) {
 	double total = 0;
         for (int i = 0; i < column.size(); i++) {
 	    if (alreadyRemoved.contains(i)) {
@@ -25,13 +25,7 @@ public class STDEV {
 	}
 	return total;
     }
-    public double getStdDev(ArrayList<Double> column, double mean, ArrayList<Integer> alreadyRemoved) {
-        double errorSum = getErrorSum(column, mean, alreadyRemoved);
-	int valCount = column.size() - alreadyRemoved.size();
-	double stdDev = java.lang.Math.sqrt(errorSum / (valCount - 1));
-	return stdDev;
-    }
-    public double getStdDev(ArrayList<Double> column, double mean, ArrayList<Integer> alreadyRemoved) {
+    public static double getStdDev(ArrayList<Double> column, double mean, ArrayList<Integer> alreadyRemoved) {
         double errorSum = getErrorSum(column, mean, alreadyRemoved);
 	int valCount = column.size() - alreadyRemoved.size();
 	double stdDev = java.lang.Math.sqrt(errorSum / (valCount - 1));
