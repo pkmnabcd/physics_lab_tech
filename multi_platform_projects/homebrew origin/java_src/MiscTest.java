@@ -6,13 +6,13 @@ public class MiscTest {
 	ArrayList<ArrayList<Double>> inputData = new ArrayList<ArrayList<Double>>();
 	inputData.add(new ArrayList<Double>());
 	inputData.add(new ArrayList<Double>());
-	for (ArrayList<Double> list : inputData) {
-	    double addVal = 1.0;
-	    for (int i = 0; i < 12; i++) {
-		list.add(addVal);
-		//addVal++;
-	    }
+	double addVal = 1.0;
+	for (int i = 0; i < 12; i++) {
+	    inputData.get(0).add(addVal);
+	    inputData.get(1).add(1.0);
+	    addVal++;
 	}
+	
 	for (ArrayList<Double> list : inputData) {
 	    list.add(0, 21.0);
 	    list.add(0, 20.0);
@@ -25,11 +25,11 @@ public class MiscTest {
 	printArrayList(inputData.get(1));
 
 	ArrayList<Integer> removeIndexesMain = new ArrayList<Integer>();
-	//removeIndexesMain.add(16);
-	//removeIndexesMain.add(15);
-	//removeIndexesMain.add(6);
-	//removeIndexesMain.add(0);
-	//removeIndexesMain.add(1);
+	removeIndexesMain.add(16);
+	removeIndexesMain.add(15);
+	removeIndexesMain.add(6);
+	removeIndexesMain.add(0);
+	removeIndexesMain.add(1);
 
 	ArrayList<Integer> removeIndexesTemp = cleaner.runCleaningAlgorithm(inputData, removeIndexesMain);
         

@@ -16,11 +16,33 @@ public class CloudCleaner extends AbstractCleaner {
 	Graph smoothedLine = getSmoothedLine(inputData, alreadyRemoved);
 	printGraph(smoothedLine);
 
+	ArrayList<Double> allTime = inputData.getXData();
+	ArrayList<Double> allTemp = inputData.getYData();
+	ArrayList<Double> smoothRemoved = smoothedLine.getXData();
+	ArrayList<Double> smoothTemp = smoothedLine.getYData();
+
+	ArrayList<Double> residualData = makeResidualData(allTemp, smoothTemp, allTime, alreadyRemoved, smoothRemoved);
+	printArrayList(residualData);
+	Graph ResidualAnalysisGraph = new Graph(smoothRemoved, residualData);
+	return ResidualAnalysisGraph;
+
 	// TODO: Make sure that null objects are accounted for (probably removed).
 
 	return new Graph(new ArrayList<Double>(), new ArrayList<Double>());
     }
-
+    private ArrayList<Double> makeResidualData(ArrayList<Double> allTemp, ArrayList<Double> smoothedTemp, ArrayList<Double> allTimes, ArrayList<Integer> alreadyRemoved, ArrayList<Double> smoothRemoved) {
+	ArrayList<Double> residualData = new ArrayList<Double>();
+	int smoothTempIndex = 0;
+	for (int i = 0; i < allTimes.size(); i++) {
+	    if (alreadyRemoved.contains(i) || smoothRemoved.contains(allTimes.get(i))) continue;
+	    double rawTemp = allTemp.get(i);
+	    double smoothTemp = smoothedTemp.get(smoothTempIndex);
+	    smoothTempIndex++;
+	    double residualTemp = rawTemp - smoothTemp;
+	    residualData.add(residualTemp);
+	}
+	return residualData;
+    }
     private Graph getSmoothedLine(Graph inputData, ArrayList<Integer> alreadyRemoved) {
 	int i = 0;
 	ArrayList<Double> movingAverages = new ArrayList<Double>();
