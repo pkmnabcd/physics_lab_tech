@@ -10,7 +10,7 @@ public class CloudCleaner extends AbstractCleaner {
 	ArrayList<Integer> toRemove = cleanResidual(residualGraph, alreadyRemoved, timeData);
 	printArrayList(toRemove);
 
-	return new ArrayList<Integer>();
+	return toRemove;
     }
     private ArrayList<Integer> cleanResidual(Graph residualGraph, ArrayList<Integer> alreadyRemoved, ArrayList<Double> allTime) {
 	ArrayList<Double> smoothRemoved = residualGraph.getXData();

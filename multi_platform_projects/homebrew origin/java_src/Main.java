@@ -7,9 +7,14 @@ public class Main {
         ArrayList<ArrayList<Double>> inData = Parser.parseFile(filename);
         
 	ArrayList<Integer> removeIndexesMain = new ArrayList<Integer>();
-        AbstractCleaner cleaner = new StandardDeviationCleanerBGOnly();
-	ArrayList<Integer> removeIndexesTemp = cleaner.runCleaningAlgorithm(inData, removeIndexesMain);
+        AbstractCleaner cleaner1 = new StandardDeviationCleanerBGOnly();
+	ArrayList<Integer> removeIndexesTemp = cleaner1.runCleaningAlgorithm(inData, removeIndexesMain);
 	removeIndexesMain = combineToRemove(removeIndexesTemp, removeIndexesMain);
+
+	AbstractCleaner cleaner2 = new CloudCleaner();
+	removeIndexesTemp = cleaner2.runCleaningAlgorithm(inData, removeIndexesMain);
+	removeIndexesMain = combineToRemove(removeIndexesTemp, removeIndexesMain);
+
 	String write_file = Write.writeCleanFile(removeIndexesMain, filename);
 
 	if (write_file != "") {
