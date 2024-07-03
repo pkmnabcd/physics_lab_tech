@@ -21,6 +21,10 @@ public class MiscTest {
 	    list.add(6, 19.0);
 	    
 	}
+
+	inputData.get(0).add(30.0);
+	inputData.get(1).add(50.0);
+
 	printArrayList(inputData.get(0));
 	printArrayList(inputData.get(1));
 

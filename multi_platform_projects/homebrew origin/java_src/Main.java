@@ -38,18 +38,8 @@ public class Main {
     private static ArrayList<Integer> combineToRemove(ArrayList<Integer> toRemove1, ArrayList<Integer> toRemove2) {
 	ArrayList<Integer> toRemoveOutput = toRemove1;
 	for (Integer val : toRemove2) {
-	    if (! toRemoveOutput.contains(val)) insertIndex(toRemoveOutput, val);
+	    if (! toRemoveOutput.contains(val)) toRemoveOutput.add(val);
 	}
 	return toRemoveOutput;
-    }
-    private static void insertIndex(ArrayList<Integer> toRemove, Integer val) {
-	int addIndex = -1;
-	for (int i = 0; i < toRemove.size(); i++) {
-	    if (toRemove.get(i) > val) {
-		addIndex = i;
-		break;
-	    }
-	}
-	toRemove.add(addIndex, val);
     }
 }

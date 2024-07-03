@@ -1,16 +1,47 @@
 import java.util.ArrayList;
 public class CloudCleaner extends AbstractCleaner {
     public ArrayList<Integer> runCleaningAlgorithm(ArrayList<ArrayList<Double>> data, ArrayList<Integer> alreadyRemoved) {
+	System.out.println("Running Cloud Cleaning Algorithm (STDEV cleaning on the OHTemp Residual analysis graph)");
 	ArrayList<Double> timeData = data.get(0);
 	ArrayList<Double> tempData = data.get(1);
 
 	Graph inputGraph = new Graph(timeData, tempData);
 	Graph residualGraph = getResidualAnalysisGraph(inputGraph, alreadyRemoved);
-	//printGraph(residualGraph);
+	ArrayList<Integer> toRemove = cleanResidual(residualGraph, alreadyRemoved, timeData);
+	printArrayList(toRemove);
 
 	return new ArrayList<Integer>();
     }
+    private ArrayList<Integer> cleanResidual(Graph residualGraph, ArrayList<Integer> alreadyRemoved, ArrayList<Double> allTime) {
+	ArrayList<Double> smoothRemoved = residualGraph.getXData();
+	ArrayList<Double> residualData = residualGraph.getYData();
 
+	// Temporarily merge the removed into a new list so that they'll work with the STDEV functions
+	
+	double mean = STDEV.getMean(residualData, new ArrayList<Integer>());
+	double standardDev = STDEV.getStdDev(residualData, mean, new ArrayList<Integer>());
+	System.out.printf("Mean: %f\nStandardDeviation: %f\n\n", mean, standardDev);
+	double upperBound = mean + standardDev;
+	double lowerBound = mean - standardDev;
+
+	ArrayList<Integer> toRemove = new ArrayList<Integer>();
+	int resDataIndex = 0;
+	for (int i = 0; i < allTime.size(); i++) {
+	    if (alreadyRemoved.contains(i)) continue;
+	    else if (smoothRemoved.contains(allTime.get(i))) {
+		toRemove.add(i);  // Adding smoothRemoved to toRemoved w/o using residual data
+		continue;
+	    } else {
+	        double val = residualData.get(resDataIndex);
+	        resDataIndex++;
+	        if (val > upperBound || val < lowerBound) {
+	       	    toRemove.add(i);
+	        }
+	    }
+	}
+
+	return toRemove;
+    }
 
     private Graph getResidualAnalysisGraph(Graph inputData, ArrayList<Integer> alreadyRemoved) {
 	Graph smoothedLine = getSmoothedLine(inputData, alreadyRemoved);
@@ -27,8 +58,6 @@ public class CloudCleaner extends AbstractCleaner {
 	return ResidualAnalysisGraph;
 
 	// TODO: Make sure that null objects are accounted for (probably removed).
-
-	return new Graph(new ArrayList<Double>(), new ArrayList<Double>());
     }
     private ArrayList<Double> makeResidualData(ArrayList<Double> allTemp, ArrayList<Double> smoothedTemp, ArrayList<Double> allTimes, ArrayList<Integer> alreadyRemoved, ArrayList<Double> smoothRemoved) {
 	ArrayList<Double> residualData = new ArrayList<Double>();
