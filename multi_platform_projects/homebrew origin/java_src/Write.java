@@ -5,6 +5,7 @@ import java.lang.Double;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.lang.StringBuilder;
+import java.util.Comparator;
 
 public class Write {
     public static String writeCleanFile(ArrayList<Integer> toRemove, String filename) {
@@ -41,6 +42,7 @@ public class Write {
 	}
     }
     private static void removeLines(ArrayList<String> lines, ArrayList<Integer> removeList) {
+	removeList.sort(Comparator.naturalOrder());
 	for (int i = removeList.size() - 1; i > -1; i--) {
 	    int index = removeList.get(i);
 	    lines.remove(index);

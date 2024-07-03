@@ -21,8 +21,8 @@ public class CloudCleaner extends AbstractCleaner {
 	double mean = STDEV.getMean(residualData, new ArrayList<Integer>());
 	double standardDev = STDEV.getStdDev(residualData, mean, new ArrayList<Integer>());
 	System.out.printf("Mean: %f\nStandardDeviation: %f\n\n", mean, standardDev);
-	double upperBound = mean + standardDev;
-	double lowerBound = mean - standardDev;
+	double upperBound = mean + (2 * standardDev);
+	double lowerBound = mean - (2 * standardDev);
 
 	ArrayList<Integer> toRemove = new ArrayList<Integer>();
 	int resDataIndex = 0;
