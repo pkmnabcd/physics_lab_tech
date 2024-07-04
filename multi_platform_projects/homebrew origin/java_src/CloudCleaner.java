@@ -24,12 +24,12 @@ public class CloudCleaner extends AbstractCleaner {
 	double upperBound, lowerBound;
 	if (standardDev > 20) {
 	    System.out.println("Aggressive bounds used.");
-	    upperBound = mean + (0.75 * standardDev);
-	    lowerBound = mean - (0.75 * standardDev);
+	    upperBound = mean + (0.25 * standardDev);
+	    lowerBound = mean - (0.25 * standardDev);
 	} else if (standardDev > 5) {
 	    System.out.println("Medium bounds used.");
-	    upperBound = mean + (1 * standardDev);
-	    lowerBound = mean - (1 * standardDev);
+	    upperBound = mean + (0.80 * standardDev);
+	    lowerBound = mean - (0.80 * standardDev);
 	} else {
 	    System.out.println("Lenient bounds used.");
 	    upperBound = mean + (2 * standardDev);
