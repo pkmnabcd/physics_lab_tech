@@ -63,9 +63,9 @@ Once you have the above items, you are ready to run the script. For simplicity, 
 
 When you have the terminal open in the same directory as `chileTempCleanerAndGrapher.bat`, use this command format to run the script:
 
-`./chileTempCleanerAndGrapher.bat [filename]`
+`.\chileTempCleanerAndGrapher.bat [filename]`
 
-The `./` before the script name tells the terminal to run the script. The brackets represent the filename that will be passed to the python and Java files. Two things are *super important* to note about these.
+The `.\` before the script name tells the terminal to run the script. The brackets represent the filename that will be passed to the python and Java files. Two things are *super important* to note about these.
 * Always use forward-slash `/` when navigating through a folder
 * If there is a space in the path, *always use quotation marks around the filename*
 

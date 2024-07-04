@@ -13,7 +13,7 @@ public class Main {
 	removeIndexesTemp = cleaner1.runCleaningAlgorithm(inData, removeIndexesMain);
 	removeIndexesMain = combineToRemove(removeIndexesTemp, removeIndexesMain);
 
-	AbstractCleaner cleaner2 = new NullOHCleaner();
+	AbstractCleaner cleaner2 = new PreOHCleaner();
 	removeIndexesTemp = cleaner2.runCleaningAlgorithm(inData, removeIndexesMain);
 	removeIndexesMain = combineToRemove(removeIndexesTemp, removeIndexesMain);
 

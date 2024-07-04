@@ -45,7 +45,7 @@ public class CloudCleaner extends AbstractCleaner {
 
     private Graph getResidualAnalysisGraph(Graph inputData, ArrayList<Integer> alreadyRemoved) {
 	Graph smoothedLine = getSmoothedLine(inputData, alreadyRemoved);
-	printGraph(smoothedLine);
+	//printGraph(smoothedLine);
 
 	ArrayList<Double> allTime = inputData.getXData();
 	ArrayList<Double> allTemp = inputData.getYData();
@@ -53,7 +53,7 @@ public class CloudCleaner extends AbstractCleaner {
 	ArrayList<Double> smoothTemp = smoothedLine.getYData();
 
 	ArrayList<Double> residualData = makeResidualData(allTemp, smoothTemp, allTime, alreadyRemoved, smoothRemoved);
-	printArrayList(residualData);
+	//printArrayList(residualData);
 	Graph ResidualAnalysisGraph = new Graph(smoothRemoved, residualData);
 	return ResidualAnalysisGraph;
 
