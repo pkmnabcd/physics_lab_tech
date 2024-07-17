@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.lang.StringBuilder;
 import java.lang.Double;
 
 public class Main {
@@ -30,9 +31,19 @@ public class Main {
 	}
     }
     private static <E> void printArrayList(ArrayList<E> input) {
+	StringBuilder output = new StringBuilder();
+	int col = 0;
+
 	for (E val : input) {
-	    System.out.println(val);
+	    col++;
+	    output.append(val.toString());
+	    output.append(", ");
+	    if (col > 6) {
+		col = 0;
+		output.append("\n");
+	    }
 	}
+	System.out.println(output);
 	System.out.println();
     }
     private static ArrayList<Integer> combineToRemove(ArrayList<Integer> toRemove1, ArrayList<Integer> toRemove2) {
