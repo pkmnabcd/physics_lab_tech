@@ -19,20 +19,4 @@ public abstract class StandardDeviationCleaner extends AbstractCleaner {
 	}
 	return indexes;
     }
-    private <E> void printArrayList(ArrayList<E> input) {
-	for (E val : input) {
-	    System.out.println(val);
-	}
-	System.out.println();
-    }
-    private <E> void print2DArrayList(ArrayList<ArrayList<E>> input) {
-	for (ArrayList<E> innerArray : input) {
-	    System.out.println(innerArray.size());
-	    for (E val : innerArray) {
-		System.out.printf("%s ", val);
-	    }
-	    System.out.println();
-	}
-	System.out.println();
-    }
 }

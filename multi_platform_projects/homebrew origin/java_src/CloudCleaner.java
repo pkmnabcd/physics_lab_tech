@@ -8,7 +8,6 @@ public class CloudCleaner extends AbstractCleaner {
 	Graph inputGraph = new Graph(timeData, tempData);
 	Graph residualGraph = getResidualAnalysisGraph(inputGraph, alreadyRemoved);
 	ArrayList<Integer> toRemove = cleanResidual(residualGraph, alreadyRemoved, timeData);
-	printArrayList(toRemove);
 
 	return toRemove;
     }
@@ -57,7 +56,6 @@ public class CloudCleaner extends AbstractCleaner {
 
     private Graph getResidualAnalysisGraph(Graph inputData, ArrayList<Integer> alreadyRemoved) {
 	Graph smoothedLine = getSmoothedLine(inputData, alreadyRemoved);
-	//printGraph(smoothedLine);
 
 	ArrayList<Double> allTime = inputData.getXData();
 	ArrayList<Double> allTemp = inputData.getYData();
@@ -65,7 +63,6 @@ public class CloudCleaner extends AbstractCleaner {
 	ArrayList<Double> smoothTemp = smoothedLine.getYData();
 
 	ArrayList<Double> residualData = makeResidualData(allTemp, smoothTemp, allTime, alreadyRemoved, smoothRemoved);
-	//printArrayList(residualData);
 	Graph ResidualAnalysisGraph = new Graph(smoothRemoved, residualData);
 
 	return ResidualAnalysisGraph;
@@ -138,12 +135,6 @@ public class CloudCleaner extends AbstractCleaner {
 	}
 	return sum;
     }
-    private <E> void printArrayList(ArrayList<E> input) {
-	for (E val : input) {
-	    System.out.println(val);
-	}
-	System.out.println();
-    }
 
 
     private class Graph {
@@ -167,13 +158,5 @@ public class CloudCleaner extends AbstractCleaner {
 	    }
 	    return output;
 	}
-    }
-    private void printGraph(Graph graph) {
-	ArrayList<Double> xData = graph.getXData();
-	ArrayList<Double> yData = graph.getYData();
-	System.out.println("X-Data:");
-	printArrayList(xData);
-	System.out.println("Y-Data:");
-	printArrayList(yData);
     }
 }

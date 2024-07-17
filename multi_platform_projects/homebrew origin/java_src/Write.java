@@ -48,12 +48,6 @@ public class Write {
 	    lines.remove(index);
 	}
     }
-    private static <E> void printArrayList(ArrayList<E> input) {
-	for (E val : input) {
-	    System.out.println(val);
-	}
-	System.out.println();
-    }
     /**
      * This method adds e to the end of the filename before .dat to signify this is the
      * edited version of the input file.

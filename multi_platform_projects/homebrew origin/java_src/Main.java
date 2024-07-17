@@ -29,17 +29,6 @@ public class Main {
 	    printArrayList(removeIndexesMain);
 	}
     }
-    private static void printInput(ArrayList<ArrayList<Double>> inArray) {
-	for (ArrayList<Double> col : inArray) {
-	    System.out.println(col.size());
-	    for (Double val : col) {
-	        System.out.print(val);
-		System.out.print(" ");
-	    }
-	    System.out.println();
-	}
-	System.out.println();
-    }
     private static <E> void printArrayList(ArrayList<E> input) {
 	for (E val : input) {
 	    System.out.println(val);
