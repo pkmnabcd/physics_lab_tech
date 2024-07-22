@@ -10,6 +10,10 @@ public class Main {
 	ArrayList<Integer> removeIndexesMain = new ArrayList<Integer>();
 	ArrayList<Integer> removeIndexesTemp;
 
+        AbstractCleaner cleaner0 = new PreBGCleaner();
+	removeIndexesTemp = cleaner0.runCleaningAlgorithm(inData, removeIndexesMain);
+	removeIndexesMain = combineToRemove(removeIndexesTemp, removeIndexesMain);
+
         AbstractCleaner cleaner1 = new StandardDeviationCleanerBGOnly();
 	removeIndexesTemp = cleaner1.runCleaningAlgorithm(inData, removeIndexesMain);
 	removeIndexesMain = combineToRemove(removeIndexesTemp, removeIndexesMain);
