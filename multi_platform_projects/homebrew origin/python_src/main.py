@@ -56,18 +56,19 @@ if __name__ == "__main__":
     OH_band_index = get_data_type_index("OHBandInt", col_headers)
     CCD_temp_index = get_data_type_index("CCDTemp", col_headers)
 
-    filter_graph = grapher.SingleGraph4Sets(
-        data[P12_index], col_headers[P12_index],
-        data[P14_index], col_headers[P14_index],
-        data[BG_index], col_headers[BG_index],
-        data[Dark_index], col_headers[Dark_index]
-    )
-    OH_temp_graph = grapher.SingleGraph1Set(data[OH_temp_index], col_headers[OH_temp_index])
-    OH_band_graph = grapher.SingleGraph1Set(data[OH_band_index], col_headers[OH_band_index])
-    CCD_temp_graph = grapher.SingleGraph1Set(data[CCD_temp_index], col_headers[CCD_temp_index])
-
-    combined_graph = grapher.CombinedGraph(filter_graph, OH_temp_graph, OH_band_graph, CCD_temp_graph,
-                                           metadata, data[0])
+    # Change this and combined graph so it doesn't use the SingleGraph objects anymore
+    # Changes should end here
+    data_map = {
+	col_headers[P12_index]: data[P12_index],
+	col_headers[P14_index]: data[P14_index],
+	col_headers[BG_index]: data[BG_index],
+	col_headers[Dark_index]: data[Dark_index],
+	col_headers[OH_temp_index]: data[OH_temp_index],
+	col_headers[OH_band_index]: data[OH_band_index],
+	col_headers[CCD_temp_index]: data[CCD_temp_index],
+    }
+    
+    combined_graph = grapher.CombinedGraph(data_map, metadata, data[0])
     combined_graph.generate_graph()
 
     save_dir = file_dir

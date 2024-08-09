@@ -28,20 +28,18 @@ class SingleGraph4Sets(SingleGraph):
 
 
 class CombinedGraph:
-    def __init__(self, graph0: SingleGraph, graph1: SingleGraph,
-                 graph2: SingleGraph, graph3: SingleGraph, metadata: dict, x_axis: list):
-        self.graph0, self.graph1, self.graph2, self.graph3 = graph0, graph1, graph2, graph3
+    def __init__(self, datasets: dict, metadata: dict, x_axis: list):
         self.metadata = metadata
         self.x_axis = x_axis
 
-        self.P12_data = graph0.datasets["P12"]
-        self.P14_data = graph0.datasets["P14"]
-        self.BG_data = graph0.datasets["BG"]
-        self.Dark_data = graph0.datasets["ActDark"]
+        self.P12_data = datasets["P12"]
+        self.P14_data = datasets["P14"]
+        self.BG_data = datasets["BG"]
+        self.Dark_data = datasets["ActDark"]
 
-        self.OH_temp_data = graph1.datasets["OHTemp"]
-        self.OH_band_data = graph2.datasets["OHBandInt"]
-        self.CCD_temp_data = graph3.datasets["CCDTemp"]
+        self.OH_temp_data = datasets["OHTemp"]
+        self.OH_band_data = datasets["OHBandInt"]
+        self.CCD_temp_data = datasets["CCDTemp"]
 
         self.fig = self.axes = None
 
