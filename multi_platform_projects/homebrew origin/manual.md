@@ -18,12 +18,18 @@ You need the following python files in the same folder (specified by `PYTHON_SCR
 
 You need the following java files in the same folder (specified by `JAVA_PATH`) to run the program:
 * AbstractCleaner.class
+* CloudCleaner$Graph.class
 * CloudCleaner.class
 * Main.class
 * Parser.class
+* PreBGCleaner.class
+* PreOHCleaner.class
 * StandardDeviationCleaner.class
 * StandardDeviationCleanerBGOnly.class
+* STDEV.class
 * Write.class
+
+If you have the corresponding .java files, but not the .class files, you will need to compile them by navigating to the folder where all the .java files are, and run `javac Main.java`. If the command isn't recognized, you'll have to get the jdk as described below.
 
 ### Java Installed
 Make sure you have Java installed by opening a windows terminal (this can be done by hitting the windows key and typing `command` and clicking what pops up) and entering `javac`. If a long message is printed, describing how to use the command, then you have java already and can skip this step. If a *command not found* message is printed, you need to install it. 
