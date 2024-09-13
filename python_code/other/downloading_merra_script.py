@@ -126,6 +126,7 @@ def write_file(filename, save_count, path, response):
 
 
 def connect_and_download_from_url(session, url, path, file_count):
+    # TODO: add logic to support the new and old links.
     filename = url[81:124]
     file_month = get_month_from_filename(filename)
     make_month_directory(path, file_month)
@@ -182,8 +183,6 @@ def get_urls_and_download(urls_filename, path):
         The code right now adds the day to the stub that includes the year and month. For the first URL, it will add 01, making 
         20190601
         '''
-        # filename = "MERRA2_400.inst3_3d_asm_Nv.201810" + format(i + 1, "02d") + ".nc4.nc4"
-        # filename = url[81:124]
         successful_download = False
         while not successful_download:
             try:
