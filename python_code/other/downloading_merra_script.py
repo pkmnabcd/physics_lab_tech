@@ -165,13 +165,28 @@ def connect_and_download_from_url(session, url, path, file_count):
             raise DownloadingException(message)
 
 
+def get_username_password():
+    """
+    The file containing the uname and password should be like this:
+    Username: vjk;alfjek;lsajfksa
+    Password: fjekafvjka;jefa
+    """
+    path = "path_to_file_including_filename.txt"
+    file = open(path)
+    lines = file.readlines()
+
+    username_line = lines[0].split(": ").strip("\n")
+    username = username_line[1]
+    password_line = lines[1].split(": ").strip("\n")
+    password = username_line[1]
+
+    return username, password
 
 
 def get_urls_and_download(urls_filename, path):
     URLs = get_URL_list(urls_filename)
     
-    username = "GabeDeckerEarthDataLogin"
-    password = "PasswordForGabeDeckerEarthDataLogin1!"
+    username, password = get_username_password()
     session = SessionWithHeaderRedirection(username, password)
 
     # Iterate through each URL
