@@ -123,8 +123,9 @@ def write_file(filename, save_count, path, response):
 
 
 def connect_and_download_from_url(session, url, path, file_count):
-    # TODO: add logic to support the new and old links.
-    filename = url[81:124]
+    # This supports the new links I seem to be getting. They start with https://opendap instead of https://goldsmr5.
+    # For the old one, use url[81:124]
+    filename = url[96:143]
     file_month = get_month_from_filename(filename)
     make_month_directory(path, file_month)
     path += file_month + "//"
