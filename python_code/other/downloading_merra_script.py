@@ -20,34 +20,34 @@ class DownloadingException(Exception):
     def __init__(self, message):
         super().__init__(message)
         self.message = message
-    
+
 
 class SessionWithHeaderRedirection(requests.Session):
- 
+
     AUTH_HOST = 'urs.earthdata.nasa.gov'
- 
+
     def __init__(self, username, password):
- 
+
         super().__init__()
- 
+
         self.auth = (username, password)
- 
-  
- 
+
+
+
     # Overrides from the library to keep headers when redirected to or from
- 
+
     # the NASA auth host.
- 
+
     def rebuild_auth(self, prepared_request, response):
 
         headers = prepared_request.headers
 
         url = prepared_request.url
 
- 
+
 
         if 'Authorization' in headers:
- 
+
             original_parsed = requests.utils.urlparse(response.request.url)
 
             redirect_parsed = requests.utils.urlparse(url)
@@ -57,11 +57,11 @@ class SessionWithHeaderRedirection(requests.Session):
             if (original_parsed.hostname != redirect_parsed.hostname) and \
                     redirect_parsed.hostname != self.AUTH_HOST and \
                     original_parsed.hostname != self.AUTH_HOST:
- 
+
                 del headers['Authorization']
- 
-  
- 
+
+
+
         return
 
 
@@ -134,7 +134,7 @@ def connect_and_download_from_url(session, url, path, file_count):
     if exists(path + filename):
         print("This file is already present!")
         return
-    
+
     print("Trying to access URL #" + str(file_count + 1) + " ...")
     successfully_downloaded = False
     while not successfully_downloaded:
@@ -185,13 +185,13 @@ def get_username_password():
 
 def get_urls_and_download(urls_filename, path):
     URLs = get_URL_list(urls_filename)
-    
+
     username, password = get_username_password()
     session = SessionWithHeaderRedirection(username, password)
 
     # Iterate through each URL
     for i in range(len(URLs)):
-        
+
         url = URLs[i]
         '''
         EDIT THE FOLLOWING LINE!! Make sure that the filename iterating makes sense.
