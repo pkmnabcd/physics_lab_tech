@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Aug 17 09:33:00 2023
-
 @author: Gabriel Decker, with lots of help from https://wiki.earthdata.nasa.gov/display/EL/How+To+Access+Data+With+Python
 
 This program will download files from EarthData using my login. As of now, the files are put into the same folder as this script.
