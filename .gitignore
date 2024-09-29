@@ -11,3 +11,5 @@
 *.class
 **/test files/
 *temp_note.txt
+
+*/build/
