@@ -9,12 +9,12 @@ project(${PROJECT_NAME})
 set(HEADER_FILES
     mean.hpp
     strTool.hpp
-    files.hpp)
+)
 
 set(SOURCE_FILES
     mean.cpp
     strTool.cpp
-    files.cpp)
+)
 
 #
 # This is the main target
