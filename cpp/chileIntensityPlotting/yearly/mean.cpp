@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <format>
 
 std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
 {
@@ -33,4 +34,20 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
     return return_temp;
 }
 
-// std::vector<std::filesystem::path> getMonthPaths(std::string yearPathStr,
+std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath) 
+{
+    std::string year = getYearFromPath(yearPath.string())
+    std::cout << std::format("Finding the months paths for the year {}\n.", year);
+
+    std::vector<std::filesystem::path> monthPaths = {};
+    for (std::string month& : MONTH_HEADERS)
+    {
+        std::string monthPathStr = yearPath.string() + "/" + month + year+ "/";
+        auto monthPath = std::filesystem::path(monthPathStr)
+        if (std::filesystem::exists(monthPath))
+        {
+            monthPaths.add(monthPath);
+        }
+    }
+    return monthPaths;
+}
