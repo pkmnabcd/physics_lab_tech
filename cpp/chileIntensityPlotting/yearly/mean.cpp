@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-std::vector<std::vector<std::vector<double>>> getYearlyAverages(std::string yearPathStr)
+std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
 {
     auto yearPath = std::filesystem::path(yearPathStr);
     std::cout << "Path from yearPath: " << yearPath << std::endl;
@@ -25,9 +25,11 @@ std::vector<std::vector<std::vector<double>>> getYearlyAverages(std::string year
     //
     // Combine the individual month's averages into one array
     //
+    // The array will just be an array of an array of doubles. One array being the day of year (casted to double) and the other array being the average temps
+    //
     // Return this
 
-    std::vector<std::vector<std::vector<double>>> return_temp = { { { 0.0 } } };
+    std::vector<std::vector<double>> return_temp = { { 0.0 } };
     return return_temp;
 }
 

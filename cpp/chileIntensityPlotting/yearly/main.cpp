@@ -12,7 +12,7 @@ int main(int argc, char** argv)
         return 0;
     }
     std::string year_folder = argv[1];
-    std::vector<std::vector<std::vector<double>>> yearAverages = getYearlyAverages(year_folder);
+    std::vector<std::vector<double>> yearAverages = getYearlyAverages(year_folder);
 
     return 0;
 }
