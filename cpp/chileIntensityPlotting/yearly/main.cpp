@@ -1,8 +1,8 @@
-#include "files.hpp"
 #include "mean.hpp"
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 int main(int argc, char** argv)
 {
@@ -12,8 +12,7 @@ int main(int argc, char** argv)
         return 0;
     }
     std::string year_folder = argv[1];
-
-    double year_avg = getYearlyAverage(year_folder);
+    std::vector<std::vector<std::vector<double>>> yearAverages = getYearlyAverages(year_folder);
 
     return 0;
 }

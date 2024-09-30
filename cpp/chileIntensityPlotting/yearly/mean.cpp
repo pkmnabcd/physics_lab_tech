@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-double getYearlyAverage(std::string yearPathStr)
+std::vector<std::vector<std::vector<double>>> getYearlyAverages(std::string yearPathStr)
 {
     auto yearPath = std::filesystem::path(yearPathStr);
     std::cout << "Path from yearPath: " << yearPath << std::endl;
@@ -19,8 +19,16 @@ double getYearlyAverage(std::string yearPathStr)
     {
         std::cout << entry << std::endl;
     }
+    // Get month paths
+    //
+    // Call function to get all the averages from this month
+    //
+    // Combine the individual month's averages into one array
+    //
+    // Return this
 
-    return 0.0;
+    std::vector<std::vector<std::vector<double>>> return_temp = { { { 0.0 } } };
+    return return_temp;
 }
 
 // std::vector<std::filesystem::path> getMonthPaths(std::string yearPathStr,
