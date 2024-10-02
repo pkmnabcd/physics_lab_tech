@@ -3,10 +3,30 @@
 #include "strTool.hpp"
 
 #include <filesystem>
+#include <format>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <format>
+
+std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
+{
+    std::string year = getYearFromPath(yearPath.string());
+    std::cout << std::format("Finding the months paths for the year {}\n.", year);
+
+    std::vector<std::filesystem::path> monthPaths = {};
+    for (std::string month : MONTH_HEADERS)
+    {
+        std::string monthPathStr = yearPath.string() + "/" + month + year + "/";
+        auto monthPath = std::filesystem::path(monthPathStr);
+        if (std::filesystem::exists(monthPath))
+        {
+            monthPaths.push_back(monthPath);
+        }
+    }
+    return monthPaths;
+}
+
+
 
 std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
 {
@@ -21,6 +41,11 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
         std::cout << entry << std::endl;
     }
     // Get month paths
+    std::vector<std::filesystem::path> monthPaths = getMonthPaths(yearPath);
+    for (auto path : monthPaths)
+    {
+        std::cout << path.string() << std::endl;
+    }
     //
     // Call function to get all the averages from this month
     //
@@ -32,22 +57,4 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
 
     std::vector<std::vector<double>> return_temp = { { 0.0 } };
     return return_temp;
-}
-
-std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath) 
-{
-    std::string year = getYearFromPath(yearPath.string())
-    std::cout << std::format("Finding the months paths for the year {}\n.", year);
-
-    std::vector<std::filesystem::path> monthPaths = {};
-    for (std::string month& : MONTH_HEADERS)
-    {
-        std::string monthPathStr = yearPath.string() + "/" + month + year+ "/";
-        auto monthPath = std::filesystem::path(monthPathStr)
-        if (std::filesystem::exists(monthPath))
-        {
-            monthPaths.add(monthPath);
-        }
-    }
-    return monthPaths;
 }
