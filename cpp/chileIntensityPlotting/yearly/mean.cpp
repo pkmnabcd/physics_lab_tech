@@ -26,7 +26,9 @@ std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
     return monthPaths;
 }
 
-
+std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthPath)
+{
+}
 
 std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
 {
@@ -35,17 +37,37 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
     std::string year = getYearFromPath(yearPath.string());
     std::cout << "Output year: " << year << std::endl;
 
+    // Temp for demo purposes
     auto entries = std::filesystem::directory_iterator(yearPath);
     for (auto&& entry : entries)
     {
         std::cout << entry << std::endl;
     }
-    // Get month paths
+
+    // Temp print month paths
     std::vector<std::filesystem::path> monthPaths = getMonthPaths(yearPath);
     for (auto path : monthPaths)
     {
         std::cout << path.string() << std::endl;
     }
+
+    std::vector<std::vector<double>> yearlyAverages = { {} {} };
+    for (auto path : monthPaths)
+    {
+         std::vector<std::vector<double>> monthlyAverages = getMonthlyAverages(path);
+        // Test output and make sure there are only two columns
+        // Also test to make sure that both arrays are same length
+
+        std::vector<double> time = monthlyAverages[0];
+        std::vector<double> temps = monthlyAverages[1];
+        for (unsigned int i = 0; i < time.size(); i++)
+        {
+            // TODO: Make sure the month arrays are ordered
+            yearlyAverages[0].push_back(time[i]);
+            yearlyAverages[1].push_back(temps[i]);
+        }
+    }
+ 
     //
     // Call function to get all the averages from this month
     //
