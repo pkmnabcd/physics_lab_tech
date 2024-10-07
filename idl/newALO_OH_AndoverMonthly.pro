@@ -1,4 +1,4 @@
-pro ALO_OH_Andover ; c:\
+pro newALO_OH_AndoverMonthly ; c:\
 
 ;Set the day numbers for automatic running
 daynum = strarr(501)
@@ -7,7 +7,6 @@ for j = 0,500 do begin
 endfor
 
 endfile = '*.tif'       ; Use this with raw data
-;endfile = '*sr*.tif'    ; Use this for star removed data
 
 ; images location end in \
 yearl = '2016'
@@ -16,7 +15,6 @@ date = month+'12-13'
 
 drive = 'I:\'
 subfolder = 'ChileMTM\'+yearl+'\'+month+''+yearl+'\'                   ; Use this with raw data
-;subfolder = 'ChileMTM\'+yearl+'\'+month+''+yearl+'\processed\'          ; Use this star removed data
 location = drive + subfolder + date
 
 ; output images
@@ -49,7 +47,6 @@ box_pix = box_size * box_size
 	print, location+'\P12A' + endfile
 	file = FINDFILE(location+'\P12A' + endfile,count=nf)
   if (nf le 0) then print,'could not find the P12 data'
-	;file = DIALOG_PICKFILE(/READ,/MULTIPLE_FILES, FILTER = '*.tif')  ;old
 
 
 	n2 = n_elements(file)
@@ -57,8 +54,6 @@ box_pix = box_size * box_size
 	p2time = fltarr(n2)
 	p2CCDTemp = fltarr(n2)
 
-	;plot,[0,0], [20000,20000], xrange = [0,1000], yrange = [0,40000] ; dummy for image display
-	;plot,[0,0], [20000,20000], xrange = [0,24], yrange = [0,30000], Title='P12'  ;old
 
 	if n2 gt 5 then begin
 		for i = 0,n2-1 do begin
@@ -196,9 +191,6 @@ box_pix = box_size * box_size
 	; temp using actual dark zenith values
 	ohtemp = fltarr(n2)
 	ohtemp = 228.45/$
-	         ; [alog(2.621*[[(splp2 - spldk) - .733*(splbg - spldk)]/$ Old equation for Andover filter - Modified 09/28/10
-	         ;[alog(2.810*[[(splp2 - spldk) - .733*(splbg - spldk)]/$
-           ;[[[(splp4 - spldk) - .694*(splbg - spldk)]]]])]
            [alog(2.810*[[(splp2 - dkavg) - .733*(splbg - dkavg)]/$
            [[[(splp4 - dkavg) - .694*(splbg - dkavg)]]]])]              
   ohtemp = ohtemp + .62 + .0179*(ohtemp - 150) + .000616*(ohtemp - 150)^2
@@ -215,7 +207,6 @@ box_pix = box_size * box_size
 	openw, 2, out_dir +'OH_Andover_'+site+year +'day'+ strcompress(string(hr2[7]+1),/remove_all)+ '.dat'
 	printf,2,FORMAT='(8A15)', date+'-'+year, 'OHTemp','OHBandInt','CCDTemp','P12','P14','BG','ActDark'
 	for o = 0,n2-1 do begin
-		;printf, 2, string(p2time[o], ohtemp[o],  bandi[o], p2CCDTemp[o], splp2[o], splp4[o], splbg[o], spldk[o]) ;original code
 		printf, 2, format='(8f15.4)',p2time[o], ohtemp[o],  bandi[o], p2CCDTemp[o], splp2[o], splp4[o], splbg[o], spldk[o] ; changed by yucheng,5/5/10
 	endfor
 	close, 2
@@ -251,7 +242,6 @@ endif
 			endfor
 		endfor
 	endif
-	;plot, e866time, e866, xrange = [-12,12],  title = '866', /ynozero
 
 	;//////////////////////////////////////  846 Intensities   ///////////////////////////////////////
 	file = FINDFILE(location+'\868A_sr' + endfile)
@@ -269,7 +259,7 @@ endif
 					st = st + a[x,y]
 				endfor
 			endfor
-			e868[i] = st/box_pix   ;(box*2+1)^2.
+			e868[i] = st/box_pix
 
 			hr2 = read_binary(file[i], data_start =247 , data_type = 3, data_dims = [9])
 			e868time[i] = string(hr2[2]) + string(hr2[1])/60. + string(hr2[0])/3600.
@@ -278,7 +268,6 @@ endif
 			endfor
 		endfor
 	endif
-	;plot, e868time, e868, xrange = [-12,12],  title = '868', /ynozero
 
 
 ;************************** O2 Temperature Andover *******************************************
@@ -316,23 +305,14 @@ if n6 gt 5 then begin
 
   bandi2 = (3.453 + 0.00655* o2temp) * (S1c + 1.013 * S2c)
   
-	;o2temp2 = fltarr(n6)
-  ; o2temp2 = 228.45/$
-	;[alog(2.621*[[(spl866 - spldk) - .733*(splbg - spldk)]/$
-	;		[[[(spl868 - spldk) - .694*(splbg - spldk)]]]])]
-	;o2temp2 = o2temp2 + .62 + .0179*(o2temp2 - 150) + .000616*(o2temp2 - 150)^2
 
 	plot, e866time, o2temp, xrange = [-12,12], /ynozero, title='O2 Andover Temp'
 
-	;bandi2 = fltarr(n6)
-	;bandi2 = (6.80 + 0.069*(o2temp2-150) - 0.00019*(o2temp2 - 150)^2)*(spl866 -.72*splbg)
-	;e866time = fix(e866time*100) / 100.0
 	plot, e866time, bandi2, xrange = [-12,12], /ynozero ,title='O2 Andover Band Int'
 
 
 	openw, 1, out_dir +'O2_Andover_'+site+year +'day'+ strcompress(string(hr2[7]+1),/remove_all)+ '.dat'
 	for o = 0,n6-2 do begin
-;		printf, 1, string(e866time[o], o2temp[o],  bandi2[o], spl866[o], spl868[o], splbg[o], spldk[o]);original code 
 		printf, 1, format='(7f15.6)',e866time[o], o2temp[o],  bandi2[o], spl866[o], spl868[o], splbg[o], spldk[o]; Yucheng, 5/5/10
 	endfor
 	close, 1
