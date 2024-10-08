@@ -8,10 +8,14 @@ endfor
 
 endfile = '*.tif'       ; Use this with raw data
 
+daysArray = list('01-02', '02-03', '03-04', '04-05', '05-06', '06-07', '07-08', '08-09', '09-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17', '17-18', '18-19', '19-20', '20-21', '21-22', '22-23', '23-24', '24-25', '25-26', '26-27', '27-28', '28-29', '29-30', '30-31', '28-01', '29-01', '30-01', '31-01')
+
+foreach day, daysArray do begin
+
 ; images location end in \
 yearl = '2016'
 month = 'Aug'           ; First 3 letters, capitalized
-date = month+'12-13'
+date = month+day
 
 drive = 'I:\'
 subfolder = 'ChileMTM\'+yearl+'\'+month+''+yearl+'\'                   ; Use this with raw data
@@ -317,5 +321,6 @@ if n6 gt 5 then begin
 	endfor
 	close, 1
 endif
+endforeach
 stop
 end
