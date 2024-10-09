@@ -26,8 +26,23 @@ std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
     return monthPaths;
 }
 
+// TODO: write this function
 std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthPath)
 {
+    auto dataPath = monthPath / "processed";
+
+    auto output = std::vector<std::vector<double>>();
+    auto entries = std::filesystem::directory_iterator(dataPath);
+    for (auto&& entry : entries)
+    {
+        std::cout << entry << std::endl;
+        // Test to make sure it's the right file
+        // Parse the data
+        // Get the average for the day
+        // Add the doy and average to output
+    }
+
+    return { { 0.0 } };  // This is intentionally bad so it crashes when the 2nd array is accessed
 }
 
 std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
@@ -51,10 +66,10 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
         std::cout << path.string() << std::endl;
     }
 
-    std::vector<std::vector<double>> yearlyAverages = { {} {} };
+    std::vector<std::vector<double>> yearlyAverages = { {}, {} };
     for (auto path : monthPaths)
     {
-         std::vector<std::vector<double>> monthlyAverages = getMonthlyAverages(path);
+        std::vector<std::vector<double>> monthlyAverages = getMonthlyAverages(path);
         // Test output and make sure there are only two columns
         // Also test to make sure that both arrays are same length
 
@@ -67,7 +82,7 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
             yearlyAverages[1].push_back(temps[i]);
         }
     }
- 
+
     //
     // Call function to get all the averages from this month
     //
