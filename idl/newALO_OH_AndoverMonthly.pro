@@ -28,6 +28,7 @@ ErrorJump:
   if catching_error eq 1 then begin
     catching_error = 0
     continue
+  endif
 
 ; images location end in \
 yearl = '2016'
@@ -225,7 +226,11 @@ box_pix = box_size * box_size
 
 	plot, p2time, bandi, xrange = [-12,12], /ynozero ,title='OH Band Int'
 
-	openw, 2, out_dir +'OH_Andover_'+site+year +'day'+ strcompress(string(hr2[7]+1),/remove_all)+ '.dat'
+	outFilePath = out_dir +'OH_Andover_'+site+year +'day'+ strcompress(string(hr2[7]+1),/remove_all)+ '.dat'
+	outString = "Writing to: " + outFilePath
+	print, outString
+
+	openw, 2, outFilePath
 	printf,2,FORMAT='(8A15)', date+'-'+year, 'OHTemp','OHBandInt','CCDTemp','P12','P14','BG','ActDark'
 	for o = 0,n2-1 do begin
 		printf, 2, format='(8f15.4)',p2time[o], ohtemp[o],  bandi[o], p2CCDTemp[o], splp2[o], splp4[o], splbg[o], spldk[o] ; changed by yucheng,5/5/10
@@ -331,13 +336,17 @@ if n6 gt 5 then begin
 
 	plot, e866time, bandi2, xrange = [-12,12], /ynozero ,title='O2 Andover Band Int'
 
+	outFilePath = out_dir +'O2_Andover_'+site+year +'day'+ strcompress(string(hr2[7]+1),/remove_all)+ '.dat'
+	outString = "Writing to: " + outFilePath
+	print, outString
 
-	openw, 1, out_dir +'O2_Andover_'+site+year +'day'+ strcompress(string(hr2[7]+1),/remove_all)+ '.dat'
+	openw, 1, outFilePath
 	for o = 0,n6-2 do begin
 		printf, 1, format='(7f15.6)',e866time[o], o2temp[o],  bandi2[o], spl866[o], spl868[o], splbg[o], spldk[o]; Yucheng, 5/5/10
 	endfor
 	close, 1
-endif
+	endif
+print
 endforeach
 stop
 end
