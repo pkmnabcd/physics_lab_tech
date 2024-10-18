@@ -27,13 +27,78 @@ std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
     return monthPaths;
 }
 
+void doSelectionSort(std::vector<std::filesystem::path>& paths, std::vector<unsigned int>& dayNumbers)
+{
+    for (unsigned int i = 0; i < paths.size() - 1; i++)
+    {
+        unsigned int currentMinIndex = i;
+        unsigned int currentMinVal = dayNumbers[i];
+
+        for (unsigned int j = i + 1; j < paths.size(); j++)
+        {
+            if (dayNumbers[j] < currentMinVal)
+            {
+                currentMinIndex = j;
+                currentMinVal = dayNumbers[j];
+            }
+        }
+        if (currentMinIndex != i)
+        {
+            dayNumbers[currentMinIndex] = dayNumbers[i];
+            dayNumbers[i] = currentMinVal;
+
+            auto tempPath = paths[currentMinIndex];
+            paths[currentMinIndex] = paths[i];
+            paths[i] = tempPath;
+        }
+    }
+    if (dayNumbers[0] == 1)
+    {
+        auto tempNum = dayNumbers[0];
+        dayNumbers[0] = dayNumbers[dayNumbers.size() - 1];
+        dayNumbers[dayNumbers.size() - 1] = tempNum;
+
+        auto tempPath = paths[0];
+        paths[0] = paths[paths.size() - 1];
+        paths[paths.size() - 1] = tempPath;
+    }
+}
+
+void sortOHPaths(std::vector<std::filesystem::path>& paths)
+{
+    auto filenames = std::vector<std::string>();
+    std::cout << paths.size() << std::endl;
+    for (auto& path : paths)  // For future improvement for simplicity, a path has the method filename() , so you can just use that.
+    {
+        std::string pathStr = path.string();
+        auto filenamePosition = pathStr.find_last_of("/") + 1;
+        std::string filename = pathStr.substr(filenamePosition);
+        filenames.push_back(filename);
+        std::cout << filename << std::endl;
+    }
+    auto dayNumbers = std::vector<unsigned int>();
+    for (auto& filename : filenames)
+    {
+        auto doyStartPosition = filename.find('y') + 1;
+        auto doyEndPosition = filename.find('.') - 1;
+        auto positionDelta = doyEndPosition - doyStartPosition;
+        std::string doy = "";
+        for (unsigned int i = 0; i <= positionDelta; i++)
+        {
+            doy += filename[doyStartPosition + i];
+        }
+        dayNumbers.push_back(std::stoi(doy));
+    }
+    doSelectionSort(paths, dayNumbers);
+}
+
 // TODO: write this function
 std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthPath)
 {
     auto dataPath = monthPath / "processed";
     std::cout << "Finding paths in month path " << dataPath << std::endl;
 
-    std::string pattern_text = "/OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
+    std::string pattern_text = "OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
     auto regexpr = std::regex(pattern_text);
 
     std::vector<std::filesystem::path> OHPaths = std::vector<std::filesystem::path>();
@@ -50,7 +115,8 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
             OHPaths.push_back(entry.path());
         }
     }
-    // sort the OHPaths. They're all out of order
+    sortOHPaths(OHPaths);
+    std::cout << "Out of sort" << std::endl;
 
     auto output = std::vector<std::vector<double>>();
     for (auto& path : OHPaths)
@@ -61,6 +127,7 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
         // Add the doy and average to output
     }
 
+    std::cout << "Made it through getMontlyAverages" << std::endl;
     return { { 0.0 } }; // This is intentionally bad so it crashes when the 2nd array is accessed
 }
 
