@@ -99,7 +99,7 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
     auto dataPath = monthPath / "processed";
     std::cout << "Finding paths in month path " << dataPath << std::endl;
 
-    std::string pattern_text = "OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
+    std::string pattern_text = "/OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
     auto regexpr = std::regex(pattern_text);
 
     std::vector<std::filesystem::path> OHPaths = std::vector<std::filesystem::path>();
@@ -123,7 +123,7 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
     for (auto& path : OHPaths)
     {
         std::cout << path.string() << std::endl;
-        // Parse the data
+        // TODO: write the parser function in parsing.cpp
         OneDay oneDay = parseOneDay(path);
         // Get the average for the day
         // Add the doy and average to output
