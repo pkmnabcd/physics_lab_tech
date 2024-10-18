@@ -1,5 +1,6 @@
 #include "mean.hpp"
 
+#include "parsing.hpp"
 #include "strTool.hpp"
 
 #include <filesystem>
@@ -68,7 +69,7 @@ void sortOHPaths(std::vector<std::filesystem::path>& paths)
 {
     auto filenames = std::vector<std::string>();
     std::cout << paths.size() << std::endl;
-    for (auto& path : paths)  // For future improvement for simplicity, a path has the method filename() , so you can just use that.
+    for (auto& path : paths) // For future improvement for simplicity, a path has the method filename() , so you can just use that.
     {
         std::string pathStr = path.string();
         auto filenamePosition = pathStr.find_last_of("/") + 1;
@@ -123,6 +124,7 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
     {
         std::cout << path.string() << std::endl;
         // Parse the data
+        OneDay oneDay = parseOneDay(path);
         // Get the average for the day
         // Add the doy and average to output
     }

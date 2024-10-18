@@ -9,11 +9,15 @@ project(${PROJECT_NAME})
 set(HEADER_FILES
     mean.hpp
     strTool.hpp
+    OneDay.hpp
+    parsing.hpp
 )
 
 set(SOURCE_FILES
     mean.cpp
     strTool.cpp
+    OneDay.cpp
+    parsing.cpp
 )
 
 #
