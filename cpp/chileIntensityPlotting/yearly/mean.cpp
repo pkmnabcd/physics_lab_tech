@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <format>
 #include <iostream>
+#include <regex>
 #include <string>
 #include <vector>
 
@@ -30,19 +31,37 @@ std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
 std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthPath)
 {
     auto dataPath = monthPath / "processed";
+    std::cout << "Finding paths in month path " << dataPath << std::endl;
 
-    auto output = std::vector<std::vector<double>>();
+    std::string pattern_text = "/OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
+    auto regexpr = std::regex(pattern_text);
+
+    std::vector<std::filesystem::path> OHPaths = std::vector<std::filesystem::path>();
     auto entries = std::filesystem::directory_iterator(dataPath);
     for (auto&& entry : entries)
     {
-        std::cout << entry << std::endl;
-        // Test to make sure it's the right file
+        if (entry.is_directory())
+        {
+            continue;
+        }
+        std::basic_string pathString = entry.path().string();
+        if (std::regex_search(pathString.begin(), pathString.end(), regexpr))
+        {
+            OHPaths.push_back(entry.path());
+        }
+    }
+    // sort the OHPaths. They're all out of order
+
+    auto output = std::vector<std::vector<double>>();
+    for (auto& path : OHPaths)
+    {
+        std::cout << path.string() << std::endl;
         // Parse the data
         // Get the average for the day
         // Add the doy and average to output
     }
 
-    return { { 0.0 } };  // This is intentionally bad so it crashes when the 2nd array is accessed
+    return { { 0.0 } }; // This is intentionally bad so it crashes when the 2nd array is accessed
 }
 
 std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
