@@ -53,16 +53,15 @@ void doSelectionSort(std::vector<std::filesystem::path>& paths, std::vector<unsi
             paths[i] = tempPath;
         }
     }
-    // TODO: Fix a bug here. This swaps the first and last value, I need to just remove the first value and put it in the back
     if (dayNumbers[0] == 1)
     {
-        auto tempNum = dayNumbers[0];
-        dayNumbers[0] = dayNumbers[dayNumbers.size() - 1];
-        dayNumbers[dayNumbers.size() - 1] = tempNum;
+        auto numOne = dayNumbers[0];
+        dayNumbers.erase(0);
+        dayNumbers.push_back(numOne);
 
-        auto tempPath = paths[0];
-        paths[0] = paths[paths.size() - 1];
-        paths[paths.size() - 1] = tempPath;
+        auto pathOne = paths[0];
+        paths.erase(0);
+        paths.push_back(pathOne);
     }
 }
 
