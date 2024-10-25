@@ -53,14 +53,15 @@ void doSelectionSort(std::vector<std::filesystem::path>& paths, std::vector<unsi
             paths[i] = tempPath;
         }
     }
+    // TODO: Make sure this works.
     if (dayNumbers[0] == 1)
     {
         auto numOne = dayNumbers[0];
-        dayNumbers.erase(0);
+        dayNumbers.erase(dayNumbers.begin());
         dayNumbers.push_back(numOne);
 
         auto pathOne = paths[0];
-        paths.erase(0);
+        paths.erase(paths.begin());
         paths.push_back(pathOne);
     }
 }
