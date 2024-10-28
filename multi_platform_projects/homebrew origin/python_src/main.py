@@ -6,6 +6,8 @@ import grapher
 
 
 def check_or_make_dir(directory):
+    if directory == "":
+        return
     if not os.path.exists(directory):
         os.mkdir(directory)
 
