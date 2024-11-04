@@ -81,15 +81,7 @@ void sortOHPaths(std::vector<std::filesystem::path>& paths)
     auto dayNumbers = std::vector<unsigned int>();
     for (auto& filename : filenames)
     {
-        auto doyStartPosition = filename.find('y') + 1;
-        auto doyEndPosition = filename.find('.') - 1;
-        auto positionDelta = doyEndPosition - doyStartPosition;
-        std::string doy = "";
-        for (unsigned int i = 0; i <= positionDelta; i++)
-        {
-            doy += filename[doyStartPosition + i];
-        }
-        dayNumbers.push_back(std::stoi(doy));
+        dayNumbers.push_back(parseDoyFromFilename(filename));
     }
     doSelectionSort(paths, dayNumbers);
 }

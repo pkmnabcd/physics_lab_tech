@@ -35,3 +35,16 @@ std::string getYearFromPath(std::string yearPathStr)
     assert(isNumeric(year));
     return year;
 }
+
+unsigned int parseDoyFromFilename(std::string filename)
+{
+    auto doyStartPosition = filename.find('y') + 1;
+    auto doyEndPosition = filename.find('.') - 1;
+    auto positionDelta = doyEndPosition - doyStartPosition;
+    std::string doy = "";
+    for (unsigned int i = 0; i <= positionDelta; i++)
+    {
+        doy += filename[doyStartPosition + i];
+    }
+    return std::stoi(doy);
+}
