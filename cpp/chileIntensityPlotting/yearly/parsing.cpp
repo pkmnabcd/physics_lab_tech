@@ -20,7 +20,6 @@ OneDay parseOneDay(std::filesystem::path dayPath)
     unsigned int lineNumber = 1;
     while (std::getline(file, line))
     {
-        std::cout << line << std::endl;
         if (lineNumber == 1)
         {
             headerLine = line;
@@ -32,8 +31,6 @@ OneDay parseOneDay(std::filesystem::path dayPath)
         std::cout << line << std::endl;
         lineNumber++;
     }
-    // TODO: Make sure this Java yoinked code works
-    // Right now, it gets all the data from the file into arrays of rows of data. Change it to just add the needed data right into the two needed columns
 
     unsigned int lineLength = headerLine.length();
     unsigned int colLength = 15;
@@ -55,7 +52,7 @@ OneDay parseOneDay(std::filesystem::path dayPath)
             std::string::size_type spacePos = substring.find(" ");
             while (spacePos != std::string::npos)
             {
-                substring.erase(spacePos);
+                substring = substring.substr(spacePos + 1, substring.size() - 1);
                 spacePos = substring.find(" ");
             }
             double addVal;
@@ -80,6 +77,10 @@ OneDay parseOneDay(std::filesystem::path dayPath)
                 tempData.push_back(addVal);
             }
         }
+    }
+    for (unsigned int i = 0; i < timeData.size(); i++)
+    {
+        std::cout << timeData[i] << " : " << tempData[i] << std::endl;
     }
 
     file.close();
