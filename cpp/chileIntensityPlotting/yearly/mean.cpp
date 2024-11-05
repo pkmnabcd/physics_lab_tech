@@ -86,6 +86,18 @@ void sortOHPaths(std::vector<std::filesystem::path>& paths)
     doSelectionSort(paths, dayNumbers);
 }
 
+double getAverage(OneDay dayData)
+{
+    double total = 0;
+    std::vector<double> temperature = dayData.getOHTemp();
+    for (auto& val : temperature)
+    {
+        total += val;
+    }
+    double average = total / temperature.size();
+    return average;
+}
+
 // TODO: write this function
 std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthPath)
 {
@@ -112,18 +124,19 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
     sortOHPaths(OHPaths);
     std::cout << "Out of sort" << std::endl;
 
-    auto output = std::vector<std::vector<double>>();
+    auto output = std::vector<std::vector<double>>(2);
+    output[0] = std::vector<double>();
+    output[1] = std::vector<double>();
     for (auto& path : OHPaths)
     {
         std::cout << path.string() << std::endl;
-        // TODO: write the parser function in parsing.cpp
         OneDay oneDay = parseOneDay(path);
-        // Get the average for the day
-        // Add the doy and average to output
+        output[0].push_back(static_cast<double>(oneDay.getDayOfYear()));
+        output[1].push_back(getAverage(oneDay));
     }
 
     std::cout << "Made it through getMontlyAverages" << std::endl;
-    return { { 0.0 } }; // This is intentionally bad so it crashes when the 2nd array is accessed
+    return output;
 }
 
 std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
@@ -173,6 +186,5 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
     //
     // Return this
 
-    std::vector<std::vector<double>> return_temp = { { 0.0 } };
-    return return_temp;
+    return yearlyAverages;
 }
