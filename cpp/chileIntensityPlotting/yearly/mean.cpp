@@ -3,6 +3,7 @@
 #include "parsing.hpp"
 #include "strTool.hpp"
 
+#include <cmath>
 #include <filesystem>
 #include <format>
 #include <iostream>
@@ -62,14 +63,12 @@ void doSelectionSort(std::vector<std::filesystem::path>& paths, std::vector<unsi
 void sortOHPaths(std::vector<std::filesystem::path>& paths)
 {
     auto filenames = std::vector<std::string>();
-    std::cout << paths.size() << std::endl;
     for (auto& path : paths) // For future improvement for simplicity, a path has the method filename() , so you can just use that.
     {
         std::string pathStr = path.string();
         auto filenamePosition = pathStr.find_last_of("/") + 1;
         std::string filename = pathStr.substr(filenamePosition);
         filenames.push_back(filename);
-        std::cout << filename << std::endl;
     }
     auto dayNumbers = std::vector<unsigned int>();
     for (auto& filename : filenames)
@@ -83,18 +82,23 @@ double getAverage(OneDay dayData)
 {
     double total = 0;
     std::vector<double> temperature = dayData.getOHTemp();
+    std::uint16_t nanCount = 0;
     for (auto& val : temperature)
     {
+        if (std::isnan(val))
+        {
+            nanCount++;
+            continue;
+        }
         total += val;
     }
-    double average = total / temperature.size();
+    double average = total / (temperature.size() - nanCount);
     return average;
 }
 
 std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthPath)
 {
     auto dataPath = monthPath / "processed";
-    std::cout << "Finding paths in month path " << dataPath << std::endl;
 
     std::string pattern_text = "/OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
     auto regexpr = std::regex(pattern_text);
@@ -125,7 +129,6 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
         output[1].push_back(getAverage(oneDay));
     }
 
-    std::cout << "Made it through getMontlyAverages" << std::endl;
     return output;
 }
 
@@ -134,29 +137,19 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
     auto yearPath = std::filesystem::path(yearPathStr);
     std::cout << "Path from yearPath: " << yearPath << std::endl;
     std::string year = getYearFromPath(yearPath.string());
-    std::cout << "Output year: " << year << std::endl;
-
-    // Temp for demo purposes
-    auto entries = std::filesystem::directory_iterator(yearPath);
-    for (auto&& entry : entries)
-    {
-        std::cout << "--All paths in month--" << entry << std::endl;
-    }
 
     // Temp print month paths
+    std::cout << "--Month Paths--\n";
     std::vector<std::filesystem::path> monthPaths = getMonthPaths(yearPath);
     for (auto path : monthPaths)
     {
-        std::cout << "--Month Paths--\n"
-                  << path.string() << std::endl;
+        std::cout << path.string() << std::endl;
     }
 
     std::vector<std::vector<double>> yearlyAverages = { {}, {} };
     for (auto path : monthPaths)
     {
         std::vector<std::vector<double>> monthlyAverages = getMonthlyAverages(path);
-        // Test output and make sure there are only two columns
-        // Also test to make sure that both arrays are same length
 
         std::vector<double> time = monthlyAverages[0];
         std::vector<double> temps = monthlyAverages[1];
