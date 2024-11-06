@@ -28,7 +28,6 @@ OneDay parseOneDay(std::filesystem::path dayPath)
         {
             lines.push_back(line);
         }
-        std::cout << line << std::endl;
         lineNumber++;
     }
 
@@ -78,11 +77,6 @@ OneDay parseOneDay(std::filesystem::path dayPath)
             }
         }
     }
-    for (unsigned int i = 0; i < timeData.size(); i++)
-    {
-        std::cout << timeData[i] << " : " << tempData[i] << std::endl;
-    }
-
     file.close();
 
     return OneDay(timeData, tempData, doy);

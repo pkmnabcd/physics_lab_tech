@@ -30,6 +30,10 @@ std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
 
 void doSelectionSort(std::vector<std::filesystem::path>& paths, std::vector<unsigned int>& dayNumbers)
 {
+    if (paths.size() == 0 && paths.size() == 0)
+    {
+        return;
+    }
     for (unsigned int i = 0; i < paths.size() - 1; i++)
     {
         unsigned int currentMinIndex = i;
@@ -110,14 +114,12 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
         }
     }
     sortOHPaths(OHPaths);
-    std::cout << "Out of sort" << std::endl;
 
     auto output = std::vector<std::vector<double>>(2);
     output[0] = std::vector<double>();
     output[1] = std::vector<double>();
     for (auto& path : OHPaths)
     {
-        std::cout << path.string() << std::endl;
         OneDay oneDay = parseOneDay(path);
         output[0].push_back(static_cast<double>(oneDay.getDayOfYear()));
         output[1].push_back(getAverage(oneDay));
@@ -138,14 +140,15 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
     auto entries = std::filesystem::directory_iterator(yearPath);
     for (auto&& entry : entries)
     {
-        std::cout << entry << std::endl;
+        std::cout << "--All paths in month--" << entry << std::endl;
     }
 
     // Temp print month paths
     std::vector<std::filesystem::path> monthPaths = getMonthPaths(yearPath);
     for (auto path : monthPaths)
     {
-        std::cout << path.string() << std::endl;
+        std::cout << "--Month Paths--\n"
+                  << path.string() << std::endl;
     }
 
     std::vector<std::vector<double>> yearlyAverages = { {}, {} };
