@@ -53,17 +53,6 @@ void doSelectionSort(std::vector<std::filesystem::path>& paths, std::vector<unsi
             paths[i] = tempPath;
         }
     }
-    // TODO: Make sure this works.
-    if (dayNumbers[0] == 1)
-    {
-        auto numOne = dayNumbers[0];
-        dayNumbers.erase(dayNumbers.begin());
-        dayNumbers.push_back(numOne);
-
-        auto pathOne = paths[0];
-        paths.erase(paths.begin());
-        paths.push_back(pathOne);
-    }
 }
 
 void sortOHPaths(std::vector<std::filesystem::path>& paths)
@@ -98,7 +87,6 @@ double getAverage(OneDay dayData)
     return average;
 }
 
-// TODO: write this function
 std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthPath)
 {
     auto dataPath = monthPath / "processed";
@@ -176,15 +164,6 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
             yearlyAverages[1].push_back(temps[i]);
         }
     }
-
-    //
-    // Call function to get all the averages from this month
-    //
-    // Combine the individual month's averages into one array
-    //
-    // The array will just be an array of an array of doubles. One array being the day of year (casted to double) and the other array being the average temps
-    //
-    // Return this
 
     return yearlyAverages;
 }

@@ -41,10 +41,26 @@ unsigned int parseDoyFromFilename(std::string filename)
     auto doyStartPosition = filename.find('y') + 1;
     auto doyEndPosition = filename.find('.') - 1;
     auto positionDelta = doyEndPosition - doyStartPosition;
-    std::string doy = "";
+    std::string doyStr = "";
     for (unsigned int i = 0; i <= positionDelta; i++)
     {
-        doy += filename[doyStartPosition + i];
+        doyStr += filename[doyStartPosition + i];
     }
-    return std::stoi(doy);
+    unsigned int doy = std::stoi(doyStr);
+    if (doy == 1)
+    {
+        auto yearStartPosition = filename.find("ALO") + 3;
+        std::string yearStr = filename[doyStartPosition];
+        yearStr += filename[doyStartPosition + 1];
+        unsigned int year = std::stoi(yearStr);
+        if (year % 4 == 0)
+        {
+            doy = 367;
+        }
+        else
+        {
+            doy = 366;
+        }
+    }
+    return doy
 }
