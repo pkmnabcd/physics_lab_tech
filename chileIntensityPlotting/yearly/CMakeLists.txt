@@ -12,6 +12,7 @@ set(HEADER_FILES
     strTool.hpp
     OneDay.hpp
     parsing.hpp
+    fileWrite.hpp
 )
 
 set(SOURCE_FILES
@@ -19,6 +20,7 @@ set(SOURCE_FILES
     strTool.cpp
     OneDay.cpp
     parsing.cpp
+    fileWrite.cpp
 )
 
 set(UNIT_TEST_FILES

@@ -1,3 +1,4 @@
+#include "fileWrite.hpp"
 #include "mean.hpp"
 
 #include <iostream>
@@ -18,6 +19,15 @@ int main(int argc, char** argv)
     for (unsigned int i = 0; i < yearAverages[0].size(); i++)
     {
         std::cout << yearAverages[0][i] << " : " << yearAverages[1][i] << std::endl;
+    }
+
+    if (writeAveragesToCSV(year_folder, yearAverages))
+    {
+        std::cout << "Written.\n";
+    }
+    else
+    {
+        std::cout << "Not Written.\n";
     }
 
     return 0;
