@@ -14,4 +14,6 @@
 
 **/build/*
 **/data/*
-multi_platform_projects/homebrew origin/monthly/Monthly*
+homebrew origin/monthly/MonthlyCleaner
+homebrew origin/monthly/MonthlyGrapher.exe
+
