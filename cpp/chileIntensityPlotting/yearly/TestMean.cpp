@@ -1,7 +1,9 @@
 #include "mean.hpp"
+#include "strTool.hpp"
 
 #include <cmath>
 #include <gtest/gtest.h>
+#include <string>
 #include <vector>
 
 int main(int argc, char* argv[])
@@ -60,4 +62,27 @@ TEST(getAverages, AllNanReturnsNan)
     OneDay d4 = OneDay(timeData, tempData, 3);
 
     EXPECT_TRUE(std::isnan(getAverage(d4)));
+}
+
+TEST(parseDoyFromFilename, GetsCorrectNumberNormal)
+{
+    std::string filename = "OH_Andover_ALO10day64.dat";
+    EXPECT_EQ(64, parseDoyFromFilename(filename));
+    filename = "OH_Andover_ALO10day2.dat";
+    EXPECT_EQ(2, parseDoyFromFilename(filename));
+    filename = "OH_Andover_ALO10day366.dat";
+    EXPECT_EQ(366, parseDoyFromFilename(filename));
+}
+
+TEST(parseDoyFromFilename, GetsCorrectNumberDay1)
+{
+    std::string filename = "OH_Andover_ALO10day1.dat";
+    EXPECT_EQ(366, parseDoyFromFilename(filename));
+    filename = "OH_Andover_ALO13day1.dat";
+    EXPECT_EQ(366, parseDoyFromFilename(filename));
+
+    filename = "OH_Andover_ALO12day1.dat";
+    EXPECT_EQ(367, parseDoyFromFilename(filename));
+    filename = "OH_Andover_ALO24day1.dat";
+    EXPECT_EQ(367, parseDoyFromFilename(filename));
 }

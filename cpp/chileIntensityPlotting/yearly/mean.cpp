@@ -65,10 +65,7 @@ void sortOHPaths(std::vector<std::filesystem::path>& paths)
     auto filenames = std::vector<std::string>();
     for (auto& path : paths) // For future improvement for simplicity, a path has the method filename() , so you can just use that.
     {
-        std::string pathStr = path.string();
-        auto filenamePosition = pathStr.find_last_of("/") + 1;
-        std::string filename = pathStr.substr(filenamePosition);
-        filenames.push_back(filename);
+        filenames.push_back(path.filename().string());
     }
     auto dayNumbers = std::vector<unsigned int>();
     for (auto& filename : filenames)
