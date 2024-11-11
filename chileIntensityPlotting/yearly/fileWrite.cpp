@@ -10,9 +10,8 @@
 bool writeAveragesToCSV(std::string yearPath, std::vector<std::vector<double>>& yearAverages)
 {
     auto outPath = std::filesystem::path(yearPath);
-    outPath / (getYearFromPath(yearPath) + "dailyAverages");
+    outPath /= (getYearFromPath(yearPath) + "dailyAverages.csv");
     std::ofstream file = std::ofstream(outPath);
-    // file.open(path);
     if (file.is_open())
     {
         for (unsigned int i = 0; i < yearAverages[0].size(); i++)
