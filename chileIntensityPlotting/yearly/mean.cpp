@@ -95,7 +95,18 @@ double getAverage(OneDay dayData)
 
 double getStdDev(OneDay dayData)
 {
-    return 0.1;
+    double mean = dayData.getAverage();
+    std::vector<double> OHTemp = dayData.getOHTemp();
+    int numberOfVals = OHTemp.size();
+    double summation = 0;
+
+    for (double val : OHTemp)
+    {
+        summation += pow((val - mean), 2);
+    }
+    double stdDev = sqrt(summation / (numberOfVals - 1));
+
+    return stdDev;
 }
 
 std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)

@@ -4,6 +4,7 @@
 #include "strTool.hpp"
 
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -17,7 +18,7 @@ bool writeAveragesToCSV(std::string yearPath, std::vector<OneDay>& yearAverages)
     {
         for (OneDay& day : yearAverages)
         {
-            file << day.getDayOfYear() << "," << day.getAverage() << "\n";
+            file << std::format("{},{},{}\n", day.getDayOfYear(), day.getAverage(), day.getStdDev());
         }
         file.close();
     }
