@@ -93,7 +93,12 @@ double getAverage(OneDay dayData)
     return average;
 }
 
-std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthPath)
+double getStdDev(OneDay dayData)
+{
+    return 0.1;
+}
+
+std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)
 {
     auto dataPath = monthPath / "processed";
 
@@ -116,20 +121,24 @@ std::vector<std::vector<double>> getMonthlyAverages(std::filesystem::path monthP
     }
     sortOHPaths(OHPaths);
 
-    auto output = std::vector<std::vector<double>>(2);
-    output[0] = std::vector<double>();
-    output[1] = std::vector<double>();
+    auto output = std::vector<OneDay>();
     for (auto& path : OHPaths)
     {
         OneDay oneDay = parseOneDay(path);
-        output[0].push_back(static_cast<double>(oneDay.getDayOfYear()));
-        output[1].push_back(getAverage(oneDay));
+        oneDay.setAverage(getAverage(oneDay));
+        oneDay.setStdDev(getStdDev(oneDay));
+
+        // Getting rid of vectors we don't need anymore
+        oneDay.setTime(std::vector<double>());
+        oneDay.setOHTemp(std::vector<double>());
+
+        output.push_back(oneDay);
     }
 
     return output;
 }
 
-std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
+std::vector<OneDay> getYearlyAverages(std::string yearPathStr)
 {
     auto yearPath = std::filesystem::path(yearPathStr);
     std::cout << "Path from yearPath: " << yearPath << std::endl;
@@ -143,20 +152,16 @@ std::vector<std::vector<double>> getYearlyAverages(std::string yearPathStr)
         std::cout << path.string() << std::endl;
     }
 
-    std::vector<std::vector<double>> yearlyAverages = { {}, {} };
+    std::vector<OneDay> yearlyAverages = {};
     for (auto path : monthPaths)
     {
-        std::vector<std::vector<double>> monthlyAverages = getMonthlyAverages(path);
+        std::vector<OneDay> monthlyAverages = getMonthlyAverages(path);
 
-        std::vector<double> time = monthlyAverages[0];
-        std::vector<double> temps = monthlyAverages[1];
-        for (unsigned int i = 0; i < time.size(); i++)
+        for (OneDay& day : monthlyAverages)
         {
             // TODO: Make sure the month arrays are ordered
-            yearlyAverages[0].push_back(time[i]);
-            yearlyAverages[1].push_back(temps[i]);
+            yearlyAverages.push_back(day);
         }
     }
-
     return yearlyAverages;
 }

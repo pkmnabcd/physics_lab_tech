@@ -1,3 +1,4 @@
+#include "OneDay.hpp"
 #include "fileWrite.hpp"
 #include "mean.hpp"
 
@@ -13,12 +14,12 @@ int main(int argc, char** argv)
         return 0;
     }
     std::string year_folder = argv[1];
-    std::vector<std::vector<double>> yearAverages = getYearlyAverages(year_folder);
+    std::vector<OneDay> yearAverages = getYearlyAverages(year_folder);
     std::cout << "Made it to the end\n";
 
-    for (unsigned int i = 0; i < yearAverages[0].size(); i++)
+    for (OneDay& day : yearAverages)
     {
-        std::cout << yearAverages[0][i] << " : " << yearAverages[1][i] << std::endl;
+        std::cout << day.getDayOfYear() << " : " << day.getAverage() << std::endl;
     }
 
     if (writeAveragesToCSV(year_folder, yearAverages))

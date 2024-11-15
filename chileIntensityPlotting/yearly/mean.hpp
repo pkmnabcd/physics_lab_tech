@@ -4,9 +4,10 @@
 
 #include <string>
 #include <vector>
-std::vector<std::vector<double>> getYearlyAverages(std::string year_path);
+std::vector<OneDay> getYearlyAverages(std::string year_path);
 
 double getAverage(OneDay dayData);
+double getStdDev(OneDay dayData);
 
 const std::vector<std::string> MONTH_HEADERS = {
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
