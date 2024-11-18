@@ -39,6 +39,10 @@ if __name__ == "__main__":
     filename, file_dir = separateFilenameAndDirectory(file_path)
 
     data, col_headers = read_file(file_path)
+    if data == None and col_headers == None:
+        print("Empty file detected. No graph was saved.")
+        exit(1)
+
     metadata = get_metadata(filename)
     add_date_to_metadata(col_headers[0], metadata)
 

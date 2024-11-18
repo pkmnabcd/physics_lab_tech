@@ -10,6 +10,7 @@
 *.xlsx
 *.class
 **/test files/
+**/test_files/*
 *temp_note.txt
 
 **/build/*

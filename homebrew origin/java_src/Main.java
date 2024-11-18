@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         String filename = args[0];
         ArrayList<ArrayList<Double>> inData = Parser.parseFile(filename);
-        
+
 	ArrayList<Integer> removeIndexesMain = new ArrayList<Integer>();
 	ArrayList<Integer> removeIndexesTemp;
 

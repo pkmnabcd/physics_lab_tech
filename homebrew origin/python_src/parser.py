@@ -27,6 +27,8 @@ def read_file(filename):
             else:
                 line_data.append(float(substring))
         row_set.append(line_data)
+    if len(lines) == 0:
+        return None, None
 
     col_set = convert_row_set_to_col_set(row_set)
 
