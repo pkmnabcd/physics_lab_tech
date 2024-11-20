@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     data, col_headers = read_file(file_path)
     if data == None and col_headers == None:
-        print("Empty file detected. No graph was saved.")
+        print("Empty file detected. No graph was saved.", file=sys.stderr)
         exit(1)
 
     metadata = get_metadata(filename)
