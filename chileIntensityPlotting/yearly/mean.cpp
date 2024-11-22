@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <format>
 #include <iostream>
+#include <print>
 #include <regex>
 #include <string>
 #include <vector>
@@ -102,10 +103,16 @@ double getStdDev(OneDay dayData)
 
     for (double val : OHTemp)
     {
-        summation += pow((val - mean), 2);
+        if (std::isnan(val))
+        {
+            numberOfVals--;
+        }
+        else
+        {
+            summation += pow((val - mean), 2);
+        }
     }
     double stdDev = sqrt(summation / (numberOfVals - 1));
-
     return stdDev;
 }
 
@@ -113,7 +120,7 @@ std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)
 {
     auto dataPath = monthPath / "processed";
 
-    std::string pattern_text = "/OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
+    std::string pattern_text = "/OH_Andover_ALO[0-9]day[0-9]{1,3}.dat";
     auto regexpr = std::regex(pattern_text);
 
     std::vector<std::filesystem::path> OHPaths = std::vector<std::filesystem::path>();
