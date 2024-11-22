@@ -10,13 +10,15 @@ def readAverages(path):
 
     times = []
     temps = []
+    stdevs = []
     for line in lines:
         cols = line.split(",")
         times.append(int(cols[0]))
         temps.append(float(cols[1]))
+        stdevs.append(float(cols[2]))
 
     file.close()
-    return times, temps
+    return times, temps, stdevs
 
 def getYear(file_path: str):
     last_slash_index = -1
@@ -29,7 +31,7 @@ def getYear(file_path: str):
     return year
 
 
-def makeAndSaveGraph(year, times, temps):
+def makeAndSaveGraph(year, times, temps, stdevs):
     return
 
 
@@ -38,5 +40,10 @@ if __name__ == "__main__":
         print("USAGE: python[3] grapher.py path_to/[year]dailyAverages.csv")
         exit()
     averagesPath = argv[1]
-    times, temps = readAverages(averagesPath)
+    times, temps, stdevs = readAverages(averagesPath)
     year = getYear(averagesPath)
+    print(year)
+    print(times)
+    print(temps)
+    print(stdevs)
+    makeAndSaveGraph(year, times, temps, stdevs)
