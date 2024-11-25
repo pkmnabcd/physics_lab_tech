@@ -131,10 +131,16 @@ std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)
         {
             continue;
         }
+        // TODO: try just getting the filename to help see if that makes the regex work again
         std::basic_string pathString = entry.path().string();
+        std::cout << pathString << std::endl;
         if (std::regex_search(pathString.begin(), pathString.end(), regexpr))
         {
             OHPaths.push_back(entry.path());
+        }
+        else
+        {
+            std::cout << "The file does not match\n";
         }
     }
     sortOHPaths(OHPaths);
