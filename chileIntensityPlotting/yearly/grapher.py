@@ -32,7 +32,14 @@ def getYear(file_path: str):
 
 
 def makeAndSaveGraph(year, times, temps, stdevs):
-    return
+    plt.figure(figsize=(10,8))
+    plt.scatter(times, temps, label="Daily Average OH Temp")
+    plt.grid(visible=True, axis="both")
+
+    title = "OH Temp Daily Averages from Year " + year
+    plt.title(title, fontsize=26)
+
+    plt.show()
 
 
 if __name__ == "__main__":
@@ -43,7 +50,10 @@ if __name__ == "__main__":
     times, temps, stdevs = readAverages(averagesPath)
     year = getYear(averagesPath)
     print(year)
+    print(str(len(times)))
     print(times)
+    print(str(len(temps)))
     print(temps)
+    print(str(len(stdevs)))
     print(stdevs)
     makeAndSaveGraph(year, times, temps, stdevs)
