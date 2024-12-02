@@ -5,8 +5,6 @@
 
 #include <cmath>
 #include <filesystem>
-#include <format>
-#include <iostream>
 #include <print>
 #include <regex>
 #include <string>
@@ -15,7 +13,6 @@
 std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
 {
     std::string year = getYearFromPath(yearPath.string());
-    std::cout << std::format("Finding the months paths for the year {}\n.", year);
 
     std::vector<std::filesystem::path> monthPaths = {};
     for (std::string month : MONTH_HEADERS)
@@ -132,7 +129,6 @@ std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)
             continue;
         }
         std::basic_string filename = entry.path().filename().string();
-        std::cout << filename << std::endl;
         if (std::regex_match(filename.begin(), filename.end(), regexpr))
         {
             OHPaths.push_back(entry.path());
@@ -160,17 +156,9 @@ std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)
 std::vector<OneDay> getYearlyAverages(std::string yearPathStr)
 {
     auto yearPath = std::filesystem::path(yearPathStr);
-    std::cout << "Path from yearPath: " << yearPath << std::endl;
     std::string year = getYearFromPath(yearPath.string());
 
-    // Temp print month paths
-    std::cout << "--Month Paths--\n";
     std::vector<std::filesystem::path> monthPaths = getMonthPaths(yearPath);
-    for (auto path : monthPaths)
-    {
-        std::cout << path.string() << std::endl;
-    }
-
     std::vector<OneDay> yearlyAverages = {};
     for (auto path : monthPaths)
     {

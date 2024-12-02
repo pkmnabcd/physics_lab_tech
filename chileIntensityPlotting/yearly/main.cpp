@@ -15,20 +15,14 @@ int main(int argc, char** argv)
     }
     std::string year_folder = argv[1];
     std::vector<OneDay> yearAverages = getYearlyAverages(year_folder);
-    std::cout << "Made it to the end\n";
-
-    for (OneDay& day : yearAverages)
-    {
-        std::cout << day.getDayOfYear() << " : " << day.getAverage() << std::endl;
-    }
 
     if (writeAveragesToCSV(year_folder, yearAverages))
     {
-        std::cout << "Written.\n";
+        std::cout << "Averages file written.\n";
     }
     else
     {
-        std::cout << "Not Written.\n";
+        std::cout << "Averages file NOT written.\n";
     }
 
     return 0;
