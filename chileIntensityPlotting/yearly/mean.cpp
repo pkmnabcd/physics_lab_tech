@@ -98,7 +98,7 @@ double getStdDev(OneDay dayData)
 {
     double mean = dayData.getAverage();
     std::vector<double> OHTemp = dayData.getOHTemp();
-    int numberOfVals = OHTemp.size();
+    unsigned int numberOfVals = static_cast<unsigned int>(OHTemp.size());
     double summation = 0;
 
     for (double val : OHTemp)

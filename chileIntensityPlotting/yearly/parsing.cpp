@@ -31,7 +31,7 @@ OneDay parseOneDay(std::filesystem::path dayPath)
         lineNumber++;
     }
 
-    unsigned int lineLength = headerLine.length();
+    unsigned int lineLength = static_cast<unsigned int>(headerLine.length());
     unsigned int colLength = 15;
     unsigned int numberOfColumns = lineLength / colLength;
     if (numberOfColumns != 8)
@@ -41,12 +41,12 @@ OneDay parseOneDay(std::filesystem::path dayPath)
     std::vector<double> timeData = std::vector<double>();
     std::vector<double> tempData = std::vector<double>();
 
-    for (std::string line : lines)
+    for (std::string currentLine : lines)
     {
         for (unsigned int i = 0; i < 2; i++) // Just want the first two columns
         {
             unsigned int indexStart = i * colLength;
-            std::string substring = line.substr(indexStart, colLength);
+            std::string substring = currentLine.substr(indexStart, colLength);
 
             std::string::size_type spacePos = substring.find(" ");
             while (spacePos != std::string::npos)
