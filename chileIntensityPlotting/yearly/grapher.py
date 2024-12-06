@@ -31,7 +31,7 @@ def getYear(file_path: str):
     return year
 
 
-def makeAndSaveGraph(year, times, temps, stdevs):
+def makeAndSaveGraph(year, times, temps, stdevs, averagesPath):
     plt.figure(figsize=(15,8))
     plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
     plt.grid(visible=True, axis="both")
@@ -39,7 +39,9 @@ def makeAndSaveGraph(year, times, temps, stdevs):
     title = "OH Temp Daily Averages from Year " + year
     plt.title(title, fontsize=26)
 
-    plt.show()
+    # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
+    outFile = averagesPath.replace(".csv", ".png")
+    plt.save(outFile)
 
 
 if __name__ == "__main__":
@@ -49,4 +51,4 @@ if __name__ == "__main__":
     averagesPath = argv[1]
     times, temps, stdevs = readAverages(averagesPath)
     year = getYear(averagesPath)
-    makeAndSaveGraph(year, times, temps, stdevs)
+    makeAndSaveGraph(year, times, temps, stdevs, averagesPath)
