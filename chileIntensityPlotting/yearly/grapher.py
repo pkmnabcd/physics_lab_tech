@@ -49,11 +49,4 @@ if __name__ == "__main__":
     averagesPath = argv[1]
     times, temps, stdevs = readAverages(averagesPath)
     year = getYear(averagesPath)
-    print(year)
-    print(str(len(times)))
-    print(times)
-    print(str(len(temps)))
-    print(temps)
-    print(str(len(stdevs)))
-    print(stdevs)
     makeAndSaveGraph(year, times, temps, stdevs)
