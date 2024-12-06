@@ -40,8 +40,9 @@ def makeAndSaveGraph(year, times, temps, stdevs, averagesPath):
     plt.title(title, fontsize=26)
 
     # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
-    outFile = averagesPath.replace(".csv", ".png")
-    plt.save(outFile)
+    outPath = averagesPath.replace(".csv", ".png")
+    plt.savefig(outPath)
+    print(f"File saved to {outPath} .")
 
 
 if __name__ == "__main__":
