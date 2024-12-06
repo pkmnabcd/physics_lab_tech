@@ -32,8 +32,8 @@ def getYear(file_path: str):
 
 
 def makeAndSaveGraph(year, times, temps, stdevs):
-    plt.figure(figsize=(10,8))
-    plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, label="Daily Average OH Temp")
+    plt.figure(figsize=(15,8))
+    plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
     plt.grid(visible=True, axis="both")
 
     title = "OH Temp Daily Averages from Year " + year
