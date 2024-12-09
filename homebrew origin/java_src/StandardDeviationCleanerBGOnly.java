@@ -44,9 +44,17 @@ public class StandardDeviationCleanerBGOnly extends StandardDeviationCleaner {
 	return false;
     }
     private boolean twilightAtEnd(ArrayList<Double> column) {
-	if (column.get(column.size() - 1) > 50000) {
-	    System.out.println("Twilight detected at the end.");
-	    return true;
+	int i = column.size() - 1;
+	while (i > -1) {
+	    if (column.get(i) == null) {
+		i--;
+	    } else {
+		if (column.get(i) > 50000) {
+		    System.out.println("Twilight detected at the end.");
+		    return true;
+		}
+		break;
+	    }
 	}
 	return false;
     }
