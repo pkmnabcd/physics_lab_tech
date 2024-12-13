@@ -2,7 +2,6 @@ from sys import argv
 
 import matplotlib.pyplot as plt
 
-# See named colors at https://matplotlib.org/stable/gallery/color/named_colors.html
 YEAR_COLORS = {
     "2009": "black",
     "2010": "darkgray",

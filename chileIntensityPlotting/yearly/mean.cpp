@@ -61,7 +61,7 @@ void doSelectionSort(std::vector<std::filesystem::path>& paths, std::vector<unsi
 void sortOHPaths(std::vector<std::filesystem::path>& paths)
 {
     auto filenames = std::vector<std::string>();
-    for (auto& path : paths) // For future improvement for simplicity, a path has the method filename() , so you can just use that.
+    for (auto& path : paths)
     {
         filenames.push_back(path.filename().string());
     }
