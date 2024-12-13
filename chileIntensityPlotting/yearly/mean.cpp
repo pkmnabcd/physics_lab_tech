@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <filesystem>
+#include <optional>
 #include <print>
 #include <regex>
 #include <string>
@@ -73,25 +74,33 @@ void sortOHPaths(std::vector<std::filesystem::path>& paths)
     doSelectionSort(paths, dayNumbers);
 }
 
-double getAverage(OneDay dayData)
+std::optional<double> calculateAverage(OneDay dayData, bool doingTest)
 {
     double total = 0;
     std::vector<double> temperature = dayData.getOHTemp();
-    std::uint16_t nanCount = 0;
-    for (auto& val : temperature)
+    if (temperature.size() < 33 && !doingTest)
     {
-        if (std::isnan(val))
-        {
-            nanCount++;
-            continue;
-        }
-        total += val;
+        std::print("Skipping a day because it's too short.\n");
+        return {};
     }
-    double average = total / (temperature.size() - nanCount);
-    return average;
+    else
+    {
+        std::uint16_t nanCount = 0;
+        for (auto& val : temperature)
+        {
+            if (std::isnan(val))
+            {
+                nanCount++;
+                continue;
+            }
+            total += val;
+        }
+        double average = total / (temperature.size() - nanCount);
+        return { average };
+    }
 }
 
-double getStdDev(OneDay dayData)
+double calculateStdDev(OneDay dayData)
 {
     double mean = dayData.getAverage();
     std::vector<double> OHTemp = dayData.getOHTemp();
@@ -140,14 +149,22 @@ std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)
     for (auto& path : OHPaths)
     {
         OneDay oneDay = parseOneDay(path);
-        oneDay.setAverage(getAverage(oneDay));
-        oneDay.setStdDev(getStdDev(oneDay));
+        std::optional<double> avg = calculateAverage(oneDay, false);
+        if (avg.has_value())
+        {
+            oneDay.setAverage(avg.value());
+            oneDay.setStdDev(calculateStdDev(oneDay));
 
-        // Getting rid of vectors we don't need anymore
-        oneDay.setTime(std::vector<double>());
-        oneDay.setOHTemp(std::vector<double>());
+            // Getting rid of vectors we don't need anymore
+            oneDay.setTime(std::vector<double>());
+            oneDay.setOHTemp(std::vector<double>());
 
-        output.push_back(oneDay);
+            output.push_back(oneDay);
+        }
+        else
+        {
+            continue;
+        }
     }
 
     return output;

@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
     return RUN_ALL_TESTS();
 }
 
-TEST(getAverages, ComputesUnderNormalConditions)
+TEST(calculateAverages, ComputesUnderNormalConditions)
 {
     std::vector<double> timeData = { 1, 2, 3 };
     std::vector<double> tempData = { 1.5, 1.5, 1.5 };
@@ -30,13 +30,13 @@ TEST(getAverages, ComputesUnderNormalConditions)
     tempData = { 2.0, 2.0, 2.0, 2.0, 2.0 };
     OneDay d4 = OneDay(timeData, tempData, 3);
 
-    EXPECT_EQ(1.5, getAverage(d1));
-    EXPECT_EQ(2.4, getAverage(d2));
-    EXPECT_EQ(2, getAverage(d3));
-    EXPECT_EQ(2, getAverage(d4));
+    EXPECT_EQ(1.5, calculateAverage(d1, true).value());
+    EXPECT_EQ(2.4, calculateAverage(d2, true).value());
+    EXPECT_EQ(2, calculateAverage(d3, true).value());
+    EXPECT_EQ(2, calculateAverage(d4, true).value());
 }
 
-TEST(getAverages, ComputesWithNan)
+TEST(calculateAverages, ComputesWithNan)
 {
     std::vector<double> timeData = { 1, 2, 3 };
     std::vector<double> tempData = { 1.5, std::nan(""), 1.5 };
@@ -50,18 +50,18 @@ TEST(getAverages, ComputesWithNan)
     tempData = { 2, 2, 2, std::nan(""), 2 };
     OneDay d3 = OneDay(timeData, tempData, 3);
 
-    EXPECT_EQ(1.5, getAverage(d1));
-    EXPECT_EQ(3, getAverage(d2));
-    EXPECT_EQ(2, getAverage(d3));
+    EXPECT_EQ(1.5, calculateAverage(d1, true).value());
+    EXPECT_EQ(3, calculateAverage(d2, true).value());
+    EXPECT_EQ(2, calculateAverage(d3, true).value());
 }
 
-TEST(getAverages, AllNanReturnsNan)
+TEST(calculateAverages, AllNanReturnsNan)
 {
     std::vector<double> timeData = { 1, 2, 3, 4, 5 };
     std::vector<double> tempData = { std::nan(""), std::nan(""), std::nan(""), std::nan(""), std::nan("") };
     OneDay d4 = OneDay(timeData, tempData, 3);
 
-    EXPECT_TRUE(std::isnan(getAverage(d4)));
+    EXPECT_TRUE(std::isnan(calculateAverage(d4, true).value()));
 }
 
 TEST(parseDoyFromFilename, GetsCorrectNumberNormal)

@@ -2,12 +2,13 @@
 
 #include "OneDay.hpp"
 
+#include <optional>
 #include <string>
 #include <vector>
 std::vector<OneDay> getYearlyAverages(std::string year_path);
 
-double getAverage(OneDay dayData);
-double getStdDev(OneDay dayData);
+std::optional<double> calculateAverage(OneDay dayData, bool doingTest);
+double calculateStdDev(OneDay dayData);
 
 const std::vector<std::string> MONTH_HEADERS = {
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
