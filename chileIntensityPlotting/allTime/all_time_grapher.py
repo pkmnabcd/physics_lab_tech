@@ -2,6 +2,27 @@ from sys import argv
 
 import matplotlib.pyplot as plt
 
+# See named colors at https://matplotlib.org/stable/gallery/color/named_colors.html
+YEAR_COLORS = {
+    "2009": "black",
+    "2010": "darkgray",
+    "2011": "rosybrown",
+    "2012": "brown",
+    "2013": "red",
+    "2014": "sandybrown",
+    "2015": "gold",
+    "2016": "darkkhaki",
+    "2017": "yellow",
+    "2018": "lawngreen",
+    "2019": "forestgreen",
+    "2020": "aquamarine",
+    "2021": "teal",
+    "2022": "deepskyblue",
+    "2023": "purple",
+    "2024": "hotpink",
+}
+
+
 def readAverages(path):
     file = open(path)
     lines = file.readlines()
@@ -22,7 +43,7 @@ def readAverages(path):
 
 
 def makeAndSaveGraph(years, allTimes, allTemps, allStdevs):
-    plt.figure(figsize=(15,8))
+    plt.figure(figsize=(20,13))
     plt.grid(visible=True, axis="both")
     title = "OH Temp Daily Averages from All Years"
     plt.title(title, fontsize=26)
@@ -32,7 +53,7 @@ def makeAndSaveGraph(years, allTimes, allTemps, allStdevs):
         times = allTimes[i]
         temps = allTemps[i]
         stdevs = allStdevs[i]
-        plt.scatter(times, temps, label=year)
+        plt.scatter(times, temps, label=year, color=YEAR_COLORS[year])
 
     # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
     plt.legend(fontsize=15)
@@ -47,8 +68,7 @@ def getYearAverages(year, yearPath):
 
 
 if __name__ == "__main__":
-    #years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
-    years = ["2020", "2021"]
+    years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
     days = []
     temps = []
     stdevs = []
@@ -60,9 +80,6 @@ if __name__ == "__main__":
         temps.append(newTemps)
         stdevs.append(newStdevs)
 
-    print(days)
-    print(temps)
-    print(stdevs)
 
     makeAndSaveGraph(years, days, temps, stdevs)
 
