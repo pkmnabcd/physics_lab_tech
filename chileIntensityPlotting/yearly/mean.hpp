@@ -7,7 +7,7 @@
 #include <vector>
 std::vector<OneDay> getYearlyAverages(std::string year_path);
 
-std::optional<double> calculateAverage(OneDay dayData, bool doingTest);
+std::optional<double> calculateAverage(OneDay dayData, bool doingTest, std::string year);
 double calculateStdDev(OneDay dayData);
 
 const std::vector<std::string> MONTH_HEADERS = {

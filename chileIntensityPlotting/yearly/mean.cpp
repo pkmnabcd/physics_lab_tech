@@ -11,6 +11,11 @@
 #include <string>
 #include <vector>
 
+std::uint8_t getHourLength(OneDay day, std::string year)
+{
+    return 33;
+}
+
 std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
 {
     std::string year = getYearFromPath(yearPath.string());
@@ -74,11 +79,14 @@ void sortOHPaths(std::vector<std::filesystem::path>& paths)
     doSelectionSort(paths, dayNumbers);
 }
 
-std::optional<double> calculateAverage(OneDay dayData, bool doingTest)
+std::optional<double> calculateAverage(OneDay dayData, bool doingTest, std::string year)
 {
     double total = 0;
     std::vector<double> temperature = dayData.getOHTemp();
-    if (temperature.size() < 33 && !doingTest)
+    // TODO: make a function that gets the needed number of lines to make an hour. See work computer doc.
+    // NOTE: Either 10 or 33 depending on the date
+    std::uint8_t hourLen = getHourLength(dayData, year);
+    if (temperature.size() < hourLen && !doingTest)
     {
         std::print("Skipping a day because it's too short.\n");
         return {};
@@ -122,7 +130,7 @@ double calculateStdDev(OneDay dayData)
     return stdDev;
 }
 
-std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)
+std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath, std::string year)
 {
     auto dataPath = monthPath / "processed";
 
@@ -149,7 +157,7 @@ std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath)
     for (auto& path : OHPaths)
     {
         OneDay oneDay = parseOneDay(path);
-        std::optional<double> avg = calculateAverage(oneDay, false);
+        std::optional<double> avg = calculateAverage(oneDay, false, year);
         if (avg.has_value())
         {
             oneDay.setAverage(avg.value());
@@ -179,11 +187,10 @@ std::vector<OneDay> getYearlyAverages(std::string yearPathStr)
     std::vector<OneDay> yearlyAverages = {};
     for (auto path : monthPaths)
     {
-        std::vector<OneDay> monthlyAverages = getMonthlyAverages(path);
+        std::vector<OneDay> monthlyAverages = getMonthlyAverages(path, year);
 
         for (OneDay& day : monthlyAverages)
         {
-            // TODO: Make sure the month arrays are ordered
             yearlyAverages.push_back(day);
         }
     }

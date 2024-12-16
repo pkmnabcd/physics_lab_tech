@@ -30,10 +30,10 @@ TEST(calculateAverages, ComputesUnderNormalConditions)
     tempData = { 2.0, 2.0, 2.0, 2.0, 2.0 };
     OneDay d4 = OneDay(timeData, tempData, 3);
 
-    EXPECT_EQ(1.5, calculateAverage(d1, true).value());
-    EXPECT_EQ(2.4, calculateAverage(d2, true).value());
-    EXPECT_EQ(2, calculateAverage(d3, true).value());
-    EXPECT_EQ(2, calculateAverage(d4, true).value());
+    EXPECT_EQ(1.5, calculateAverage(d1, true, "2020").value());
+    EXPECT_EQ(2.4, calculateAverage(d2, true, "2020").value());
+    EXPECT_EQ(2, calculateAverage(d3, true, "2020").value());
+    EXPECT_EQ(2, calculateAverage(d4, true, "2020").value());
 }
 
 TEST(calculateAverages, ComputesWithNan)
@@ -50,9 +50,9 @@ TEST(calculateAverages, ComputesWithNan)
     tempData = { 2, 2, 2, std::nan(""), 2 };
     OneDay d3 = OneDay(timeData, tempData, 3);
 
-    EXPECT_EQ(1.5, calculateAverage(d1, true).value());
-    EXPECT_EQ(3, calculateAverage(d2, true).value());
-    EXPECT_EQ(2, calculateAverage(d3, true).value());
+    EXPECT_EQ(1.5, calculateAverage(d1, true, "2020").value());
+    EXPECT_EQ(3, calculateAverage(d2, true, "2020").value());
+    EXPECT_EQ(2, calculateAverage(d3, true, "2020").value());
 }
 
 TEST(calculateAverages, AllNanReturnsNan)
@@ -61,7 +61,7 @@ TEST(calculateAverages, AllNanReturnsNan)
     std::vector<double> tempData = { std::nan(""), std::nan(""), std::nan(""), std::nan(""), std::nan("") };
     OneDay d4 = OneDay(timeData, tempData, 3);
 
-    EXPECT_TRUE(std::isnan(calculateAverage(d4, true).value()));
+    EXPECT_TRUE(std::isnan(calculateAverage(d4, true, "2020").value()));
 }
 
 TEST(parseDoyFromFilename, GetsCorrectNumberNormal)
