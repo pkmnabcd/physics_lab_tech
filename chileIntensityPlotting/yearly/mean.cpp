@@ -11,9 +11,45 @@
 #include <string>
 #include <vector>
 
-std::uint8_t getHourLength(OneDay day, std::string year)
+std::uint8_t getHourLength(OneDay day, std::string yearStr)
 {
-    return 33;
+    int year = std::stoi(yearStr);
+    if (year < 2011)
+    {
+        return 10;
+    }
+    else if (year == 2011)
+    {
+        unsigned int doy = day.getDayOfYear();
+        if (doy < 319 && doy != 1)
+        {
+            return 10;
+        }
+        else
+        {
+            return 33;
+        }
+    }
+    else if (year < 2023)
+    {
+        return 33;
+    }
+    else if (year == 2023)
+    {
+        unsigned int doy = day.getDayOfYear();
+        if (doy < 281 && doy != 1)
+        {
+            return 33;
+        }
+        else
+        {
+            return 10;
+        }
+    }
+    else
+    {
+        return 10;
+    }
 }
 
 std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
@@ -83,12 +119,11 @@ std::optional<double> calculateAverage(OneDay dayData, bool doingTest, std::stri
 {
     double total = 0;
     std::vector<double> temperature = dayData.getOHTemp();
-    // TODO: make a function that gets the needed number of lines to make an hour. See work computer doc.
     // NOTE: Either 10 or 33 depending on the date
     std::uint8_t hourLen = getHourLength(dayData, year);
     if (temperature.size() < hourLen && !doingTest)
     {
-        std::print("Skipping a day because it's too short.\n");
+        std::print("Skipping day {} because it's too short.\n", dayData.getDayOfYear());
         return {};
     }
     else
