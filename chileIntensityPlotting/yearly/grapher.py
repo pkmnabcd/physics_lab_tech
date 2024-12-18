@@ -2,6 +2,13 @@ from sys import argv
 
 import matplotlib.pyplot as plt
 
+def testTimes(times):
+    prevTime = -99999
+    for time in times:
+        if time < prevTime:
+            print(f"Time reversion detected at {time}")
+        prevTime = time
+
 def readAverages(path):
     file = open(path)
     lines = file.readlines()
@@ -52,4 +59,7 @@ if __name__ == "__main__":
     averagesPath = argv[1]
     times, temps, stdevs = readAverages(averagesPath)
     year = getYear(averagesPath)
+
+    testTimes(times)
+
     makeAndSaveGraph(year, times, temps, stdevs, averagesPath)
