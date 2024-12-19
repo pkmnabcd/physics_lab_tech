@@ -11,6 +11,19 @@
 #include <string>
 #include <vector>
 
+void testDayTimes(std::vector<double> times)
+{
+    double prevTime = -9999999;
+    for (double time : times)
+    {
+        if (time < prevTime)
+        {
+            std::print("WARNING: Time reversion detected at {}\n", time);
+        }
+        prevTime = time;
+    }
+}
+
 std::uint8_t getHourLength(OneDay day, std::string yearStr)
 {
     int year = std::stoi(yearStr);
@@ -192,6 +205,8 @@ std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath, std::str
     for (auto& path : OHPaths)
     {
         OneDay oneDay = parseOneDay(path);
+        testDayTimes(oneDay.getTime());
+
         std::optional<double> avg = calculateAverage(oneDay, false, year);
         if (avg.has_value())
         {
