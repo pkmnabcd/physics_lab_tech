@@ -29,7 +29,7 @@ std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
     return monthPaths;
 }
 
-void testDayTimes(OneDay day)
+void testDayTimes(OneDay day, std::string year)
 {
     std::vector<double> times = day.getTime();
     unsigned int doy = day.getDayOfYear();
@@ -38,13 +38,13 @@ void testDayTimes(OneDay day)
     {
         if (time < prevTime)
         {
-            std::print("WARNING: Time reversion detected at day {}.\n", doy);
+            std::print("WARNING: Time reversion detected in year {} at day {}.\n", year, doy);
         }
         prevTime = time;
     }
 }
 
-void validateMonth(std::filesystem::path monthPath)
+void validateMonth(std::filesystem::path monthPath, std::string year)
 {
     auto dataPath = monthPath / "processed";
 
@@ -68,18 +68,18 @@ void validateMonth(std::filesystem::path monthPath)
     for (auto& path : OHPaths)
     {
         OneDay oneDay = parseOneDay(path);
-        testDayTimes(oneDay);
+        testDayTimes(oneDay, year);
     }
 }
 
-void validateYear(std::string yearPathStr)
+void validateYear(std::string year)
 {
-    auto yearPath = std::filesystem::path(yearPathStr);
+    auto yearPath = std::filesystem::path(year);
 
     std::vector<std::filesystem::path> monthPaths = getMonthPaths(yearPath);
     for (auto path : monthPaths)
     {
-        validateMonth(path);
+        validateMonth(path, year);
     }
 }
 
@@ -87,7 +87,7 @@ int main()
 {
     for (int yearInt = 2009; yearInt < 2025; yearInt++)
     {
-        std::string year = std::to_string(yearInt) + "/";
+        std::string year = std::to_string(yearInt);
         validateYear(year);
     }
 }
