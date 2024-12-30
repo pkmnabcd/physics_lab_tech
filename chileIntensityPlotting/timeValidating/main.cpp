@@ -1,0 +1,93 @@
+#include "OneDay.hpp"
+#include "parsing.hpp"
+#include "strTool.hpp"
+
+#include <filesystem>
+#include <print>
+#include <regex>
+#include <string>
+#include <vector>
+
+const std::vector<std::string> MONTH_HEADERS = {
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+};
+
+std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
+{
+    std::string year = getYearFromPath(yearPath.string());
+    std::vector<std::filesystem::path> monthPaths = {};
+    for (std::string month : MONTH_HEADERS)
+    {
+        std::string monthPathStr = yearPath.string() + "/" + month + year + "/";
+        auto monthPath = std::filesystem::path(monthPathStr);
+        if (std::filesystem::exists(monthPath))
+        {
+            monthPaths.push_back(monthPath);
+        }
+    }
+    return monthPaths;
+}
+
+void testDayTimes(OneDay day)
+{
+    std::vector<double> times = day.getTime();
+    unsigned int doy = day.getDayOfYear();
+    double prevTime = -9999999;
+    for (double time : times)
+    {
+        if (time < prevTime)
+        {
+            std::print("WARNING: Time reversion detected at day {}.\n", doy);
+        }
+        prevTime = time;
+    }
+}
+
+void validateMonth(std::filesystem::path monthPath)
+{
+    auto dataPath = monthPath / "processed";
+
+    std::string pattern_text = "OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
+    auto regexpr = std::regex(pattern_text);
+
+    std::vector<std::filesystem::path> OHPaths = std::vector<std::filesystem::path>();
+    auto entries = std::filesystem::directory_iterator(dataPath);
+    for (auto&& entry : entries)
+    {
+        if (entry.is_directory())
+        {
+            continue;
+        }
+        std::basic_string filename = entry.path().filename().string();
+        if (std::regex_match(filename.begin(), filename.end(), regexpr))
+        {
+            OHPaths.push_back(entry.path());
+        }
+    }
+    for (auto& path : OHPaths)
+    {
+        OneDay oneDay = parseOneDay(path);
+        testDayTimes(oneDay);
+    }
+}
+
+void validateYear(std::string yearPathStr)
+{
+    auto yearPath = std::filesystem::path(yearPathStr);
+
+    std::vector<std::filesystem::path> monthPaths = getMonthPaths(yearPath);
+    for (auto path : monthPaths)
+    {
+        validateMonth(path);
+    }
+}
+
+int main()
+{
+    for (int yearInt = 2009; yearInt < 2025; yearInt++)
+    {
+        std::string year = std::to_string(yearInt) + "/";
+        validateYear(year);
+    }
+}
