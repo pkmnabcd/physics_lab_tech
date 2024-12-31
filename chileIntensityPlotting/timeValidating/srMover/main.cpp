@@ -37,7 +37,7 @@ int main()
     for (auto& dir_entry : dirEntries)
     {
         std::filesystem::path path = dir_entry.path();
-        std::string filename = path.filename();
+        std::string filename = path.filename().string();
         std::print("{}\n", filename);
         bool isSr = isSrImage(filename);
         std::print("\tIs sr? {}.\n", isSr);
