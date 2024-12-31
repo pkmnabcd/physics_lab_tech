@@ -38,14 +38,12 @@ int main()
     {
         std::filesystem::path path = dir_entry.path();
         std::string filename = path.filename().string();
-        std::print("{}\n", filename);
         bool isSr = isSrImage(filename);
-        std::print("\tIs sr? {}.\n", isSr);
 
         if (isSr)
         {
             std::string command = std::format("mv {0} sr_data/{0}", filename);
-            std::print("Running the command: {}\n", command);
+            std::print("Moving {}\n", filename);
             std::system(command.c_str());
         }
     }
