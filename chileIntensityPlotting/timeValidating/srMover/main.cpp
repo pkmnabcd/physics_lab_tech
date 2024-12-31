@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <filesystem>
 #include <format>
 #include <print>
@@ -42,9 +41,9 @@ int main()
 
         if (isSr)
         {
-            std::string command = std::format("mv {0} sr_data/{0}", filename);
             std::print("Moving {}\n", filename);
-            std::system(command.c_str());
+            std::filesystem::path newPath = std::filesystem::path(std::format("sr_data/{}", filename));
+            std::filesystem::rename(path, newPath);
         }
     }
 
