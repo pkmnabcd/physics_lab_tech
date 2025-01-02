@@ -7,6 +7,7 @@ and make sure that the filenames are consistent with the links
 """
 
 import requests
+import os
 from os.path import exists
 from os import mkdir
 from os import remove
@@ -168,8 +169,11 @@ def get_username_password():
     The file containing the uname and password should be like this:
     Username: vjk;alfjek;lsajfksa
     Password: fjekafvjka;jefa
+
+    It should be located in the same directory as this script.
     """
-    path = "path_to_file_including_filename.txt"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(script_dir, "EarthDataLogin.txt")
     file = open(path)
     lines = file.readlines()
 
