@@ -1,6 +1,6 @@
 @echo off
 
-CALL .\scriptPathsSetter.bat
+CALL scriptPathsSetter.bat
 
 SET INPUT=%1
 echo Java class files should be found at: %JAVA_PATH%
