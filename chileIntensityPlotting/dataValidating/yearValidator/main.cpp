@@ -42,7 +42,6 @@ bool imgInCorrectYear(std::filesystem::path imgPath, std::string year)
         return true;
     }
 
-    std::print("Made it here\n");
     char buffer[3];
     file.read(buffer, 3);
 
@@ -50,7 +49,14 @@ bool imgInCorrectYear(std::filesystem::path imgPath, std::string year)
 
     // TODO: convert buffer to year
     // (Recall, year is the buffer + 1900)
-    return true;
+
+    std::uint32_t fileYear = parseBinary(buffer, 3);
+    std::print("fileYear {}\n", fileYear);
+    fileYear += 1900;
+    std::uint32_t pathYear = std::stoi(year);
+    std::print("Year should be: {}. Year is: {}.\n", fileYear, pathYear);
+
+    return fileYear == pathYear;
 }
 
 std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
@@ -96,7 +102,7 @@ void validateNight(std::filesystem::path nightPath, std::string year)
         std::print("Validating this file: {}\n", path.string());
         if (!imgInCorrectYear(path, year))
         {
-            std::print("Previous year's data found in {}.\n", nightPath.string());
+            std::print("Previous year's data found in {} at image {}.\n", nightPath.string(), path.string());
             break;
         }
     }

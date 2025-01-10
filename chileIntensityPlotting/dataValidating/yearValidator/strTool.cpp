@@ -65,3 +65,16 @@ unsigned int parseDoyFromFilename(std::string filename)
     }
     return doy;
 }
+
+std::uint32_t parseBinary(char* buffer, std::uint8_t size)
+{
+    std::uint32_t output = 0;
+    while (size > 0)
+    {
+        std::uint8_t i = size - 1;
+        output |= (static_cast<std::uint32_t>(buffer[i]) << (8 * i));
+        size--;
+    }
+
+    return output;
+}
