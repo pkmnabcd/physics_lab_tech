@@ -25,6 +25,31 @@ const std::vector<std::string> IMG_PATTERNS = {
     "P14A_[0-9]{4}.tif"
 };
 
+bool imgInCorrectYear(std::filesystem::path imgPath, std::string year)
+{
+    std::ifstream file(imgPath, std::ios::binary);
+    if (!file)
+    {
+        std::print(stderr, "Error opening file: {}\n", imgPath.string());
+        return true;
+    }
+
+    const long startPosition = 267;
+    file.seekg(startPosition, std::ios::beg);
+    if (!file)
+    {
+        std::print(stderr, "Error seeking in file: {}\n", imgPath.string());
+        return true;
+    }
+
+    char buffer[3];
+    file.read(buffer, 3);
+
+    // TODO: convert buffer to year
+    // (Recall, year is the buffer + 1900
+    return true;
+}
+
 std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
 {
     std::string year = getYearFromPath(yearPath.string());
@@ -41,47 +66,74 @@ std::vector<std::filesystem::path> getMonthPaths(std::filesystem::path yearPath)
     return monthPaths;
 }
 
-void testDayTimes(OneDay day, std::string year)
+void validateNight(std::filesystem::path nightPath, std::string year)
 {
-    std::vector<double> times = day.getTime();
-    unsigned int doy = day.getDayOfYear();
-    double prevTime = -9999999;
-    for (double time : times)
-    {
-        if (time < prevTime)
-        {
-            std::print("WARNING: Time reversion detected in year {} at day {}.\n", year, doy);
-        }
-        prevTime = time;
-    }
-}
-
-void validateMonth(std::filesystem::path monthPath, std::string year)
-{
-    // TODO: start here in making changes
-    auto dataPath = monthPath / "processed";
-
-    std::string pattern_text = "OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}.dat";
-    auto regexpr = std::regex(pattern_text);
-
-    std::vector<std::filesystem::path> OHPaths = std::vector<std::filesystem::path>();
-    auto entries = std::filesystem::directory_iterator(dataPath);
+    std::vector<std::filesystem::path> toCheck;
+    auto entries = std::filesystem::directory_iterator(nightPath);
     for (auto&& entry : entries)
     {
         if (entry.is_directory())
         {
             continue;
         }
-        std::basic_string filename = entry.path().filename().string();
-        if (std::regex_match(filename.begin(), filename.end(), regexpr))
+        for (const std::string& pattern : IMG_PATTERNS)
         {
-            OHPaths.push_back(entry.path());
+            std::string pattern_text = pattern;
+            auto regexpr = std::regex(pattern_text);
+            std::basic_string filename = entry.path().filename().string();
+            if (std::regex_match(filename.begin(), filename.end(), regexpr))
+            {
+                toCheck.push_back(entry.path());
+            }
         }
     }
-    for (auto& path : OHPaths)
+
+    for (std::filesystem::path& path : toCheck)
     {
-        // OneDay oneDay = parseOneDay(path);
-        // testDayTimes(oneDay, year);
+        std::print("Validating this file: {}\n", path.string());
+        if (!imgInCorrectYear(path, year))
+        {
+            std::print("Previous year's data found in {}.\n", nightPath.string());
+            break;
+        }
+    }
+}
+
+void validateMonth(std::filesystem::path monthPath, std::string year)
+{
+    // NOTE: The following assumes that progam is called above year directory, and that there are no
+    // month stems in the filepath besides the one that's relevant
+    std::string monthStem;
+    for (const std::string& month : MONTH_HEADERS)
+    {
+        if (monthPath.string().find(month) != std::string::npos)
+        {
+            monthStem = month;
+            break;
+        }
+    }
+
+    std::string pattern_text = monthStem + "[0-3][0-9]-[0-3][0-9]";
+    auto regexpr = std::regex(pattern_text);
+
+    std::vector<std::filesystem::path> rawImgPaths = std::vector<std::filesystem::path>();
+    auto entries = std::filesystem::directory_iterator(monthPath);
+    for (auto&& entry : entries)
+    {
+        if (!entry.is_directory())
+        {
+            continue;
+        }
+        std::basic_string testPath = entry.path().string();
+        if (std::regex_search(testPath.begin(), testPath.end(), regexpr))
+        {
+            rawImgPaths.push_back(entry.path());
+        }
+    }
+    for (auto& path : rawImgPaths)
+    {
+        std::print("Found path: {}\n", path.string());
+        validateNight(path, year);
     }
 }
 
