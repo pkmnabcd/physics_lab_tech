@@ -42,11 +42,14 @@ bool imgInCorrectYear(std::filesystem::path imgPath, std::string year)
         return true;
     }
 
+    std::print("Made it here\n");
     char buffer[3];
     file.read(buffer, 3);
 
+    std::print("Buffer {}\n", buffer);
+
     // TODO: convert buffer to year
-    // (Recall, year is the buffer + 1900
+    // (Recall, year is the buffer + 1900)
     return true;
 }
 
