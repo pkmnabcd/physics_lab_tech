@@ -46,7 +46,7 @@ bool imgInCorrectYear(std::filesystem::path imgPath, std::string year)
     file.read(buffer, 3);
 
     std::uint32_t fileYear = parseBinary(buffer, 3);
-    fileYear += 1900;  // Year is stored relative to 1900
+    fileYear += 1900; // Year is stored relative to 1900
     std::uint32_t pathYear = std::stoi(year);
 
     return fileYear == pathYear;
@@ -153,6 +153,8 @@ int main()
     for (int yearInt = 2009; yearInt < 2025; yearInt++)
     {
         std::string year = std::to_string(yearInt);
+        std::print(" --- Validating Year: {} --- \n", year);
         validateYear(year);
+        std::print("Year {} done.\n\n", year);
     }
 }
