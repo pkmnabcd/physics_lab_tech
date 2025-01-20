@@ -109,7 +109,7 @@ void validateNight(std::filesystem::path nightPath, std::string year)
                 std::basic_string filename = entry.path().filename().string();
                 if (std::regex_match(filename.begin(), filename.end(), regexpr))
                 {
-                    std::print("SR data found in {} at image{}.\n", nightPath.string(), entry.path().string());
+                    std::print("SR data found in {} at image {}.\n", nightPath.string(), entry.path().string());
                     srFound = true;
                 }
             }
