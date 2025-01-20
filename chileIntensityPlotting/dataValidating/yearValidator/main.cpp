@@ -25,6 +25,15 @@ const std::vector<std::string> IMG_PATTERNS = {
     "P14A_[0-9]{4}.tif"
 };
 
+const std::vector<std::string> SR_PATTERNS = {
+    "866A_sr[0-9]{4}.tif",
+    "868A_sr[0-9]{4}.tif",
+    "BG_sr[0-9]{4}.tif",
+    "Dark_sr[0-9]{4}.tif",
+    "P12A_sr[0-9]{4}.tif",
+    "P14A_sr[0-9]{4}.tif"
+};
+
 bool imgInCorrectYear(std::filesystem::path imgPath, std::string year)
 {
     std::ifstream file(imgPath, std::ios::binary);
@@ -72,6 +81,7 @@ void validateNight(std::filesystem::path nightPath, std::string year)
 {
     std::vector<std::filesystem::path> toCheck;
     auto entries = std::filesystem::directory_iterator(nightPath);
+    bool srFound = false;
     for (auto&& entry : entries)
     {
         if (entry.is_directory())
@@ -86,6 +96,22 @@ void validateNight(std::filesystem::path nightPath, std::string year)
             if (std::regex_match(filename.begin(), filename.end(), regexpr))
             {
                 toCheck.push_back(entry.path());
+            }
+        }
+
+        // NOTE: this checks for sr data present in the directory
+        if (!srFound)
+        {
+            for (const std::string& pattern : SR_PATTERNS)
+            {
+                std::string pattern_text = pattern;
+                auto regexpr = std::regex(pattern_text);
+                std::basic_string filename = entry.path().filename().string();
+                if (std::regex_match(filename.begin(), filename.end(), regexpr))
+                {
+                    std::print("SR data found in {} at image{}.\n", nightPath.string(), entry.path().string());
+                    srFound = true;
+                }
             }
         }
     }
