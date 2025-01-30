@@ -1,4 +1,3 @@
-#include "OneDay.hpp"
 #include "OneYear.hpp"
 #include "fileWrite.hpp"
 #include "mean.hpp"
@@ -26,10 +25,8 @@ int main()
         std::print("Year {} done.\n\n", year);
     }
 
-    std::string outputPathStr = "";
-    // TODO: Change this to something relevant
-    std::string year_folder = "temp";
-    if (writeAveragesToCSV(year_folder, yearlyMeans, outputPathStr))
+    std::string outputPathStr = "all_time_year_averages.csv";
+    if (writeAveragesToCSV(yearlyMeans, outputPathStr))
     {
         std::cout << "Averages file written to " << outputPathStr << " .\n";
 #ifdef _WIN32

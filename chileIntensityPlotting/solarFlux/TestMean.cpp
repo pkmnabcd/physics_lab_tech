@@ -1,5 +1,4 @@
 #include "mean.hpp"
-#include "strTool.hpp"
 
 #include <gtest/gtest.h>
 #include <string>

@@ -9,8 +9,6 @@ project(${PROJECT_NAME})
 #
 set(HEADER_FILES
     mean.hpp
-    strTool.hpp
-    OneDay.hpp
     OneYear.hpp
     parsing.hpp
     fileWrite.hpp
@@ -18,8 +16,6 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
     mean.cpp
-    strTool.cpp
-    OneDay.cpp
     OneYear.cpp
     parsing.cpp
     fileWrite.cpp

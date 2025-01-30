@@ -1,8 +1,6 @@
 #include "fileWrite.hpp"
 
-#include "OneDay.hpp"
 #include "OneYear.hpp"
-#include "strTool.hpp"
 
 #include <filesystem>
 #include <format>
@@ -10,11 +8,9 @@
 #include <string>
 #include <vector>
 
-bool writeAveragesToCSV(std::string yearPath, std::vector<OneYear>& yearAverages, std::string& outputPathStr)
+bool writeAveragesToCSV(std::vector<OneYear>& yearAverages, std::string outputPathStr)
 {
-    auto outPath = std::filesystem::path(yearPath);
-    outPath /= (getYearFromPath(yearPath) + "dailyAverages.csv");
-    outputPathStr = outPath.string();
+    auto outPath = std::filesystem::path(outputPathStr);
     std::ofstream file = std::ofstream(outPath);
     if (file.is_open())
     {
