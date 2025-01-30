@@ -2,6 +2,7 @@
 #include "OneYear.hpp"
 #include "fileWrite.hpp"
 #include "mean.hpp"
+#include "parsing.hpp"
 
 #include <cstdint>
 #include <cstdlib>
@@ -21,7 +22,7 @@ int main()
     {
         std::string year = std::to_string(yearInt);
         std::print(" --- Getting the Yearly Average OH Temp and Solar Flux for Year: {} --- \n", year);
-        yearlyMeans.push_back(getYearAverages(year));
+        yearlyMeans.push_back(parseOneYear(year));
         std::print("Year {} done.\n\n", year);
     }
 

@@ -1,23 +1,37 @@
 #include "parsing.hpp"
 
 #include "OneDay.hpp"
+#include "OneYear.hpp"
 #include "strTool.hpp"
 
 #include <cmath>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <vector>
 
-OneDay parseOneDay(std::filesystem::path dayPath)
+OneYear parseOneYear(std::string year)
 {
-    unsigned int doy = parseDoyFromFilename(dayPath.filename().string());
+    // NOTE: Get year OH data
+    auto OHPath = std::filesystem::path(std::format("{}dailyAverages.csv", year));
 
-    std::ifstream file = std::ifstream(dayPath);
-    std::vector<std::string> lines;
+    std::ifstream file = std::ifstream(OHPath);
+    std::vector<std::string> OHLines;
     std::string line;
+    while (std::getline(file, line))
+    {
+        OHLines.push_back(line);
+    }
+    file.close();
+
+    // NOTE: Get year solar flux data
+    auto solarPath = std::filesystem::path("noaa_radio_flux.csv");
+    file = std::ifstream(solarPath); // Assumes solar flux in pwd
+    std::vector<std::string> solarLines;
+    line = "";
     std::string headerLine;
-    unsigned int lineNumber = 1;
+    std::uint8_t lineNumber = 1;
     while (std::getline(file, line))
     {
         if (lineNumber == 1)
@@ -26,58 +40,10 @@ OneDay parseOneDay(std::filesystem::path dayPath)
         }
         else
         {
-            lines.push_back(line);
+            solarLines.push_back(line);
         }
         lineNumber++;
     }
 
-    unsigned int lineLength = static_cast<unsigned int>(headerLine.length());
-    unsigned int colLength = 15;
-    unsigned int numberOfColumns = lineLength / colLength;
-    if (numberOfColumns != 8)
-    {
-        std::cout << "Warning! Number of Columns is wrong for " << dayPath << "!\nExpected 8 and got " << numberOfColumns << std::endl;
-    }
-    std::vector<double> timeData = std::vector<double>();
-    std::vector<double> tempData = std::vector<double>();
-
-    for (std::string currentLine : lines)
-    {
-        for (unsigned int i = 0; i < 2; i++) // Just want the first two columns
-        {
-            unsigned int indexStart = i * colLength;
-            std::string substring = currentLine.substr(indexStart, colLength);
-
-            std::string::size_type spacePos = substring.find(" ");
-            while (spacePos != std::string::npos)
-            {
-                substring = substring.substr(spacePos + 1, substring.size() - 1);
-                spacePos = substring.find(" ");
-            }
-            double addVal;
-            if (substring.contains("*"))
-            {
-                addVal = std::nan("");
-            }
-            else if (substring.contains("NaN"))
-            {
-                addVal = std::nan("");
-            }
-            else
-            {
-                addVal = std::stod(substring);
-            }
-            if (i == 0)
-            {
-                timeData.push_back(addVal);
-            }
-            else if (i == 1)
-            {
-                tempData.push_back(addVal);
-            }
-        }
-    }
-    file.close();
-
-    return OneDay(timeData, tempData, doy);
+    return OneYear(year, { 0 }, { 0 });
 }
