@@ -18,7 +18,7 @@ bool writeAveragesToCSV(std::vector<OneYear>& yearAverages, std::string outputPa
         {
             // TODO: Fix this whole file
 
-            // file << std::format("{},{},{}\n", year.getDayOfYear(), year.getAverage(), year.getStdDev());
+            file << std::format("{},{},{},{},{}\n", year.getYear(), year.getOHAverage(), year.getSolarAverage(), year.getOHStdDev(), year.getSolarStdDev());
         }
         file.close();
     }
