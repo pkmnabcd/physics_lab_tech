@@ -61,9 +61,9 @@ OneYear parseOneYear(std::string year)
 
     // NOTE: Parsing the OH lines
     std::vector<double> dailyOHAverages;
-    for (std::string& line : OHLines)
+    for (std::string& currentLine : OHLines)
     {
-        std::vector<std::string> splitLine = split(line, ',');
+        std::vector<std::string> splitLine = split(currentLine, ',');
         assert(splitLine.size() == 3 && "YEARdailyAverages.csv must have 3 columns");
         dailyOHAverages.push_back(std::stod(splitLine[1]));
     }
@@ -91,12 +91,12 @@ OneYear parseOneYear(std::string year)
 
     // NOTE: Parsing the solar lines
     std::vector<double> dailySolarAverages;
-    for (std::string& line : solarLines)
+    for (std::string& currentLine : solarLines)
     {
-        std::vector<std::string> splitLine = split(line, ',');
+        std::vector<std::string> splitLine = split(currentLine, ',');
         assert(splitLine.size() == 3 && "noaa_radio_flux.csv must have 3 columns");
-        std::uint16_t currentYearInt = std::stoi(year);
-        std::uint16_t lineYear = std::stoi(splitLine[0].substr(0, 4));
+        std::uint16_t currentYearInt = static_cast<std::uint16_t>(std::stoi(year));
+        std::uint16_t lineYear = static_cast<std::uint16_t>(std::stoi(splitLine[0].substr(0, 4)));
         if (currentYearInt > lineYear)
         {
             continue;
