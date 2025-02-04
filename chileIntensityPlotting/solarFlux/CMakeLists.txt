@@ -22,7 +22,7 @@ set(SOURCE_FILES
 )
 
 set(UNIT_TEST_FILES
-    TestMean.cpp
+    TestProgram.cpp
 )
 
 #

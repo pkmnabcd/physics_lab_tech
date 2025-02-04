@@ -12,9 +12,37 @@
 #include <string>
 #include <vector>
 
-std::vector<std::string> split(std::string input)
+std::vector<std::string> split(std::string input, std::uint8_t ch)
 {
-    return {};
+    std::vector<std::string> output;
+    if (!input.contains(ch))
+    {
+        output.push_back(input);
+        return output;
+    }
+
+    std::string beforeCh;
+    for (std::uint16_t i = 0; i < input.size(); i++)
+    {
+        if (input[i] == ch)
+        {
+            // NOTE: This implementation isn't expecting empty values
+            if (beforeCh != "")
+            {
+                output.push_back(beforeCh);
+                beforeCh = "";
+            }
+        }
+        else
+        {
+            beforeCh.push_back(input[i]);
+        }
+    }
+    if (beforeCh != "")
+    {
+        output.push_back(beforeCh);
+    }
+    return output;
 }
 
 OneYear parseOneYear(std::string year)
@@ -35,7 +63,7 @@ OneYear parseOneYear(std::string year)
     std::vector<double> dailyOHAverages;
     for (std::string& line : OHLines)
     {
-        std::vector<std::string> splitLine = split(line);
+        std::vector<std::string> splitLine = split(line, ',');
         assert(splitLine.size() == 3 && "YEARdailyAverages.csv must have 3 columns");
         dailyOHAverages.push_back(std::stod(splitLine[1]));
     }
@@ -65,7 +93,7 @@ OneYear parseOneYear(std::string year)
     std::vector<double> dailySolarAverages;
     for (std::string& line : solarLines)
     {
-        std::vector<std::string> splitLine = split(line);
+        std::vector<std::string> splitLine = split(line, ',');
         assert(splitLine.size() == 3 && "noaa_radio_flux.csv must have 3 columns");
         std::uint16_t currentYearInt = std::stoi(year);
         std::uint16_t lineYear = std::stoi(splitLine[0].substr(0, 4));
