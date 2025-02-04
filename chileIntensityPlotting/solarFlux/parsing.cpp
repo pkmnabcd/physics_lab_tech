@@ -2,12 +2,20 @@
 
 #include "OneYear.hpp"
 
+#include <cassert>
 #include <cmath>
+#include <cstdint>
 #include <filesystem>
 #include <format>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <vector>
+
+std::vector<std::string> split(std::string input)
+{
+    return {};
+}
 
 OneYear parseOneYear(std::string year)
 {
@@ -22,6 +30,15 @@ OneYear parseOneYear(std::string year)
         OHLines.push_back(line);
     }
     file.close();
+
+    // NOTE: Parsing the OH lines
+    std::vector<double> dailyOHAverages;
+    for (std::string& line : OHLines)
+    {
+        std::vector<std::string> splitLine = split(line);
+        assert(splitLine.size() == 3 && "YEARdailyAverages.csv must have 3 columns");
+        dailyOHAverages.push_back(std::stod(splitLine[1]));
+    }
 
     // NOTE: Get year solar flux data
     auto solarPath = std::filesystem::path("noaa_radio_flux.csv");
@@ -42,6 +59,29 @@ OneYear parseOneYear(std::string year)
         }
         lineNumber++;
     }
+    file.close();
 
-    return OneYear(year, { 0 }, { 0 });
+    // NOTE: Parsing the solar lines
+    std::vector<double> dailySolarAverages;
+    for (std::string& line : solarLines)
+    {
+        std::vector<std::string> splitLine = split(line);
+        assert(splitLine.size() == 3 && "noaa_radio_flux.csv must have 3 columns");
+        std::uint16_t currentYearInt = std::stoi(year);
+        std::uint16_t lineYear = std::stoi(splitLine[0].substr(0, 4));
+        if (currentYearInt > lineYear)
+        {
+            continue;
+        }
+        else if (currentYearInt == lineYear)
+        {
+            dailySolarAverages.push_back(std::stod(splitLine[1]));
+        }
+        else
+        {
+            break; // Assumes time goes from least to greatest
+        }
+    }
+
+    return OneYear(year, dailyOHAverages, dailySolarAverages);
 }
