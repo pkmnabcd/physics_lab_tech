@@ -8,14 +8,12 @@ project(${PROJECT_NAME})
 # Manually specifying all the source files.
 #
 set(HEADER_FILES
-    mean.hpp
     OneYear.hpp
     parsing.hpp
     fileWrite.hpp
 )
 
 set(SOURCE_FILES
-    mean.cpp
     OneYear.cpp
     parsing.cpp
     fileWrite.cpp

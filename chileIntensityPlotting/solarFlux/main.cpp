@@ -1,6 +1,5 @@
 #include "OneYear.hpp"
 #include "fileWrite.hpp"
-#include "mean.hpp"
 #include "parsing.hpp"
 
 #include <cstdint>
