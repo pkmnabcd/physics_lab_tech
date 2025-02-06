@@ -11,10 +11,6 @@
 
 int main()
 {
-    // TODO: Remove this test code
-    OneYear test = OneYear("2009", { 1.3, 4.5 }, { 3, 4.1 });
-    // TODO: end test code
-
     std::vector<OneYear> yearlyMeans;
     for (std::uint16_t yearInt = 2009; yearInt < 2025; yearInt++)
     {
