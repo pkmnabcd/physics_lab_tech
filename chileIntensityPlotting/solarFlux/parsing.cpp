@@ -54,7 +54,7 @@ OneYear parseOneYear(std::string year)
     std::ifstream file = std::ifstream(OHPath);
     if (!file.is_open())
     {
-        std::print("WARNING: the file at this path: \"{}\" was not found!", OHPath.string());
+        std::print("WARNING: the file at this path: \"{}\" was not found!\n", OHPath.string());
     }
     std::vector<std::string> OHLines;
     std::string line;
@@ -78,7 +78,7 @@ OneYear parseOneYear(std::string year)
     file = std::ifstream(solarPath); // Assumes solar flux in pwd
     if (!file.is_open())
     {
-        std::print("WARNING: the file at this path: \"{}\" was not found!", solarPath.string());
+        std::print("WARNING: the file at this path: \"{}\" was not found!\n", solarPath.string());
     }
     std::vector<std::string> solarLines;
     line = "";

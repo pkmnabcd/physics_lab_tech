@@ -22,9 +22,9 @@ int main(int argc, char** argv)
     {
         std::cout << "Averages file written to " << outputPathStr << " .\n";
 #ifdef _WIN32
-        std::string command = "python grapher.py ";
+        std::string command = "python yearGrapher.py ";
 #else
-        std::string command = "python3 grapher.py ";
+        std::string command = "python3 yearGrapher.py ";
 #endif
         command += outputPathStr;
         std::cout << "Executing the command: " << command << std::endl;
