@@ -9,6 +9,7 @@
 #include <format>
 #include <fstream>
 #include <iostream>
+#include <print>
 #include <string>
 #include <vector>
 
@@ -48,9 +49,13 @@ std::vector<std::string> split(std::string input, std::uint8_t ch)
 OneYear parseOneYear(std::string year)
 {
     // NOTE: Get year OH data
-    auto OHPath = std::filesystem::path(std::format("{}dailyAverages.csv", year));
+    auto OHPath = std::filesystem::path(std::format("{0}/{0}dailyAverages.csv", year));
 
     std::ifstream file = std::ifstream(OHPath);
+    if (!file.is_open())
+    {
+        std::print("WARNING: the file at this path: \"{}\" was not found!", OHPath.string());
+    }
     std::vector<std::string> OHLines;
     std::string line;
     while (std::getline(file, line))
@@ -71,6 +76,10 @@ OneYear parseOneYear(std::string year)
     // NOTE: Get year solar flux data
     auto solarPath = std::filesystem::path("noaa_radio_flux.csv");
     file = std::ifstream(solarPath); // Assumes solar flux in pwd
+    if (!file.is_open())
+    {
+        std::print("WARNING: the file at this path: \"{}\" was not found!", solarPath.string());
+    }
     std::vector<std::string> solarLines;
     line = "";
     std::string headerLine;
