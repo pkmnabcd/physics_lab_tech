@@ -54,8 +54,12 @@ def makeAndSaveGraph(years, allTimes, allTemps, allStdevs):
         stdevs = allStdevs[i]
         plt.scatter(times, temps, label=year, color=YEAR_COLORS[year])
 
-    # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
+    plt.set_xlabel("Day of Year", fontsize=20)
+    plt.set_ylabel("OH Temp (K)", fontsize=20)
+
     plt.legend(fontsize=15)
+
+    # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
     outPath = "allTime_OH_temp.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
