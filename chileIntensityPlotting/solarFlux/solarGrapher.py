@@ -37,14 +37,17 @@ def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)", fontsize=20)
     ax2.errorbar(years, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Yearly Average OH Temp")
-    ax1.tick_params(axis="y", labelcolor="blue")
+    ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
     title = "All-Time Yearly OH Temp and Solar Flux"
     plt.title(title, fontsize=26)
-    plt.legend()
+
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax2.legend(lines1 + lines2, labels1 + labels2)
     plt.tight_layout()
 
     # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
