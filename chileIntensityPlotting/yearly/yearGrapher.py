@@ -39,8 +39,8 @@ def makeAndSaveGraph(year, times, temps, stdevs, averagesPath):
     title = "OH Temp Daily Averages from Year " + year
     plt.title(title, fontsize=26)
 
-    plt.set_xlabel("Day of Year", fontsize=20)
-    plt.set_ylabel("OH Temp (K)", fontsize=20)
+    plt.xlabel("Day of Year", fontsize=20)
+    plt.ylabel("OH Temp (K)", fontsize=20)
 
     # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
     outPath = averagesPath.replace(".csv", ".png")
