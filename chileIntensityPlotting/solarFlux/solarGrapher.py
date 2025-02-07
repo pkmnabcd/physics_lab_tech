@@ -8,49 +8,52 @@ def readAverages(path):
     for i in range(len(lines)):
         lines[i] = lines[i].strip("\n")
 
-    times = []
-    temps = []
-    stdevs = []
+    years = []
+    ohAvgs = []
+    solarAvgs = []
+    ohStdevs = []
+    solarStdevs = []
     for line in lines:
         cols = line.split(",")
-        times.append(int(cols[0]))
-        temps.append(float(cols[1]))
-        stdevs.append(float(cols[2]))
+        years.append(int(cols[0]))
+        ohAvgs.append(float(cols[1]))
+        solarAvgs.append(float(cols[2]))
+        ohStdevs.append(float(cols[3]))
+        solarStdevs.append(float(cols[4]))
 
     file.close()
-    return times, temps, stdevs
-
-def getYear(file_path: str):
-    last_slash_index = -1
-    for i in range(len(file_path)):
-        if file_path[i] == '/':
-            last_slash_index = i
-
-    filename = file_path[last_slash_index + 1:]
-    year = filename[0:4]
-    return year
+    return years, ohAvgs, solarAvgs, ohStdevs, solarStdevs
 
 
-def makeAndSaveGraph(year, times, temps, stdevs, averagesPath):
-    plt.figure(figsize=(15,8))
-    plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
+def makeAndSaveGraph(years, ohAvgs, solarAvgs, averagesPath):
+    fig, ax1 = plt.subplots(figsize=(10,6))
+    #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
+
+    ax1.set_xlabel("Year")
+    ax1.set_ylabel("Solar Flux (SFU)")
+    ax1.plot(years, solarAvgs, color="r", label="Yearly Average Solar Flux")
+    ax1.tick_params(axis="y", labelcolor="r")
+
+    ax2 = ax1.twinx()
+    ax2.set_ylabel("OH Temp (K)")
+    ax2.errorbar(years, ohAvgs, color="b", fmt="o", ecolor="p", label="Yearly Average OH Temp")
+    ax1.tick_params(axis="y", labelcolor="b")
+
+    fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
     title = "OH Temp Daily Averages from Year " + year
     plt.title(title, fontsize=26)
 
-    # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
+    # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
     outPath = averagesPath.replace(".csv", ".png")
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
 
 if __name__ == "__main__":
-    if len(argv) == 1:
-        print("USAGE: python[3] grapher.py path_to/[year]dailyAverages.csv")
-        exit()
-    averagesPath = argv[1]
-    times, temps, stdevs = readAverages(averagesPath)
-    year = getYear(averagesPath)
+    averagesPath = "all_time_year_averages.csv"
+    years, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
 
-    makeAndSaveGraph(year, times, temps, stdevs, averagesPath)
+    makeAndSaveGraph(years, ohAvgs, solarAvgs, averagesPath)
+
