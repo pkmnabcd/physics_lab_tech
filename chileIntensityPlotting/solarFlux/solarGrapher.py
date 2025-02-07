@@ -25,7 +25,7 @@ def readAverages(path):
     return years, ohAvgs, solarAvgs, ohStdevs, solarStdevs
 
 
-def makeAndSaveGraph(years, ohAvgs, solarAvgs, ,ohAvgs, averagesPath):
+def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
     fig, ax1 = plt.subplots(figsize=(10,6))
     #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
 
@@ -55,5 +55,5 @@ if __name__ == "__main__":
     averagesPath = "all_time_year_averages.csv"
     years, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
 
-    makeAndSaveGraph(years, ohAvgs, solarAvgs, averagesPath)
+    makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath)
 
