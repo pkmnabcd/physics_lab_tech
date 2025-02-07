@@ -47,7 +47,7 @@ def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
 
     lines1, labels1 = ax1.get_legend_handles_labels()
     lines2, labels2 = ax2.get_legend_handles_labels()
-    ax2.legend(lines1 + lines2, labels1 + labels2)
+    ax2.legend(lines1 + lines2, labels1 + labels2, loc="lower right")
     plt.tight_layout()
 
     # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
