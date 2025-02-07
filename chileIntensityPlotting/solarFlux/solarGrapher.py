@@ -26,7 +26,7 @@ def readAverages(path):
 
 
 def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
-    fig, ax1 = plt.subplots(figsize=(10,6))
+    fig, ax1 = plt.subplots(figsize=(14,10))
     #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
 
     ax1.set_xlabel("Year")
@@ -36,7 +36,7 @@ def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)")
-    ax2.errorbar(years, ohAvgs, yerr=ohAvgs, color="b", fmt="o", ecolor="p", label="Yearly Average OH Temp")
+    ax2.errorbar(years, ohAvgs, yerr=ohStdevs, color="b", fmt="o", ecolor="purple", label="Yearly Average OH Temp")
     ax1.tick_params(axis="y", labelcolor="b")
 
     fig.tight_layout()
@@ -44,6 +44,7 @@ def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
 
     title = "All-Time Yearly OH Temp and Solar Flux"
     plt.title(title, fontsize=26)
+    plt.legend()
 
     # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
     outPath = averagesPath.replace(".csv", ".png")
