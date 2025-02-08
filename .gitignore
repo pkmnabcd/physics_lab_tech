@@ -20,3 +20,5 @@
 homebrew origin/monthly/MonthlyCleaner
 homebrew origin/monthly/MonthlyGrapher.exe
 
+*/scriptPathsSetter.sh
+*/scriptPathsSetter.bat
