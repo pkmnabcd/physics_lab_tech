@@ -2,6 +2,7 @@
 #include "parsing.hpp"
 #include "strTool.hpp"
 
+#include <cmath>
 #include <filesystem>
 #include <print>
 #include <regex>
@@ -35,6 +36,10 @@ void testDarkIntensities(OneDay day, std::string year)
     unsigned int doy = day.getDayOfYear();
     for (double dark : darkIntensities)
     {
+        if (std::isnan(dark))
+        {
+            continue;
+        }
         if (dark < 0 || dark > 50000)
         {
             std::print("WARNING: Strange Dark Intensity detected in year {} at day {}.\n", year, doy);
