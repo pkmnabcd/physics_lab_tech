@@ -74,7 +74,7 @@ OneYear parseOneYear(std::string year)
     }
 
     // NOTE: Get year solar flux data
-    auto solarPath = std::filesystem::path("noaa_radio_flux.csv");
+    auto solarPath = std::filesystem::path("solarFlux.txt");
     file = std::ifstream(solarPath); // Assumes solar flux in pwd
     if (!file.is_open())
     {
@@ -82,19 +82,9 @@ OneYear parseOneYear(std::string year)
     }
     std::vector<std::string> solarLines;
     line = "";
-    std::string headerLine;
-    std::uint8_t lineNumber = 1;
     while (std::getline(file, line))
     {
-        if (lineNumber == 1)
-        {
-            headerLine = line;
-        }
-        else
-        {
-            solarLines.push_back(line);
-        }
-        lineNumber++;
+        solarLines.push_back(line);
     }
     file.close();
 
@@ -102,17 +92,17 @@ OneYear parseOneYear(std::string year)
     std::vector<double> dailySolarAverages;
     for (std::string& currentLine : solarLines)
     {
-        std::vector<std::string> splitLine = split(currentLine, ',');
-        assert(splitLine.size() == 3 && "noaa_radio_flux.csv must have 3 columns");
         std::uint16_t currentYearInt = static_cast<std::uint16_t>(std::stoi(year));
-        std::uint16_t lineYear = static_cast<std::uint16_t>(std::stoi(splitLine[0].substr(0, 4)));
-        if (currentYearInt > lineYear)
+        std::string lineYear = currentLine.substr(0, 4);
+        std::uint16_t lineYearInt = static_cast<std::uint16_t>(std::stoi(lineYear));
+        if (currentYearInt > lineYearInt)
         {
             continue;
         }
-        else if (currentYearInt == lineYear)
+        else if (currentYearInt == lineYearInt)
         {
-            dailySolarAverages.push_back(std::stod(splitLine[1]));
+            std::string solarFluxObserved = currentLine.substr(139, 7);
+            dailySolarAverages.push_back(std::stod(solarFluxObserved));
         }
         else
         {
