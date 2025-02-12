@@ -199,6 +199,12 @@ box_pix = box_size * box_size
 	dkavg=dkavg/n5
 	plot, dktime, dk, xrange = [-12,12], /ynozero, title = 'Dark'
 
+	; Change dark if it's too high (bad dark data)
+	dkavgDict = DICTIONARY("Jan", 3855, "Feb", 4121, "Mar", 3503, "Apr", 3178, "May", 2361, "Jun", 2065, "Jul", 1813, "Aug", 2090, "Sep", 2519, "Oct", 2516, "Nov", 3178, "Dec", 3314)
+	if (dkavg gt 9000) and (dkavg ne 0.00000) then begin
+	  dkavg = dkavgDict[month]
+	endif
+
 	;/////////interpolate all filters to P12 time ////////////
 	if n2 gt 5 then begin
 	splp2 = fltarr(n2)
