@@ -219,8 +219,8 @@ box_pix = box_size * box_size
 	;//////Change individual dark values if they're too high
 	;//////Also redo dkavg if needed
 	redoAvg = 0
-	for i = 0, n2 do begin  ; Make sure no off-by-one errors
-		if ((spldk[i] gt 9000) or (spldk[i] lt 0)) and (FINITE(spldk[i])) then begin
+	for i = 0, n2-1 do begin  ; Make sure no off-by-one errors
+		if ((spldk[i] gt 6000) or (spldk[i] lt 0)) and (FINITE(spldk[i])) then begin
 			spldk[i] = dkavgDict[month]
 			redoAvg = 1
 		endif
@@ -228,7 +228,7 @@ box_pix = box_size * box_size
 
 	if redoAvg then begin
 		dkavg = 0
-		for i = 0, n2 do begin
+		for i = 0, n2-1 do begin
 			dkavg = dkavg + spldk[i]
 		endfor
 		dkavg = dkavg / n2
