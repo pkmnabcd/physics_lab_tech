@@ -216,6 +216,24 @@ box_pix = box_size * box_size
 	spldk = fltarr(n2)
 	spldk = spline(dktime, dk, p2time, .1)
 
+	;//////Change individual dark values if they're too high
+	;//////Also redo dkavg if needed
+	redoAvg = 0
+	for i = 0, n2 do begin  ; Make sure no off-by-one errors
+		if ((spldk[i] gt 9000) or (spldk[i] lt 0)) and (FINITE(spldk[i])) then begin
+			spldk[i] = dkavgDict[month]
+			redoAvg = 1
+		endif
+	endfor
+
+	if redoAvg then begin
+		dkavg = 0
+		for i = 0, n2 do begin
+			dkavg = dkavg + spldk[i]
+		endfor
+		dkavg = dkavg / n2
+	endif
+
 	; temp using actual dark zenith values
 	ohtemp = fltarr(n2)
 	ohtemp = 228.45/$
