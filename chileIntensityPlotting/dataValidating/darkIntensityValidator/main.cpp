@@ -40,7 +40,7 @@ void testDarkIntensities(OneDay day, std::string year)
         {
             continue;
         }
-        if (dark < 0 || dark > 50000)
+        if (dark < 0 || dark > 6000)
         {
             std::print("WARNING: Strange Dark Intensity detected in year {} at day {}.\n", year, doy);
             break;
