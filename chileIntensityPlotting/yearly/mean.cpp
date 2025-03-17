@@ -179,10 +179,16 @@ double calculateStdDev(OneDay dayData)
     return stdDev;
 }
 
-// TODO: write this function
 std::string getCurrentMonth(std::filesystem::path monthPath)
 {
-    return "Jan";
+    for (std::string header : MONTH_HEADERS)
+    {
+        if (monthPath.string().contains(header))
+        {
+            return header;
+        }
+    }
+    return "Non";
 }
 
 std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath, std::string year)
