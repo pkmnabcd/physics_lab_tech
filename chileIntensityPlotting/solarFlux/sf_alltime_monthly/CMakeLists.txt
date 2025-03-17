@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(PROJECT_NAME SolarFluxAllTimeGrapher)
+set(PROJECT_NAME SolarFluxAllTimeMonthlyGrapher)
 set(UNIT_TEST_RUNNER UnitTestRunner)
 project(${PROJECT_NAME})
 
