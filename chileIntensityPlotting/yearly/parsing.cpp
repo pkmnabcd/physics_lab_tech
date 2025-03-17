@@ -7,9 +7,10 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <vector>
 
-OneDay parseOneDay(std::filesystem::path dayPath)
+OneDay parseOneDay(std::filesystem::path dayPath, std::string month)
 {
     unsigned int doy = parseDoyFromFilename(dayPath.filename().string());
 
@@ -79,5 +80,5 @@ OneDay parseOneDay(std::filesystem::path dayPath)
     }
     file.close();
 
-    return OneDay(timeData, tempData, doy);
+    return OneDay(timeData, tempData, doy, month);
 }

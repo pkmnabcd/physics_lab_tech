@@ -3,6 +3,6 @@
 #include "OneDay.hpp"
 
 #include <filesystem>
+#include <string>
 
-// This isn't the best way to do it, but I wanted to practice writing classes for a course.
-OneDay parseOneDay(std::filesystem::path dayPath);
+OneDay parseOneDay(std::filesystem::path dayPath, std::string month);

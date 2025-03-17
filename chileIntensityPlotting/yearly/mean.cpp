@@ -164,7 +164,6 @@ double calculateStdDev(OneDay dayData)
     std::vector<double> OHTemp = dayData.getOHTemp();
     unsigned int numberOfVals = static_cast<unsigned int>(OHTemp.size());
     double summation = 0;
-
     for (double val : OHTemp)
     {
         if (std::isnan(val))
@@ -180,8 +179,15 @@ double calculateStdDev(OneDay dayData)
     return stdDev;
 }
 
+// TODO: write this function
+std::string getCurrentMonth(std::filesystem::path monthPath)
+{
+    return "Jan";
+}
+
 std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath, std::string year)
 {
+    std::string month = getCurrentMonth(monthPath);
     auto dataPath = monthPath / "processed";
 
     std::string pattern_text = "OH_Andover_ALO[0-9][0-9]day[0-9]{1,3}e.dat";
@@ -206,7 +212,7 @@ std::vector<OneDay> getMonthlyAverages(std::filesystem::path monthPath, std::str
     auto output = std::vector<OneDay>();
     for (auto& path : OHPaths)
     {
-        OneDay oneDay = parseOneDay(path);
+        OneDay oneDay = parseOneDay(path, month);
         testDayTimes(oneDay);
 
         std::optional<double> avg = calculateAverage(oneDay, false, year);
