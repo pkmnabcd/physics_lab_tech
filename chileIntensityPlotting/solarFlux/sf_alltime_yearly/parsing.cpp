@@ -69,8 +69,8 @@ OneYear parseOneYear(std::string year)
     for (std::string& currentLine : OHLines)
     {
         std::vector<std::string> splitLine = split(currentLine, ',');
-        assert(splitLine.size() == 3 && "YEARdailyAverages.csv must have 3 columns");
-        dailyOHAverages.push_back(std::stod(splitLine[1]));
+        assert(splitLine.size() == 4 && "YEARdailyAverages.csv must have 3 columns");
+        dailyOHAverages.push_back(std::stod(splitLine[2]));
     }
 
     // NOTE: Get year solar flux data
