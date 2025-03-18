@@ -5,15 +5,17 @@
 #include <string>
 #include <vector>
 
-OneYear::OneYear(std::string year, std::vector<double> dailyOHAvg, std::vector<double> dailySolarAvg) :
+OneYear::OneYear(std::string year, std::vector<double> dailyOHAvg, std::vector<double> dailySolarAvg, std::vector<std::uint8_t> months) :
     m_year(year),
     m_dailyOHAvg(dailyOHAvg),
-    m_dailySolarAvg(dailySolarAvg)
+    m_dailySolarAvg(dailySolarAvg),
+    m_months(months)
 {
     computeSaveAverage();
     computeSaveStdDev();
 }
 
+// TODO: Fix these functions to work with the vectors of averages and stdevs and compute them monthly
 void OneYear::computeSaveAverage()
 {
     // NOTE: computing OH average
