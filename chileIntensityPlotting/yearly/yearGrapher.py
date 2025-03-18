@@ -14,8 +14,8 @@ def readAverages(path):
     for line in lines:
         cols = line.split(",")
         times.append(int(cols[0]))
-        temps.append(float(cols[1]))
-        stdevs.append(float(cols[2]))
+        temps.append(float(cols[2]))
+        stdevs.append(float(cols[3]))
 
     file.close()
     return times, temps, stdevs
