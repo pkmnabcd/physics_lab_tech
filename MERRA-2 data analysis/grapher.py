@@ -835,6 +835,7 @@ def do_smoothing(array, window_size):
     moving_averages = []
 
     while i < len(array) - window_size:
+        # NOTE: This is slow because I query the same data over and over again
         window_average = round(np.sum(array[i:i + window_size]) / window_size, 2)
         moving_averages.append(window_average)
         i += 1
