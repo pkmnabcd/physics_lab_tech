@@ -7,12 +7,13 @@
 class OneYear
 {
   public:
-    OneYear(std::string year, std::vector<double> dailyOHAvg, std::vector<double> dailySolarAvg, std::vector<std::uint8_t> months);
+    OneYear(std::string year, std::vector<double> dailyOHAvg, std::vector<double> dailySolarAvg, std::vector<std::uint8_t> dailyMonths);
 
     std::string getYear() { return m_year; }
     std::vector<double> getDailyOHAvg() { return m_dailyOHAvg; }
     std::vector<double> getDailySolarAvg() { return m_dailySolarAvg; }
     std::vector<std::uint8_t> getMonths() { return m_months; }
+    std::vector<std::uint8_t> getDailyMonths() { return m_dailyMonths; }
 
     std::vector<double> getOHAverage() { return m_OHMonthlyAverages; }
     std::vector<double> getOHStdDev() { return m_OHMonthlyStdDevs; }
@@ -24,6 +25,7 @@ class OneYear
     std::vector<double> m_dailyOHAvg;
     std::vector<double> m_dailySolarAvg;
     std::vector<std::uint8_t> m_months;
+    std::vector<std::uint8_t> m_dailyMonths;
 
     std::vector<double> m_OHMonthlyAverages;
     std::vector<double> m_OHMonthlyStdDevs;
@@ -32,4 +34,5 @@ class OneYear
 
     void computeSaveAverage();
     void computeSaveStdDev();
+    void computeMonths();
 };
