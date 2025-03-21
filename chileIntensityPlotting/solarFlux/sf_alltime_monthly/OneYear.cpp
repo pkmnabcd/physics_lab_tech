@@ -5,11 +5,12 @@
 #include <string>
 #include <vector>
 
-OneYear::OneYear(std::string year, std::vector<double> dailyOHAvg, std::vector<double> dailySolarAvg, std::vector<std::uint8_t> dailyMonths) :
+OneYear::OneYear(std::string year, std::vector<double> dailyOHAvg, std::vector<double> dailySfAvg, std::vector<std::uint8_t> ohMonths, std::vector<std::uint8_t> sfMonths) :
     m_year(year),
     m_dailyOHAvg(dailyOHAvg),
-    m_dailySolarAvg(dailySolarAvg),
-    m_dailyMonths(dailyMonths)
+    m_dailySfAvg(dailySfAvg),
+    m_ohMonths(ohMonths),
+    m_sfMonths(sfMonths)
 {
     computeSaveAverage();
     computeSaveStdDev();
@@ -145,6 +146,7 @@ void OneYear::computeSaveStdDev()
     m_SolarStdDev = stdDev;
 }
 
+// TODO: Change this so that it uses the sf months since those are more consistent
 void OneYear::computeMonths()
 {
     for (std::uint8_t& currentMonth : m_dailyMonths)
