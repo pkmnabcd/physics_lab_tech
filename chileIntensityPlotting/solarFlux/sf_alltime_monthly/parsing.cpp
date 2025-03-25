@@ -66,15 +66,15 @@ OneYear parseOneYear(std::string year)
 
     // NOTE: Parsing the OH lines
     std::vector<double> dailyOHAverages;
-    std::vector<std::uint8_t> months;
+    std::vector<std::uint8_t> OHMonths;
     for (std::string& currentLine : OHLines)
     {
         std::vector<std::string> splitLine = split(currentLine, ',');
         assert(splitLine.size() == 4 && "YEARdailyAverages.csv must have 3 columns");
         dailyOHAverages.push_back(std::stod(splitLine[2]));
-        months.push_back(static_cast<std::uint8_t>(std::stoul(splitLine[1])));
+        OHMonths.push_back(static_cast<std::uint8_t>(std::stoul(splitLine[1])));
     }
-    assert(dailyOHAverages.size() == months.size() && "Month and dailyOHAverages vectors have same size");
+    assert(dailyOHAverages.size() == OHMonths.size() && "Month and dailyOHAverages vectors have same size");
 
     // NOTE: Get year solar flux data
     auto solarPath = std::filesystem::path("solarFlux.txt");
@@ -93,6 +93,7 @@ OneYear parseOneYear(std::string year)
 
     // NOTE: Parsing the solar lines
     std::vector<double> dailySolarAverages;
+    std::vector<std::uint8_t> sfMonths;
     for (std::string& currentLine : solarLines)
     {
         std::uint16_t currentYearInt = static_cast<std::uint16_t>(std::stoi(year));
@@ -104,6 +105,9 @@ OneYear parseOneYear(std::string year)
         }
         else if (currentYearInt == lineYearInt)
         {
+            std::string sfMonth = currentLine.substr(5, 2);
+            sfMonths.push_back(std::stod(sfMonth));
+
             std::string solarFluxObserved = currentLine.substr(139, 7);
             dailySolarAverages.push_back(std::stod(solarFluxObserved));
         }
@@ -113,5 +117,5 @@ OneYear parseOneYear(std::string year)
         }
     }
 
-    return OneYear(year, dailyOHAverages, dailySolarAverages, months);
+    return OneYear(year, dailyOHAverages, dailySolarAverages, OHMonths, sfMonths);
 }
