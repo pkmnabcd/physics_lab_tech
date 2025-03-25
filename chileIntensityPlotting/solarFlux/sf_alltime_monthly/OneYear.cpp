@@ -96,10 +96,10 @@ void OneYear::computeSaveSfAverage()
 
 void OneYear::computeSaveOHStdDev()
 {
-    std::uint8_t monthIndex = 0;
-    std::uint8_t currentMonth = m_OHMonths[i];
+    std::uint8_t currentMonth = m_OHMonths[0];
     std::uint8_t daysInMonth = 0;
     double summation = 0;
+    double mean = m_OHMonthlyAverages[0];
     std::uint16_t nanCount = 0;
     for (std::uint16_t i = 0; i < m_OHMonths.size(); i++)
     {
@@ -113,68 +113,63 @@ void OneYear::computeSaveOHStdDev()
             }
             else
             {
-                total += val;
+                summation += pow((val - mean), 2);
             }
         }
         else
         {
-            double avg = total / (daysInMonth - nanCount);
-            m_sfMonthlyAverages.push_back(avg);
+            double stdDev = sqrt(summation / ((daysInMonth - nanCount) - 1));
+            m_OHMonthlyStdDevs.push_back(stdDev);
 
-            currentMonth = m_sfMonths[i];
+            currentMonth = m_OHMonths[i];
+            mean = m_OHMonthlyAverages[i];
             daysInMonth = 0;
-            total = 0;
+            summation = 0;
             nanCount = 0;
         }
     }
-    // NOTE: adding the last average
-    double avg = total / (daysInMonth - nanCount);
-    m_sfMonthlyAverages.push_back(avg);
+    // NOTE: adding the last standard deviation
+    double stdDev = sqrt(summation / ((daysInMonth - nanCount) - 1));
+    m_OHMonthlyStdDevs.push_back(stdDev);
 }
 
-void OneYear::computeSaveStdDev()
+void OneYear::computeSaveSfStdDev()
 {
-    // NOTE: computing OH Temp standard deviation
-    double mean = m_OHAverage;
-    std::vector<double> OHTemp = m_dailyOHAvg;
-
-    std::uint16_t numberOfVals = static_cast<std::uint16_t>(OHTemp.size());
+    std::uint8_t currentMonth = m_sfMonths[0];
+    std::uint8_t daysInMonth = 0;
     double summation = 0;
-
-    for (double& val : OHTemp)
+    double mean = m_sfMonthlyAverages[0];
+    std::uint16_t nanCount = 0;
+    for (std::uint16_t i = 0; i < m_sfMonths.size(); i++)
     {
-        if (std::isnan(val))
+        if (m_sfMonths[i] == currentMonth)
         {
-            numberOfVals--;
+            daysInMonth++;
+            double val = m_dailySfAvg[i];
+            if (std::isnan(val))
+            {
+                nanCount++;
+            }
+            else
+            {
+                summation += pow((val - mean), 2);
+            }
         }
         else
         {
-            summation += pow((val - mean), 2);
+            double stdDev = sqrt(summation / ((daysInMonth - nanCount) - 1));
+            m_sfMonthlyStdDevs.push_back(stdDev);
+
+            currentMonth = m_sfMonths[i];
+            mean = m_sfMonthlyAverages[i];
+            daysInMonth = 0;
+            summation = 0;
+            nanCount = 0;
         }
     }
-    double stdDev = sqrt(summation / (numberOfVals - 1));
-    m_OHStdDev = stdDev;
-
-    // NOTE: computing solar flux standard deviation
-    mean = m_SolarAverage;
-    std::vector<double> solarFlux = m_dailySolarAvg;
-
-    numberOfVals = static_cast<std::uint16_t>(solarFlux.size());
-    summation = 0;
-
-    for (double& val : solarFlux)
-    {
-        if (std::isnan(val))
-        {
-            numberOfVals--;
-        }
-        else
-        {
-            summation += pow((val - mean), 2);
-        }
-    }
-    stdDev = sqrt(summation / (numberOfVals - 1));
-    m_SolarStdDev = stdDev;
+    // NOTE: adding the last standard deviation
+    double stdDev = sqrt(summation / ((daysInMonth - nanCount) - 1));
+    m_sfMonthlyStdDevs.push_back(stdDev);
 }
 
 void OneYear::collapseOHMonths()
