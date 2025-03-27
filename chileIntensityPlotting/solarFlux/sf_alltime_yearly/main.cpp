@@ -20,7 +20,7 @@ int main()
         std::print("Year {} done.\n\n", year);
     }
 
-    std::string outputPathStr = "all_time_year_averages.csv";
+    std::string outputPathStr = "all_time_oh_sf_year_averages.csv";
     if (writeAveragesToCSV(yearlyMeans, outputPathStr))
     {
         std::cout << "Averages file written to " << outputPathStr << " .\n";
