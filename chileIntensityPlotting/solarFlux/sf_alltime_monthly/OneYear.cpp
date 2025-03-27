@@ -47,10 +47,22 @@ void OneYear::computeSaveOHAverage()
             double avg = total / (daysInMonth - nanCount);
             m_OHMonthlyAverages.push_back(avg);
 
+            // NOTE: reset the month
             currentMonth = m_OHMonths[i];
             daysInMonth = 0;
             total = 0;
             nanCount = 0;
+
+            daysInMonth++;
+            double val = m_dailyOHAvg[i];
+            if (std::isnan(val))
+            {
+                nanCount++;
+            }
+            else
+            {
+                total += val;
+            }
         }
     }
     // NOTE: adding the last average
@@ -84,10 +96,22 @@ void OneYear::computeSaveSfAverage()
             double avg = total / (daysInMonth - nanCount);
             m_sfMonthlyAverages.push_back(avg);
 
+            // NOTE: reset the month
             currentMonth = m_sfMonths[i];
             daysInMonth = 0;
             total = 0;
             nanCount = 0;
+
+            daysInMonth++;
+            double val = m_dailySfAvg[i];
+            if (std::isnan(val))
+            {
+                nanCount++;
+            }
+            else
+            {
+                total += val;
+            }
         }
     }
     // NOTE: adding the last average
@@ -122,11 +146,23 @@ void OneYear::computeSaveOHStdDev()
             double stdDev = sqrt(summation / ((daysInMonth - nanCount) - 1));
             m_OHMonthlyStdDevs.push_back(stdDev);
 
+            // NOTE: Reset month
             currentMonth = m_OHMonths[i];
             mean = m_OHMonthlyAverages[i];
             daysInMonth = 0;
             summation = 0;
             nanCount = 0;
+
+            daysInMonth++;
+            double val = m_dailyOHAvg[i];
+            if (std::isnan(val))
+            {
+                nanCount++;
+            }
+            else
+            {
+                summation += pow((val - mean), 2);
+            }
         }
     }
     // NOTE: adding the last standard deviation
@@ -161,11 +197,23 @@ void OneYear::computeSaveSfStdDev()
             double stdDev = sqrt(summation / ((daysInMonth - nanCount) - 1));
             m_sfMonthlyStdDevs.push_back(stdDev);
 
+            // NOTE: Reset month
             currentMonth = m_sfMonths[i];
             mean = m_sfMonthlyAverages[i];
             daysInMonth = 0;
             summation = 0;
             nanCount = 0;
+
+            daysInMonth++;
+            double val = m_dailySfAvg[i];
+            if (std::isnan(val))
+            {
+                nanCount++;
+            }
+            else
+            {
+                summation += pow((val - mean), 2);
+            }
         }
     }
     // NOTE: adding the last standard deviation
