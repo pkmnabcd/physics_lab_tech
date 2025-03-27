@@ -32,27 +32,27 @@ def readAverages(path):
         sfYearmonths.append(yearmonth)
 
     file.close()
-    return years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs
+    return ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs
 
 
-def makeAndSaveGraph(years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath):
+def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath):
     fig, ax1 = plt.subplots(figsize=(14,10))
     #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
 
     ax1.set_xlabel("Year", fontsize=20)
     ax1.set_ylabel("Solar Flux (SFU)", fontsize=20)
-    ax1.plot(years, solarAvgs, color="red", label="Yearly Average Solar Flux")
+    ax1.plot(sfYearmonths, solarAvgs, color="red", label="Yearly Average Solar Flux")
     ax1.tick_params(axis="y", labelcolor="red")
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.errorbar(years, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Yearly Average OH Temp")
+    ax2.errorbar(ohYearmonths, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Yearly Average OH Temp")
     ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "All-Time Yearly OH Temp and Solar Flux"
+    title = "All-Time Monthly OH Temp and Solar Flux"
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
@@ -68,7 +68,7 @@ def makeAndSaveGraph(years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStd
 
 if __name__ == "__main__":
     averagesPath = "all_time_oh_sf_month_averages.csv"
-    years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
+    ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
 
-    makeAndSaveGraph(years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath)
+    makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath)
 
