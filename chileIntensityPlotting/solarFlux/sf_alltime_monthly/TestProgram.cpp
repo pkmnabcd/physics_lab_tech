@@ -73,6 +73,7 @@ TEST(montlyAveragesOneMonth, worksWhenSfOHSame)
                       { 5.2, 1.1, 0.6 },
                       { 1, 1, 1 },
                       { 1, 1, 1 });
+
     EXPECT_FLOAT_EQ(4.6, y1.getOHAverage()[0]);
     EXPECT_EQ(1, y1.getOHAverage().size());
     EXPECT_EQ(1, y1.getOHStdDev().size());
@@ -93,6 +94,7 @@ TEST(montlyAveragesOneMonth, worksWhenSfOHDifferent)
                       { 5.2, 1.1, 0.6 },
                       { 1, 1, 1 },
                       { 12, 12, 12 });
+
     EXPECT_FLOAT_EQ(4.6, y1.getOHAverage()[0]);
     EXPECT_EQ(1, y1.getOHAverage().size());
     EXPECT_EQ(1, y1.getOHStdDev().size());
@@ -110,15 +112,106 @@ TEST(montlyAveragesOneMonth, worksWhenSfOHDifferent)
                       { 5.2, 1.1, 0.6, 5.2, 1.1, 0.6 },
                       { 1, 1, 1 },
                       { 10, 10, 10, 10, 10, 10 });
-    EXPECT_FLOAT_EQ(4.6, y1.getOHAverage()[0]);
-    EXPECT_EQ(1, y1.getOHAverage().size());
-    EXPECT_EQ(1, y1.getOHStdDev().size());
-    EXPECT_FLOAT_EQ(2.3, y1.getSfAverage()[0]);
-    EXPECT_EQ(1, y1.getSfAverage().size());
-    EXPECT_EQ(1, y1.getSfStdDev().size());
 
-    EXPECT_EQ(1, y1.getCollapsedOHMonths().size());
+    EXPECT_FLOAT_EQ(4.6, y2.getOHAverage()[0]);
+    EXPECT_EQ(1, y2.getOHAverage().size());
+    EXPECT_EQ(1, y2.getOHStdDev().size());
+    EXPECT_FLOAT_EQ(2.3, y2.getSfAverage()[0]);
+    EXPECT_EQ(1, y2.getSfAverage().size());
+    EXPECT_EQ(1, y2.getSfStdDev().size());
+
+    EXPECT_EQ(1, y2.getCollapsedOHMonths().size());
+    EXPECT_EQ(1, y2.getCollapsedOHMonths()[0]);
+    EXPECT_EQ(1, y2.getCollapsedSfMonths().size());
+    EXPECT_EQ(10, y2.getCollapsedSfMonths()[0]);
+}
+
+TEST(montlyAveragesMultipleMonth, worksWhenSfOHSame)
+{
+    auto y1 = OneYear("2024",
+                      { 4.2, 3.1, 6.5, 1.5, 4.5, 6.4, 3.6 },
+                      { 5.2, 1.1, 0.6, 2.0, 4.0, 1.5, 0.5 },
+                      { 1, 1, 1, 2, 2, 12, 12 },
+                      { 1, 1, 1, 2, 2, 12, 12 });
+
+    EXPECT_FLOAT_EQ(4.6, y1.getOHAverage()[0]);
+    EXPECT_FLOAT_EQ(3.0, y1.getOHAverage()[1]);
+    EXPECT_FLOAT_EQ(5.0, y1.getOHAverage()[2]);
+    EXPECT_EQ(3, y1.getOHAverage().size());
+    EXPECT_EQ(3, y1.getOHStdDev().size());
+
+    EXPECT_FLOAT_EQ(2.3, y1.getSfAverage()[0]);
+    EXPECT_FLOAT_EQ(3.0, y1.getSfAverage()[1]);
+    EXPECT_FLOAT_EQ(1.0, y1.getSfAverage()[2]);
+    EXPECT_EQ(3, y1.getSfAverage().size());
+    EXPECT_EQ(3, y1.getSfStdDev().size());
+
+    EXPECT_EQ(3, y1.getCollapsedOHMonths().size());
     EXPECT_EQ(1, y1.getCollapsedOHMonths()[0]);
-    EXPECT_EQ(1, y1.getCollapsedSfMonths().size());
-    EXPECT_EQ(12, y1.getCollapsedSfMonths()[0]);
+    EXPECT_EQ(2, y1.getCollapsedOHMonths()[1]);
+    EXPECT_EQ(12, y1.getCollapsedOHMonths()[2]);
+
+    EXPECT_EQ(3, y1.getCollapsedSfMonths().size());
+    EXPECT_EQ(1, y1.getCollapsedSfMonths()[0]);
+    EXPECT_EQ(2, y1.getCollapsedSfMonths()[1]);
+    EXPECT_EQ(12, y1.getCollapsedSfMonths()[2]);
+}
+
+TEST(montlyAveragesMultipleMonth, worksWhenSfOHDifferent)
+{
+    auto y1 = OneYear("2024",
+                      { 4.2, 3.1, 6.5, 1.5, 4.5, 6.4, 3.6 },
+                      { 5.2, 1.1, 0.6, 2.0, 4.0, 1.5, 0.5 },
+                      { 1, 1, 1, 2, 2, 12, 12 },
+                      { 2, 2, 2, 3, 3, 11, 11 });
+
+    EXPECT_FLOAT_EQ(4.6, y1.getOHAverage()[0]);
+    EXPECT_FLOAT_EQ(3.0, y1.getOHAverage()[1]);
+    EXPECT_FLOAT_EQ(5.0, y1.getOHAverage()[2]);
+    EXPECT_EQ(3, y1.getOHAverage().size());
+    EXPECT_EQ(3, y1.getOHStdDev().size());
+
+    EXPECT_FLOAT_EQ(2.3, y1.getSfAverage()[0]);
+    EXPECT_FLOAT_EQ(3.0, y1.getSfAverage()[1]);
+    EXPECT_FLOAT_EQ(1.0, y1.getSfAverage()[2]);
+    EXPECT_EQ(3, y1.getSfAverage().size());
+    EXPECT_EQ(3, y1.getSfStdDev().size());
+
+    EXPECT_EQ(3, y1.getCollapsedOHMonths().size());
+    EXPECT_EQ(1, y1.getCollapsedOHMonths()[0]);
+    EXPECT_EQ(2, y1.getCollapsedOHMonths()[1]);
+    EXPECT_EQ(12, y1.getCollapsedOHMonths()[2]);
+
+    EXPECT_EQ(3, y1.getCollapsedSfMonths().size());
+    EXPECT_EQ(2, y1.getCollapsedSfMonths()[0]);
+    EXPECT_EQ(3, y1.getCollapsedSfMonths()[1]);
+    EXPECT_EQ(11, y1.getCollapsedSfMonths()[2]);
+
+    auto y2 = OneYear("2024",
+                      { 4.2, 3.1, 6.5, 1.5, 4.5, 6.4, 3.6 },
+                      { 5.2, 1.1, 0.6, 2.0, 4.0, 1.5, 0.5, 1.0 },
+                      { 1, 1, 1, 2, 2, 12, 12 },
+                      { 1, 1, 1, 2, 2, 12, 12, 12 });
+
+    EXPECT_FLOAT_EQ(4.6, y2.getOHAverage()[0]);
+    EXPECT_FLOAT_EQ(3.0, y2.getOHAverage()[1]);
+    EXPECT_FLOAT_EQ(5.0, y2.getOHAverage()[2]);
+    EXPECT_EQ(3, y2.getOHAverage().size());
+    EXPECT_EQ(3, y2.getOHStdDev().size());
+
+    EXPECT_FLOAT_EQ(2.3, y2.getSfAverage()[0]);
+    EXPECT_FLOAT_EQ(3.0, y2.getSfAverage()[1]);
+    EXPECT_FLOAT_EQ(1.0, y2.getSfAverage()[2]);
+    EXPECT_EQ(3, y2.getSfAverage().size());
+    EXPECT_EQ(3, y2.getSfStdDev().size());
+
+    EXPECT_EQ(3, y2.getCollapsedOHMonths().size());
+    EXPECT_EQ(1, y2.getCollapsedOHMonths()[0]);
+    EXPECT_EQ(2, y2.getCollapsedOHMonths()[1]);
+    EXPECT_EQ(12, y2.getCollapsedOHMonths()[2]);
+
+    EXPECT_EQ(3, y2.getCollapsedSfMonths().size());
+    EXPECT_EQ(1, y2.getCollapsedSfMonths()[0]);
+    EXPECT_EQ(2, y2.getCollapsedSfMonths()[1]);
+    EXPECT_EQ(12, y2.getCollapsedSfMonths()[2]);
 }
