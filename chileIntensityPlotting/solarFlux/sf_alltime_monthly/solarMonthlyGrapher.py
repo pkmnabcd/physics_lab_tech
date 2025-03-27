@@ -8,24 +8,34 @@ def readAverages(path):
     for i in range(len(lines)):
         lines[i] = lines[i].strip("\n")
 
-    years = []
+    ohYearmonths = []  # this is the year and then some multiple of 1/12 to be the month
+    sfYearmonths = []  # this is the year and then some multiple of 1/12 to be the month
     ohAvgs = []
     solarAvgs = []
     ohStdevs = []
     solarStdevs = []
     for line in lines:
         cols = line.split(",")
-        years.append(int(cols[0]))
-        ohAvgs.append(float(cols[1]))
-        solarAvgs.append(float(cols[2]))
-        ohStdevs.append(float(cols[3]))
-        solarStdevs.append(float(cols[4]))
+
+        yearmonth = int(cols[0])
+        month = int(cols[1]) - 1
+        yearmonth += (1/12) * month
+
+        ohAvg = cols[2]
+        if not ohAvg == '':
+            ohAvgs.append(ohAvg)
+            ohStdevs.append(float(cols[4]))
+            ohYearmonths.append(yearmonth)
+
+        solarAvgs.append(float(cols[3]))
+        solarStdevs.append(float(cols[5]))
+        sfYearmonths.append(yearmonth)
 
     file.close()
-    return years, ohAvgs, solarAvgs, ohStdevs, solarStdevs
+    return years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs
 
 
-def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
+def makeAndSaveGraph(years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath):
     fig, ax1 = plt.subplots(figsize=(14,10))
     #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
 
@@ -57,8 +67,8 @@ def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
 
 
 if __name__ == "__main__":
-    averagesPath = "all_time_year_averages.csv"
-    years, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
+    averagesPath = "all_time_oh_sf_month_averages.csv"
+    years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
 
-    makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath)
+    makeAndSaveGraph(years, ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath)
 

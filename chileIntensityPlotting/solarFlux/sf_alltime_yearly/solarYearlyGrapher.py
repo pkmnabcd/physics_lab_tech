@@ -57,7 +57,7 @@ def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
 
 
 if __name__ == "__main__":
-    averagesPath = "all_time_year_averages.csv"
+    averagesPath = "all_time_oh_sf_year_averages.csv"
     years, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
 
     makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath)
