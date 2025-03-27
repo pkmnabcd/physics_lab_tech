@@ -31,8 +31,8 @@ bool writeAveragesToCSV(std::vector<OneYear>& years, std::string outputPathStr)
     {
         for (OneYear& year : years)
         {
-            std::vector<std::uint8_t> ohMonths = year.getgetCollapsedOHMonths();
-            std::vector<std::uint8_t> sfMonths = year.getgetCollapsedSfMonths();
+            std::vector<std::uint8_t> ohMonths = year.getCollapsedOHMonths();
+            std::vector<std::uint8_t> sfMonths = year.getCollapsedSfMonths();
 
             std::vector<double> ohAvgs = year.getOHAverage();
             std::vector<double> sfAvgs = year.getSfAverage();
@@ -41,17 +41,17 @@ bool writeAveragesToCSV(std::vector<OneYear>& years, std::string outputPathStr)
 
             for (std::uint8_t monthIndex = 0; monthIndex < sfMonths.size(); monthIndex++)
             {
+                std::uint8_t month = sfMonths[monthIndex];
                 std::uint8_t ohIndex = sfMonthInOHIndex(year, month);
                 if (ohIndex != 255)
                 {
+                    file << std::format("{},{},{},{},{},{}\n", year.getYear(), month, ohAvgs[ohIndex], sfAvgs[monthIndex], ohStdDevs[ohIndex], sfStdDevs[monthIndex]);
                 }
                 else
                 {
+                    file << std::format("{},{},,{},,{}\n", year.getYear(), month, sfAvgs[monthIndex], sfStdDevs[monthIndex]);
                 }
             }
-            // TODO: Fix this whole file
-
-            file << std::format("{},{},{},{},{}\n", year.getYear(), year.getOHAverage(), year.getSolarAverage(), year.getOHStdDev(), year.getSolarStdDev());
         }
         file.close();
     }
