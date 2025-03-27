@@ -124,7 +124,8 @@ void OneYear::computeSaveOHStdDev()
     std::uint8_t currentMonth = m_OHMonths[0];
     std::uint8_t daysInMonth = 0;
     double summation = 0;
-    double mean = m_OHMonthlyAverages[0];
+    std::uint8_t meanIndex = 0;
+    double mean = m_OHMonthlyAverages[meanIndex];
     std::uint16_t nanCount = 0;
     for (std::uint16_t i = 0; i < m_OHMonths.size(); i++)
     {
@@ -148,7 +149,8 @@ void OneYear::computeSaveOHStdDev()
 
             // NOTE: Reset month
             currentMonth = m_OHMonths[i];
-            mean = m_OHMonthlyAverages[i];
+            meanIndex++;
+            mean = m_OHMonthlyAverages[meanIndex];
             daysInMonth = 0;
             summation = 0;
             nanCount = 0;
@@ -175,7 +177,8 @@ void OneYear::computeSaveSfStdDev()
     std::uint8_t currentMonth = m_sfMonths[0];
     std::uint8_t daysInMonth = 0;
     double summation = 0;
-    double mean = m_sfMonthlyAverages[0];
+    std::uint8_t meanIndex = 0;
+    double mean = m_sfMonthlyAverages[meanIndex];
     std::uint16_t nanCount = 0;
     for (std::uint16_t i = 0; i < m_sfMonths.size(); i++)
     {
@@ -199,7 +202,8 @@ void OneYear::computeSaveSfStdDev()
 
             // NOTE: Reset month
             currentMonth = m_sfMonths[i];
-            mean = m_sfMonthlyAverages[i];
+            meanIndex++;
+            mean = m_sfMonthlyAverages[meanIndex];
             daysInMonth = 0;
             summation = 0;
             nanCount = 0;
