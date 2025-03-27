@@ -1,5 +1,6 @@
 #include "OneYear.hpp"
 
+#include <cassert>
 #include <cmath>
 #include <cstdint>
 #include <string>
@@ -190,6 +191,8 @@ void OneYear::collapseOHMonths()
             m_collapsedOHMonths.push_back(currentMonth);
         }
     }
+    assert(m_collapsedOHMonths.size() == m_OHMonthlyAverages.size() && "Same number of months as averages")
+    assert(m_collapsedOHMonths.size() == m_OHMonthlyStdDevs.size() && "Same number of months as std devs")
 }
 
 void OneYear::collapseSfMonths()
@@ -210,4 +213,6 @@ void OneYear::collapseSfMonths()
             m_collapsedSfMonths.push_back(currentMonth);
         }
     }
+    assert(m_collapsedSfMonths.size() == m_SfMonthlyAverages.size() && "Same number of months as averages")
+    assert(m_collapsedSfMonths.size() == m_SfMonthlyStdDevs.size() && "Same number of months as std devs")
 }
