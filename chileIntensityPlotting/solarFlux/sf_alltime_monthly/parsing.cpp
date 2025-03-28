@@ -117,32 +117,5 @@ OneYear parseOneYear(std::string year)
         }
     }
 
-    // TODO: remove this later
-
-    std::print("{}\n", year);
-    std::print("OH averages: \n");
-    for (auto& OHAvg : dailyOHAverages)
-    {
-        std::print("{} ", OHAvg);
-    }
-    std::print("SF averages: \n");
-    for (auto& sfAvg : dailySolarAverages)
-    {
-        std::print("{} ", sfAvg);
-    }
-    std::print("OH months: \n");
-    for (auto& month : OHMonths)
-    {
-        std::print("{} ", month);
-    }
-    std::print("SF months: \n");
-    for (auto& month : sfMonths)
-    {
-        std::print("{} ", month);
-    }
-    std::print("\n\n");
-
-    // TODO: End remove
-
     return OneYear(year, dailyOHAverages, dailySolarAverages, OHMonths, sfMonths);
 }
