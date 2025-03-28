@@ -101,7 +101,7 @@ OneYear parseOneYear(std::string year)
         }
         else if (currentYearInt == lineYearInt)
         {
-            std::string solarFluxObserved = currentLine.substr(139, 7);
+            std::string solarFluxObserved = currentLine.substr(139, 9);
             dailySolarAverages.push_back(std::stod(solarFluxObserved));
         }
         else
