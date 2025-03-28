@@ -25,9 +25,9 @@ int main()
     {
         std::cout << "Averages file written to " << outputPathStr << " .\n";
 #ifdef _WIN32
-        std::string command = "python solarGrapher.py ";
+        std::string command = "python solarYearlyGrapher.py ";
 #else
-        std::string command = "python3 solarGrapher.py ";
+        std::string command = "python3 solarYearlyGrapher.py ";
 #endif
         command += outputPathStr;
         std::cout << "Executing the command: " << command << std::endl;
