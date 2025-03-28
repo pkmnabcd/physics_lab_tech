@@ -70,7 +70,7 @@ OneYear parseOneYear(std::string year)
     for (std::string& currentLine : OHLines)
     {
         std::vector<std::string> splitLine = split(currentLine, ',');
-        assert(splitLine.size() == 4 && "YEARdailyAverages.csv must have 3 columns");
+        assert(splitLine.size() == 4 && "YEARdailyAverages.csv must have 4 columns");
         dailyOHAverages.push_back(std::stod(splitLine[2]));
         OHMonths.push_back(static_cast<std::uint8_t>(std::stoul(splitLine[1])));
     }
@@ -116,6 +116,33 @@ OneYear parseOneYear(std::string year)
             break; // Assumes time goes from least to greatest
         }
     }
+
+    // TODO: remove this later
+
+    std::print("{}\n", year);
+    std::print("OH averages: \n");
+    for (auto& OHAvg : dailyOHAverages)
+    {
+        std::print("{} ", OHAvg);
+    }
+    std::print("SF averages: \n");
+    for (auto& sfAvg : dailySolarAverages)
+    {
+        std::print("{} ", sfAvg);
+    }
+    std::print("OH months: \n");
+    for (auto& month : OHMonths)
+    {
+        std::print("{} ", month);
+    }
+    std::print("SF months: \n");
+    for (auto& month : sfMonths)
+    {
+        std::print("{} ", month);
+    }
+    std::print("\n\n");
+
+    // TODO: End remove
 
     return OneYear(year, dailyOHAverages, dailySolarAverages, OHMonths, sfMonths);
 }
