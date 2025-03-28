@@ -23,7 +23,7 @@ def readAverages(path):
 
         ohAvg = cols[2]
         if not ohAvg == '':
-            ohAvgs.append(ohAvg)
+            ohAvgs.append(float(ohAvg))
             ohStdevs.append(float(cols[4]))
             ohYearmonths.append(yearmonth)
 
@@ -46,7 +46,7 @@ def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, av
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.errorbar(ohYearmonths, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Yearly Average OH Temp")
+    ax2.errorbar(ohYearmonths, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Monthly Average OH Temp")
     ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
