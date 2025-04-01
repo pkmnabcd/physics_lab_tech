@@ -42,7 +42,7 @@ def makeAndSaveGraph(years, ohAvgs, solarAvgs, ohStdevs, averagesPath):
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "All-Time Yearly OH Temp and Solar Flux"
+    title = "ChileMTM All-Time (2009-2024) Yearly OH Temp and Solar Flux"
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()

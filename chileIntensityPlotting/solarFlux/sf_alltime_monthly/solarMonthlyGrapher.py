@@ -41,7 +41,7 @@ def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, av
 
     ax1.set_xlabel("Year", fontsize=20)
     ax1.set_ylabel("Solar Flux (SFU)", fontsize=20)
-    ax1.plot(sfYearmonths, solarAvgs, color="red", label="Yearly Average Solar Flux")
+    ax1.plot(sfYearmonths, solarAvgs, color="red", label="Monthly Average Solar Flux")
     ax1.tick_params(axis="y", labelcolor="red")
 
     ax2 = ax1.twinx()
@@ -52,7 +52,7 @@ def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, av
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "All-Time Monthly OH Temp and Solar Flux"
+    title = "ChileMTM All-Time (2009-2024) Monthly OH Temp and Solar Flux"
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()

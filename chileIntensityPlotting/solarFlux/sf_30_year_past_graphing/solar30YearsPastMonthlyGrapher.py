@@ -8,11 +8,8 @@ def readAverages(path):
     for i in range(len(lines)):
         lines[i] = lines[i].strip("\n")
 
-    ohYearmonths = []  # this is the year and then some multiple of 1/12 to be the month
-    sfYearmonths = []  # this is the year and then some multiple of 1/12 to be the month
-    ohAvgs = []
+    yearmonths = []  # this is the year and then some multiple of 1/12 to be the month
     solarAvgs = []
-    ohStdevs = []
     solarStdevs = []
     for line in lines:
         cols = line.split(",")
@@ -21,43 +18,30 @@ def readAverages(path):
         month = int(cols[1]) - 1
         yearmonth += (1/12) * month
 
-        ohAvg = cols[2]
-        if not ohAvg == '':
-            ohAvgs.append(float(ohAvg))
-            ohStdevs.append(float(cols[4]))
-            ohYearmonths.append(yearmonth)
-
-        solarAvgs.append(float(cols[3]))
-        solarStdevs.append(float(cols[5]))
-        sfYearmonths.append(yearmonth)
+        solarAvgs.append(float(cols[2]))
+        solarStdevs.append(float(cols[3]))
+        yearmonths.append(yearmonth)
 
     file.close()
-    return ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs
+    return yearmonths, solarAvgs, solarStdevs
 
 
-def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath):
+def makeAndSaveGraph(yearmonths, solarAvgs, averagesPath):
     fig, ax1 = plt.subplots(figsize=(14,10))
-    #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
 
     ax1.set_xlabel("Year", fontsize=20)
     ax1.set_ylabel("Solar Flux (SFU)", fontsize=20)
-    ax1.plot(sfYearmonths, solarAvgs, color="red", label="Yearly Average Solar Flux")
+    ax1.plot(yearmonths, solarAvgs, color="red", label="Monthly Average Solar Flux")
     ax1.tick_params(axis="y", labelcolor="red")
-
-    ax2 = ax1.twinx()
-    ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.errorbar(ohYearmonths, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Monthly Average OH Temp")
-    ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "All-Time Monthly OH Temp and Solar Flux"
+    title = "Monthly Solar Flux from 1979 to 2009"
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
-    ax2.legend(lines1 + lines2, labels1 + labels2, loc="lower right")
+    ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
     # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
@@ -67,8 +51,8 @@ def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, av
 
 
 if __name__ == "__main__":
-    averagesPath = "all_time_oh_sf_month_averages.csv"
-    ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
+    averagesPath = "30_years_past_sf_month_averages.csv"
+    yearmonths, solarAvgs, solarStdevs = readAverages(averagesPath)
 
-    makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath)
+    makeAndSaveGraph(sfYearmonths, solarAvgs, averagesPath)
 
