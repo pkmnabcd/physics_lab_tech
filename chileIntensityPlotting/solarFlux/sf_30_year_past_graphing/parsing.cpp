@@ -17,13 +17,13 @@ OneYear parseOneYear(std::string year)
 {
     // NOTE: Get year solar flux data
     auto solarPath = std::filesystem::path("solarFlux30YearsPast.txt");
-    file = std::ifstream(solarPath); // Assumes solar flux in pwd
+    auto file = std::ifstream(solarPath); // Assumes solar flux in pwd
     if (!file.is_open())
     {
         std::print("WARNING: the file at this path: \"{}\" was not found!\n", solarPath.string());
     }
     std::vector<std::string> solarLines;
-    line = "";
+    std::string line = "";
     while (std::getline(file, line))
     {
         solarLines.push_back(line);
