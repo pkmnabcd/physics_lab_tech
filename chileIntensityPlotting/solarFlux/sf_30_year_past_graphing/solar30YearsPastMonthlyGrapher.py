@@ -54,5 +54,5 @@ if __name__ == "__main__":
     averagesPath = "30_years_past_sf_month_averages.csv"
     yearmonths, solarAvgs, solarStdevs = readAverages(averagesPath)
 
-    makeAndSaveGraph(sfYearmonths, solarAvgs, averagesPath)
+    makeAndSaveGraph(yearmonths, solarAvgs, averagesPath)
 
