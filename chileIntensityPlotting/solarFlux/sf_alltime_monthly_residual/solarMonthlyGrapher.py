@@ -36,11 +36,11 @@ def readAverages(path):
     return ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs
 
 
-def doSmoothing(array, window_size=18):
+def doSmoothing(array, window_size):
     i = 0
     moving_averages = []
 
-    while i < len(array) - window_size:
+    while i < len(array) - window_size + 1:
         # NOTE: This is slow because I query the same data over and over again
         window_average = round(np.sum(array[i:i + window_size]) / window_size, 2)
         moving_averages.append(window_average)
@@ -49,19 +49,16 @@ def doSmoothing(array, window_size=18):
     return moving_averages
 
 
-def doYearmonthSmoothing(array, window_size=18):
-    # TODO: Modify this so that it properly handles even/odd array sizes/window sizes
+def doEndCutoffFromSmoothing(array, window_size):
+    removeCount = window_size - 1
+    if removeCount % 2 == 1:
+        print("WARNING!! removeCount IS NOT EVEN!!!!!!!!!!!!!!!!!")
 
-    arrayLength = size(array)
-    window_size = window_size if (arrayLength - window_size) % 2 == 1 else window_size + 1
-    removeCount = arrayLength + 1 - window_size
-
-    # TODO: continue modifying this
     out_list = []
     for value in array:  # Copy the array to not modify the original
         out_list.append(value)
-    front_pop_count = window_size // 2
-    back_pop_count = window_size // 2
+    front_pop_count = removeCount // 2
+    back_pop_count = removeCount // 2
     for i in range(front_pop_count):
         out_list.pop(0)
     for i in range(back_pop_count):
@@ -69,11 +66,15 @@ def doYearmonthSmoothing(array, window_size=18):
     return out_list
 
 
-def computeResidualGraph(time, avgs):
-    smoothTime = doYearmonthSmoothing(time)
-    smoothAvgs = doSmoothing(avgs)
+def computeResidualGraph(time, avgs, window_size=19):
+    # NOTE: Make sure window_size is odd
+    smoothTime = doEndCutoffFromSmoothing(time, window_size)
+    smoothAvgs = doSmoothing(avgs, window_size)
+    cutoffAvgs = doEndCutoffFromSmoothing(avgs, window_size)
 
-    residualAvgs = np.array(avgs) - np.array(smoothAvgs)
+    print(f"SmoothAvgs Length: {len(smoothAvgs)}\nSmoothTime Length: {len(smoothTime)}\nCutoffAvgs Length: {len(cutoffAvgs)}")
+
+    residualAvgs = np.array(cutoffAvgs) - np.array(smoothAvgs)
     return smoothTime, residualAvgs
 
 
