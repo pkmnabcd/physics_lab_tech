@@ -1,4 +1,5 @@
 from sys import argv
+from textwrap import wrap
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -78,9 +79,8 @@ def computeResidualGraph(time, avgs, window_size=19):
     return smoothTime, residualAvgs
 
 
-def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath):
+def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, averagesPath):
     fig, ax1 = plt.subplots(figsize=(14,10))
-    #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
 
     ax1.set_xlabel("Year", fontsize=20)
     ax1.set_ylabel("Solar Flux (SFU)", fontsize=20)
@@ -89,13 +89,14 @@ def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, av
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.errorbar(ohYearmonths, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Monthly Average OH Temp")
+    ax2.plot(ohYearmonths, ohAvgs, color="blue", label="Monthly Average OH Temp")
     ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "ChileMTM All-Time (2009-2024) Monthly OH Temp and Solar Flux"
+    title = "ChileMTM All-Time (2009-2024) Monthly OH Temp and Solar Flux Residual from Smoothed Graph (window: 19)"
+    title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
@@ -104,7 +105,7 @@ def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, av
     plt.tight_layout()
 
     # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
-    outPath = averagesPath.replace(".csv", ".png")
+    outPath = "all_time_oh_sf_month_average_residuals.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -116,5 +117,5 @@ if __name__ == "__main__":
     ohYearmonthResiduals, ohAvgResiduals = computeResidualGraph(ohYearmonths, ohAvgs)
     sfYearmonthResiduals, sfAvgResiduals = computeResidualGraph(sfYearmonths, sfAvgs)
 
-    #makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath)
+    makeAndSaveGraph(ohYearmonthResiduals, sfYearmonthResiduals, ohAvgResiduals, sfAvgResiduals, averagesPath)
 
