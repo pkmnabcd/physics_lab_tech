@@ -84,6 +84,13 @@ def computeResidualGraph(time, avgs, window_size):
 def computeFFTGraph(time, avgs, window_size=19):
     residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size)
 
+    N = len(residualAvgs)  # Number sample points
+    T = 1 / 12  # sample spacing (1/12 of a year)
+    fftData = np.abs(fft(residualAvgs))[:N // 2]
+    frequencyData = fftfreq(N, T)[:N // 2]
+
+    return frequencyData, fftData
+
 
 def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, averagesPath):
     fig, ax1 = plt.subplots(figsize=(14,10))
@@ -120,8 +127,8 @@ if __name__ == "__main__":
     averagesPath = "all_time_oh_sf_month_averages.csv"
     ohYearmonths, sfYearmonths, ohAvgs, sfAvgs, ohStdevs, sfStdevs = readAverages(averagesPath)
 
-    ohYearmonthResiduals, ohAvgResiduals = computeFFTGraph(ohYearmonths, ohAvgs)
-    sfYearmonthResiduals, sfAvgResiduals = computeFFTGraph(sfYearmonths, sfAvgs)
+    ohFrequencies, ohPowers = computeFFTGraph(ohYearmonths, ohAvgs)
+    sfFrequencies, sfPowers = computeFFTGraph(sfYearmonths, sfAvgs)
 
     makeAndSaveGraph(ohYearmonthResiduals, sfYearmonthResiduals, ohAvgResiduals, sfAvgResiduals, averagesPath)
 
