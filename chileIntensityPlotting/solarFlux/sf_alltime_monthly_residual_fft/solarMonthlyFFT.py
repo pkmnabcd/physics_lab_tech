@@ -75,14 +75,32 @@ def computeResidualGraph(time, avgs, window_size):
     smoothAvgs = doSmoothing(avgs, window_size)
     cutoffAvgs = doEndCutoffFromSmoothing(avgs, window_size)
 
-    print(f"SmoothAvgs Length: {len(smoothAvgs)}\nSmoothTime Length: {len(smoothTime)}\nCutoffAvgs Length: {len(cutoffAvgs)}")
-
     residualAvgs = np.array(cutoffAvgs) - np.array(smoothAvgs)
     return smoothTime, residualAvgs
 
 
-def computeFFTGraph(time, avgs, window_size=19):
+def computeFFTGraph(time, avgs, window_size=19, isOH=False):
     residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size)
+    residualAvgs = residualAvgs.tolist()
+
+    if isOH:
+        # Need to add 0s to OH data since it is missing a couple months
+        print("OH")
+        print(residualTime)
+
+        # Add 0 to May, June 2015
+        new2015Index = residualTime.index(2015.5)
+        residualTime.insert(new2015Index, (2015 + ((6-1)*(1/12))))
+        residualTime.insert(new2015Index, (2015 + ((5-1)*(1/12))))
+        residualAvgs.insert(new2015Index, 0)
+        residualAvgs.insert(new2015Index, 0)
+
+        # Add 0 to June 2022
+        new2022Index = residualTime.index(2022.5)
+        residualTime.insert(new2022Index, (2022 + ((6-1)*(1/12))))
+        residualAvgs.insert(new2022Index, 0)
+        print(residualTime)
+        print(residualAvgs)
 
     N = len(residualAvgs)  # Number sample points
     T = 1 / 12  # sample spacing (1/12 of a year)
@@ -127,7 +145,7 @@ if __name__ == "__main__":
     averagesPath = "all_time_oh_sf_month_averages.csv"
     ohYearmonths, sfYearmonths, ohAvgs, sfAvgs, ohStdevs, sfStdevs = readAverages(averagesPath)
 
-    ohFrequencies, ohPowers = computeFFTGraph(ohYearmonths, ohAvgs)
+    ohFrequencies, ohPowers = computeFFTGraph(ohYearmonths, ohAvgs, isOH=True)
     sfFrequencies, sfPowers = computeFFTGraph(sfYearmonths, sfAvgs)
 
     makeAndSaveGraph(ohYearmonthResiduals, sfYearmonthResiduals, ohAvgResiduals, sfAvgResiduals, averagesPath)
