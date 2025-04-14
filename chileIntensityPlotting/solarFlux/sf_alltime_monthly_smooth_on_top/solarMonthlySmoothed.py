@@ -81,13 +81,13 @@ def makeAndSaveGraph(yearmonths, smoothYearmonths, avgs, smoothAvgs, averagesPat
         dataLabel = "Monthly Average OH Temp"
         smoothLabel = "Smoothed OH Temp"
         title = "ChileMTM 2009-2024 Monthly OH Temp with Smoothed Graph (window: 19)"
-        outPath = "all_time_oh_month_average_.png"
+        outPath = "all_time_oh_month_average_smooth.png"
     else:
         ylabel = "Solar Flux (SFU)"
         dataLabel = "Monthly Average Solar Flux"
         smoothLabel = "Smoothed Solar Flux"
         title = "2009-2024 Monthly Solar Flux with Smoothed Graph (window: 19)"
-        outPath = "all_time_sf_month_average_.png"
+        outPath = "all_time_sf_month_average_smooth.png"
 
     fig, ax1 = plt.subplots(figsize=(14,10))
     ax1.set_xlabel("Year", fontsize=20)
