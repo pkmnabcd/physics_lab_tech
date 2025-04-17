@@ -1,4 +1,5 @@
 from sys import argv
+from math import floor, isclose
 
 import matplotlib.pyplot as plt
 
@@ -39,6 +40,50 @@ def splitMonths(yearmonths, avgs):
     monthDict = dict()
     # TODO: Add code to split the data by month.
     # So each month (apr to sep) will have its average value from every year (with a couple exceptions for OH)
+    # NOTE: first list is the list of years, second is the corresponding monthly average
+    apr = [[],[]]
+    aprRemainder = 3/12
+    may = [[],[]]
+    mayRemainder = 4/12
+    jun = [[],[]]
+    junRemainder = 5/12
+    jul = [[],[]]
+    julRemainder = 6/12
+    aug = [[],[]]
+    augRemainder = 7/12
+    sep = [[],[]]
+    sepRemainder = 8/12
+
+    for i in range(len(yearmonths)):
+        year = floor(yearmonths[i])
+        remainder = yearmonths[i] - year
+
+        if isclose(remainder, aprRemainder):
+            apr[0].append(year)
+            apr[1].append(avgs[i])
+        elif isclose(remainder, mayRemainder):
+            may[0].append(year)
+            may[1].append(avgs[i])
+        elif isclose(remainder, junRemainder):
+            jun[0].append(year)
+            jun[1].append(avgs[i])
+        elif isclose(remainder, julRemainder):
+            jul[0].append(year)
+            jul[1].append(avgs[i])
+        elif isclose(remainder, augRemainder):
+            aug[0].append(year)
+            aug[1].append(avgs[i])
+        elif isclose(remainder, sepRemainder):
+            sep[0].append(year)
+            sep[1].append(avgs[i])
+
+    monthDict["apr"] = apr
+    monthDict["may"] = may
+    monthDict["jun"] = jun
+    monthDict["jul"] = jul
+    monthDict["aug"] = aug
+    monthDict["sep"] = sep
+    return monthDict
 
 
 def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath):
@@ -74,8 +119,9 @@ def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, av
 
 if __name__ == "__main__":
     averagesPath = "all_time_oh_sf_month_averages.csv"
-    ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
-    print(ohYearmonths)
+    ohYearmonths, sfYearmonths, ohAvgs, sfAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
+    ohMonthDict = splitMonths(ohYearmonths, ohAvgs)
+    sfMonthDict = splitMonths(sfYearmonths, sfAvgs)
 
-    makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath)
+    #makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath)
 
