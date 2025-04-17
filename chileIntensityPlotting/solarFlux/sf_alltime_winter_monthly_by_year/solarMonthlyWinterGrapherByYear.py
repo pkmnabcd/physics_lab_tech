@@ -1,5 +1,6 @@
 from sys import argv
 from math import floor, isclose
+from textwrap import wrap
 
 import matplotlib.pyplot as plt
 
@@ -86,24 +87,24 @@ def splitMonths(yearmonths, avgs):
     return monthDict
 
 
-def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath):
-    fig, ax1 = plt.subplots(figsize=(14,10))
-    #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
+def makeAndSaveGraph(ohYears, ohAvgs, sfYears, sfAvgs, month):
+    fig, ax1 = plt.subplots(figsize=(8,7))
 
     ax1.set_xlabel("Year", fontsize=20)
     ax1.set_ylabel("Solar Flux (SFU)", fontsize=20)
-    ax1.plot(sfYearmonths, solarAvgs, color="red", label="Monthly Average Solar Flux")
+    ax1.scatter(sfYears, sfAvgs, color="red", label="Average Solar Flux")
     ax1.tick_params(axis="y", labelcolor="red")
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.errorbar(ohYearmonths, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Monthly Average OH Temp")
+    ax2.scatter(ohYears, ohAvgs, color="blue", label="Average OH Temp")
     ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "ChileMTM All-Time (2009-2024) Monthly OH Temp and Solar Flux"
+    title = "ChileMTM 2009-2024 Average OH Temp and Solar Flux in " + month
+    title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
@@ -111,8 +112,7 @@ def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, av
     ax2.legend(lines1 + lines2, labels1 + labels2, loc="lower right")
     plt.tight_layout()
 
-    # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
-    outPath = averagesPath.replace(".csv", ".png")
+    outPath = "all_time_oh_sf_average_" + month + ".png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -123,5 +123,10 @@ if __name__ == "__main__":
     ohMonthDict = splitMonths(ohYearmonths, ohAvgs)
     sfMonthDict = splitMonths(sfYearmonths, sfAvgs)
 
-    #makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, averagesPath)
+    makeAndSaveGraph(ohMonthDict["apr"][0], ohMonthDict["apr"][1], sfMonthDict["apr"][0], sfMonthDict["apr"][1], "April")
+    makeAndSaveGraph(ohMonthDict["may"][0], ohMonthDict["may"][1], sfMonthDict["may"][0], sfMonthDict["may"][1], "May")
+    makeAndSaveGraph(ohMonthDict["jun"][0], ohMonthDict["jun"][1], sfMonthDict["jun"][0], sfMonthDict["jun"][1], "June")
+    makeAndSaveGraph(ohMonthDict["jul"][0], ohMonthDict["jul"][1], sfMonthDict["jul"][0], sfMonthDict["jul"][1], "July")
+    makeAndSaveGraph(ohMonthDict["aug"][0], ohMonthDict["aug"][1], sfMonthDict["aug"][0], sfMonthDict["aug"][1], "August")
+    makeAndSaveGraph(ohMonthDict["sep"][0], ohMonthDict["sep"][1], sfMonthDict["sep"][0], sfMonthDict["sep"][1], "September")
 
