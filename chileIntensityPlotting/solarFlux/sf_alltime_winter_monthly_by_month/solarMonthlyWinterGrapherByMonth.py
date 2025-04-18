@@ -87,17 +87,29 @@ def splitMonths(yearmonths, avgs):
     return monthDict
 
 
-def makeAndSaveGraph(ohYears, ohAvgs, sfYears, sfAvgs, month):
-    fig, ax1 = plt.subplots(figsize=(8,7))
+def makeAndSaveGraph(ohDict, sfDict):
+    fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("Year", fontsize=20)
+    ax1.set_xlabel("Month", fontsize=20)
     ax1.set_ylabel("Solar Flux (SFU)", fontsize=20)
-    ax1.plot(sfYears, sfAvgs, color="red", label="Average Solar Flux")
+
+    xAxis = ["Apr", "May", "June", "July", "August", "September"]
+
+    # TODO: Make this make sense.
+    # Somehow, I need to plot the various y values for the same month x value
+    # Look this up before trying much more
+    for key in sfDict.keys():
+        month2dArray = sfDict[key]
+        monthYAxis = []
+        for i in range(len(month2dArray[0])):
+            
+        ax1.scatter(sfYears, sfAvgs, color="red", label="Average Solar Flux")
+
     ax1.tick_params(axis="y", labelcolor="red")
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.plot(ohYears, ohAvgs, color="blue", label="Average OH Temp")
+    ax2.scatter(ohYears, ohAvgs, color="blue", label="Average OH Temp")
     ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
@@ -124,9 +136,4 @@ if __name__ == "__main__":
     sfMonthDict = splitMonths(sfYearmonths, sfAvgs)
 
     makeAndSaveGraph(ohMonthDict["apr"][0], ohMonthDict["apr"][1], sfMonthDict["apr"][0], sfMonthDict["apr"][1], "April")
-    makeAndSaveGraph(ohMonthDict["may"][0], ohMonthDict["may"][1], sfMonthDict["may"][0], sfMonthDict["may"][1], "May")
-    makeAndSaveGraph(ohMonthDict["jun"][0], ohMonthDict["jun"][1], sfMonthDict["jun"][0], sfMonthDict["jun"][1], "June")
-    makeAndSaveGraph(ohMonthDict["jul"][0], ohMonthDict["jul"][1], sfMonthDict["jul"][0], sfMonthDict["jul"][1], "July")
-    makeAndSaveGraph(ohMonthDict["aug"][0], ohMonthDict["aug"][1], sfMonthDict["aug"][0], sfMonthDict["aug"][1], "August")
-    makeAndSaveGraph(ohMonthDict["sep"][0], ohMonthDict["sep"][1], sfMonthDict["sep"][0], sfMonthDict["sep"][1], "September")
 
