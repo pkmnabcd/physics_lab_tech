@@ -87,35 +87,58 @@ def splitMonths(yearmonths, avgs):
     return monthDict
 
 
+def getMonthFromKey(key):
+    if key == "apr":
+        return "April"
+    if key == "may":
+        return "May"
+    if key == "jun":
+        return "June"
+    if key == "jul":
+        return "July"
+    if key == "aug":
+        return "August"
+    if key == "sep":
+        return "September"
+
+
 def makeAndSaveGraph(ohDict, sfDict):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Month", fontsize=20)
     ax1.set_ylabel("Solar Flux (SFU)", fontsize=20)
 
-    xAxis = ["Apr", "May", "June", "July", "August", "September"]
+    dictKeys = ["apr", "may", "jun", "jul", "aug", "sep"]
 
-    # TODO: Make this make sense.
-    # Somehow, I need to plot the various y values for the same month x value
-    # Look this up before trying much more
-    for key in sfDict.keys():
-        month2dArray = sfDict[key]
-        monthYAxis = []
-        for i in range(len(month2dArray[0])):
-            
-        ax1.scatter(sfYears, sfAvgs, color="red", label="Average Solar Flux")
+    sfXData = []
+    sfYData = []
+    ohXData = []
+    ohYData = []
+    for key in dictKeys:
+        sfAvgsForMonth = sfDict[key][1]
+        ohAvgsForMonth = ohDict[key][1]
 
+        for _ in range(len(sfAvgsForMonth)):
+            sfXData.append(getMonthFromKey(key))
+        for val in sfAvgsForMonth:  # For each year's value in the month
+            sfYData.append(val)
+        for _ in range(len(ohAvgsForMonth)):
+            ohXData.append(getMonthFromKey(key))
+        for val in ohAvgsForMonth:
+            ohYData.append(val)
+
+    ax1.scatter(sfXData, sfYData, color="red", label="Average Solar Flux")
     ax1.tick_params(axis="y", labelcolor="red")
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.scatter(ohYears, ohAvgs, color="blue", label="Average OH Temp")
+    ax2.scatter(ohXData, ohYData, color="blue", alpha=0.60, label="Average OH Temp")
     ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "ChileMTM 2009-2024 Average OH Temp and Solar Flux in " + month
+    title = "ChileMTM 2009-2024 Monthly Average OH Temp and Solar Flux By Month"
     title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
@@ -124,7 +147,7 @@ def makeAndSaveGraph(ohDict, sfDict):
     ax2.legend(lines1 + lines2, labels1 + labels2, loc="lower right")
     plt.tight_layout()
 
-    outPath = "all_time_oh_sf_average_" + month + ".png"
+    outPath = "all_time_oh_sf_average_by_month.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -135,5 +158,5 @@ if __name__ == "__main__":
     ohMonthDict = splitMonths(ohYearmonths, ohAvgs)
     sfMonthDict = splitMonths(sfYearmonths, sfAvgs)
 
-    makeAndSaveGraph(ohMonthDict["apr"][0], ohMonthDict["apr"][1], sfMonthDict["apr"][0], sfMonthDict["apr"][1], "April")
+    makeAndSaveGraph(ohMonthDict, sfMonthDict)
 
