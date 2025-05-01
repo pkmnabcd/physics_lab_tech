@@ -57,7 +57,7 @@ def mode1():
                 print("You must type integers between 0 and 9999")
 
         print()
-	print("Make sure you're in the right directory!")
+        print("Make sure you're in the right directory!")
         for filter_name in FILTER_LIST:
             print("--- " + filter_name + " ---")
             print_data(filter_name, start, end)
