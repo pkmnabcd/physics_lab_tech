@@ -37,7 +37,7 @@ def readAverages(path):
     return ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, ohStdevs, solarStdevs
 
 
-def splitMonths(yearmonths, avgs):
+def splitMonths(yearmonths, avgs, stdevs):
     monthDict = dict()
     # TODO: Add code to split the data by month.
     # So each month (apr to sep) will have its average value from every year (with a couple exceptions for OH)
@@ -62,21 +62,27 @@ def splitMonths(yearmonths, avgs):
         if isclose(remainder, aprRemainder):
             apr[0].append(year)
             apr[1].append(avgs[i])
+            apr[2].append(stdevs[i])
         elif isclose(remainder, mayRemainder):
             may[0].append(year)
             may[1].append(avgs[i])
+            may[2].append(stdevs[i])
         elif isclose(remainder, junRemainder):
             jun[0].append(year)
             jun[1].append(avgs[i])
+            jun[2].append(stdevs[i])
         elif isclose(remainder, julRemainder):
             jul[0].append(year)
             jul[1].append(avgs[i])
+            jul[2].append(stdevs[i])
         elif isclose(remainder, augRemainder):
             aug[0].append(year)
             aug[1].append(avgs[i])
+            aug[2].append(stdevs[i])
         elif isclose(remainder, sepRemainder):
             sep[0].append(year)
             sep[1].append(avgs[i])
+            sep[2].append(stdevs[i])
 
     monthDict["apr"] = apr
     monthDict["may"] = may
@@ -87,7 +93,8 @@ def splitMonths(yearmonths, avgs):
     return monthDict
 
 
-def makeAndSaveGraph(ohYears, ohAvgs, sfYears, sfAvgs, month):
+# TODO: Add OH stdev to graph
+def makeAndSaveGraph(ohYears, ohAvgs, ohStdevs, sfYears, sfAvgs, sfStdevs, month):
     fig, ax1 = plt.subplots(figsize=(8,7))
 
     ax1.set_xlabel("Year", fontsize=20)
@@ -119,14 +126,14 @@ def makeAndSaveGraph(ohYears, ohAvgs, sfYears, sfAvgs, month):
 
 if __name__ == "__main__":
     averagesPath = "all_time_oh_sf_month_averages.csv"
-    ohYearmonths, sfYearmonths, ohAvgs, sfAvgs, ohStdevs, solarStdevs = readAverages(averagesPath)
-    ohMonthDict = splitMonths(ohYearmonths, ohAvgs)
-    sfMonthDict = splitMonths(sfYearmonths, sfAvgs)
+    ohYearmonths, sfYearmonths, ohAvgs, sfAvgs, ohStdevs, sfStdevs = readAverages(averagesPath)
+    ohMonthDict = splitMonths(ohYearmonths, ohAvgs, ohStdevs)
+    sfMonthDict = splitMonths(sfYearmonths, sfAvgs, sfStdevs)
 
-    makeAndSaveGraph(ohMonthDict["apr"][0], ohMonthDict["apr"][1], sfMonthDict["apr"][0], sfMonthDict["apr"][1], "April")
-    makeAndSaveGraph(ohMonthDict["may"][0], ohMonthDict["may"][1], sfMonthDict["may"][0], sfMonthDict["may"][1], "May")
-    makeAndSaveGraph(ohMonthDict["jun"][0], ohMonthDict["jun"][1], sfMonthDict["jun"][0], sfMonthDict["jun"][1], "June")
-    makeAndSaveGraph(ohMonthDict["jul"][0], ohMonthDict["jul"][1], sfMonthDict["jul"][0], sfMonthDict["jul"][1], "July")
-    makeAndSaveGraph(ohMonthDict["aug"][0], ohMonthDict["aug"][1], sfMonthDict["aug"][0], sfMonthDict["aug"][1], "August")
-    makeAndSaveGraph(ohMonthDict["sep"][0], ohMonthDict["sep"][1], sfMonthDict["sep"][0], sfMonthDict["sep"][1], "September")
+    makeAndSaveGraph(ohMonthDict["apr"][0], ohMonthDict["apr"][1], ohMonthDict["apr"][2], sfMonthDict["apr"][0], sfMonthDict["apr"][1], sfMonthDict["apr"][2], "April")
+    makeAndSaveGraph(ohMonthDict["may"][0], ohMonthDict["may"][1], ohMonthDict["may"][2], sfMonthDict["may"][0], sfMonthDict["may"][1], sfMonthDict["may"][2], "May")
+    makeAndSaveGraph(ohMonthDict["jun"][0], ohMonthDict["jun"][1], ohMonthDict["jun"][2], sfMonthDict["jun"][0], sfMonthDict["jun"][1], sfMonthDict["jun"][2], "June")
+    makeAndSaveGraph(ohMonthDict["jul"][0], ohMonthDict["jul"][1], ohMonthDict["jul"][2], sfMonthDict["jul"][0], sfMonthDict["jul"][1], sfMonthDict["jul"][2], "July")
+    makeAndSaveGraph(ohMonthDict["aug"][0], ohMonthDict["aug"][1], ohMonthDict["aug"][2], sfMonthDict["aug"][0], sfMonthDict["aug"][1], sfMonthDict["aug"][2], "August")
+    makeAndSaveGraph(ohMonthDict["sep"][0], ohMonthDict["sep"][1], ohMonthDict["sep"][2], sfMonthDict["sep"][0], sfMonthDict["sep"][1], sfMonthDict["sep"][2], "September")
 
