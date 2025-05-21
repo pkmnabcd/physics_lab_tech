@@ -42,17 +42,17 @@ def splitMonths(yearmonths, avgs, stdevs):
     # TODO: Add code to split the data by month.
     # So each month (apr to sep) will have its average value from every year (with a couple exceptions for OH)
     # NOTE: first list is the list of years, second is the corresponding monthly average
-    apr = [[],[]]
+    apr = [[],[],[]]
     aprRemainder = 3/12
-    may = [[],[]]
+    may = [[],[],[]]
     mayRemainder = 4/12
-    jun = [[],[]]
+    jun = [[],[],[]]
     junRemainder = 5/12
-    jul = [[],[]]
+    jul = [[],[],[]]
     julRemainder = 6/12
-    aug = [[],[]]
+    aug = [[],[],[]]
     augRemainder = 7/12
-    sep = [[],[]]
+    sep = [[],[],[]]
     sepRemainder = 8/12
 
     for i in range(len(yearmonths)):
@@ -104,7 +104,7 @@ def makeAndSaveGraph(ohYears, ohAvgs, ohStdevs, sfYears, sfAvgs, sfStdevs, month
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.plot(ohYears, ohAvgs, color="blue", label="Average OH Temp")
+    ax2.errorbar(ohYears, ohAvgs, yerr=ohStdevs, color="blue", fmt="o", ecolor="purple", label="Monthly Average OH Temp")
     ax2.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
