@@ -20,10 +20,9 @@ def readAverages(year, path):
         cols = line.split(",")
 
         yearmonth = yearInt
-        yearmonth += (cols[0]) / 366  # Divide the day of year by the number of days possibly in the year
+        yearmonth += int(cols[0]) / 366  # Divide the day of year by the number of days possibly in the year
 
-        ohAvg = cols[2]
-        ohAvgs.append(float(ohAvg))
+        ohAvgs.append(float(cols[2]))
         ohStdevs.append(float(cols[4]))
         ohYearmonths.append(yearmonth)
 
@@ -124,7 +123,9 @@ if __name__ == "__main__":
         alltimeAvgs += currentAvgs
         alltimeStdevs += currentStdevs
 
-    ohFrequencies, ohPowers = computeFFTGraph(alltimeYearmonths, alltimeAvgs)
+    print(alltimeYearmonths)
+    print(alltimeAvgs)
+    #ohFrequencies, ohPowers = computeFFTGraph(alltimeYearmonths, alltimeAvgs)
 
-    makeAndSaveGraph(ohFrequencies, sfFrequencies, ohPowers, sfPowers, averagesPath)
+    #makeAndSaveGraph(ohFrequencies, sfFrequencies, ohPowers, sfPowers, averagesPath)
 
