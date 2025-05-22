@@ -75,6 +75,7 @@ def computeFFTGraph(time, avgs, window_size=19):
     residualAvgs = residualAvgs.tolist()
 
     # TODO: fix this and use the other kind of fft that's similar but has uneven sampling
+    # I think it's lombscargle
     N = len(residualAvgs)  # Number sample points
     T = 1 / 12  # sample spacing (1/12 of a year)
     fftData = np.abs(fft(residualAvgs))[:N // 2]
@@ -83,7 +84,7 @@ def computeFFTGraph(time, avgs, window_size=19):
     return frequencyData, fftData
 
 
-def makeAndSaveGraph(ohFrequencies, sfFrequencies, ohPowers, sfPowers, averagesPath):
+def makeAndSaveGraph(ohFrequencies, ohPowers, averagesPath):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
@@ -112,7 +113,6 @@ if __name__ == "__main__":
     alltimeAvgs = []
     alltimeStdevs = []
 
-    # TODO: Make sure to get rid of solar flux code, as it's not required here
     dailyAveragesStub = "dailyAverages.csv"
     years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
     for year in years:
@@ -123,9 +123,7 @@ if __name__ == "__main__":
         alltimeAvgs += currentAvgs
         alltimeStdevs += currentStdevs
 
-    print(alltimeYearmonths)
-    print(alltimeAvgs)
-    #ohFrequencies, ohPowers = computeFFTGraph(alltimeYearmonths, alltimeAvgs)
+    ohFrequencies, ohPowers = computeFFTGraph(alltimeYearmonths, alltimeAvgs)
 
-    #makeAndSaveGraph(ohFrequencies, sfFrequencies, ohPowers, sfPowers, averagesPath)
+    makeAndSaveGraph(ohFrequencies, ohPowers, averagesPath)
 
