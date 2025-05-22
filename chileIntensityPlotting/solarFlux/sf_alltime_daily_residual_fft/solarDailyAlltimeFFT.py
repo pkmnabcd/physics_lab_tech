@@ -70,7 +70,7 @@ def computeResidualGraph(time, avgs, window_size):
     return smoothTime, residualAvgs
 
 
-def computeLombScargleGraph(time, avgs, window_size=19):
+def computeLombScargleGraph(time, avgs, window_size=59):
     residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size)
 
     t = np.array(residualTime)
