@@ -23,7 +23,7 @@ def readAverages(year, path):
         yearmonth += int(cols[0]) / 366  # Divide the day of year by the number of days possibly in the year
 
         ohAvgs.append(float(cols[2]))
-        ohStdevs.append(float(cols[4]))
+        ohStdevs.append(float(cols[3]))
         ohYearmonths.append(yearmonth)
 
     file.close()
