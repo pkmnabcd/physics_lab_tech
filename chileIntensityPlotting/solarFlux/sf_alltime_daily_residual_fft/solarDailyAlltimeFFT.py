@@ -70,20 +70,22 @@ def computeResidualGraph(time, avgs, window_size):
     return smoothTime, residualAvgs
 
 
-def computeFFTGraph(time, avgs, window_size=19):
+def computeLombScargleGraph(time, avgs, window_size=19):
     residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size)
-    residualAvgs = residualAvgs.tolist()
 
-    # TODO: fix this and use the other kind of fft that's similar but has uneven sampling
-    # I think it's lombscargle
-    N = len(residualAvgs)  # Number sample points
-    T = 1 / 12  # sample spacing (1/12 of a year)
-    fftData = np.abs(fft(residualAvgs))[:N // 2]
-    frequencyData = fftfreq(N, T)[:N // 2]
+    t = np.array(residualTime)
+    x = np.array(residualAvgs)
 
-    return frequencyData, fftData
+    minFreq = 1 / (t.max() - t.min())
+    maxFreq = 0.5 * (1 / np.mean(np.diff(t)))  # Don't ask me why this
+
+    frequencyData = np.linspace(min_freq / 2, max_freq * 1.5, 1000)
+    powerData = lombscargle(t, x, frequencyData, normalize=True)
+
+    return frequencyData, powerData
 
 
+# TODO: Add smooth curve plotted on normal data as well so we can see stuff
 def makeAndSaveGraph(ohFrequencies, ohPowers, averagesPath):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
@@ -123,7 +125,7 @@ if __name__ == "__main__":
         alltimeAvgs += currentAvgs
         alltimeStdevs += currentStdevs
 
-    ohFrequencies, ohPowers = computeFFTGraph(alltimeYearmonths, alltimeAvgs)
+    ohFrequencies, ohPowers = computeLombScargleGraph(alltimeYearmonths, alltimeAvgs)
 
     makeAndSaveGraph(ohFrequencies, ohPowers, averagesPath)
 
