@@ -29,6 +29,31 @@ def readAverages(year, path):
     return ohYearmonths, ohAvgs, ohStdevs
 
 
+def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_size):
+    fig, ax1 = plt.subplots(figsize=(14,10))
+
+    ax1.set_xlabel("OH Temp (K)", fontsize=20)
+    ax1.set_ylabel("Year", fontsize=20)
+    ax1.plot(time, daliyAvgs, color="blue", label="Daily Average OH Temp")
+    ax1.plot(smoothTime, smoothDaliyAvgs, color="red", label="Smoothed Daily Average OH Temp")
+    ax1.tick_params(axis="y", labelcolor="blue")
+
+    fig.tight_layout()
+    plt.grid(visible=True, axis="both")
+
+    title = f"ChileMTM 2009-2024 Daily OH Temp with Smoothed Curve (window size: {window_size})"
+    title = "\n".join(wrap(title, 40))
+    plt.title(title, fontsize=26)
+
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    ax1.legend(lines1, labels1, loc="lower right")
+    plt.tight_layout()
+
+    outPath = "all_time_oh_daily_average_frequencies.png"
+    plt.savefig(outPath)
+    print(f"File saved to {outPath} .")
+
+
 def doSmoothing(array, window_size):
     i = 0
     moving_averages = []
@@ -71,6 +96,7 @@ def computeResidualGraph(time, avgs, window_size):
 
 def computeLombScargleGraph(time, avgs, window_size=59):
     residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size)
+    makeAndSaveSmoothGraph(time, avgs, residualTime, residualAvgs, window_size)
 
     t = np.array(residualTime)
     x = np.array(residualAvgs)
@@ -84,8 +110,7 @@ def computeLombScargleGraph(time, avgs, window_size=59):
     return frequencyData, powerData
 
 
-# TODO: Add smooth curve plotted on normal data as well so we can see stuff
-def makeAndSaveGraph(ohFrequencies, ohPowers, averagesPath):
+def makeAndSaveFFTGraph(ohFrequencies, ohPowers, averagesPath):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
