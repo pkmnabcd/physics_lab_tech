@@ -49,7 +49,7 @@ def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = "all_time_oh_daily_average_frequencies.png"
+    outPath = "all_time_oh_daily_average_smooth_on_top.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
