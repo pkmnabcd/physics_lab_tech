@@ -90,13 +90,14 @@ def computeResidualGraph(time, avgs, window_size):
     smoothAvgs = doSmoothing(avgs, window_size)
     cutoffAvgs = doEndCutoffFromSmoothing(avgs, window_size)
 
+    makeAndSaveSmoothGraph(time, avgs, smoothTime, smoothAvgs, window_size)
+
     residualAvgs = np.array(cutoffAvgs) - np.array(smoothAvgs)
     return smoothTime, residualAvgs
 
 
 def computeLombScargleGraph(time, avgs, window_size=59):
     residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size)
-    makeAndSaveSmoothGraph(time, avgs, residualTime, residualAvgs, window_size)
 
     t = np.array(residualTime)
     x = np.array(residualAvgs)
