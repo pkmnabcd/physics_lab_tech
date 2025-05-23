@@ -79,7 +79,7 @@ def computeLombScargleGraph(time, avgs, window_size=59):
     minFreq = 1 / (t.max() - t.min())
     maxFreq = 0.5 * (1 / np.mean(np.diff(t)))  # Don't ask me why this
 
-    frequencyData = np.linspace(min_freq / 2, max_freq * 1.5, 1000)
+    frequencyData = np.linspace(minFreq / 2, maxFreq * 1.5, 1000)
     powerData = lombscargle(t, x, frequencyData, normalize=True)
 
     return frequencyData, powerData
