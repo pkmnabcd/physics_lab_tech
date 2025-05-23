@@ -151,5 +151,5 @@ if __name__ == "__main__":
 
     ohFrequencies, ohPowers = computeLombScargleGraph(alltimeYearmonths, alltimeAvgs)
 
-    makeAndSaveGraph(ohFrequencies, ohPowers, averagesFile)
+    makeAndSaveFFTGraph(ohFrequencies, ohPowers, averagesFile)
 
