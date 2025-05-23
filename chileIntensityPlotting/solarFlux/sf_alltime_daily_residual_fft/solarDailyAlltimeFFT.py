@@ -3,8 +3,7 @@ from textwrap import wrap
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.fft import fft
-from scipy.fft import fftfreq
+from scipy.signal import lombscargle
 
 def readAverages(year, path):
     yearInt = int(year)
