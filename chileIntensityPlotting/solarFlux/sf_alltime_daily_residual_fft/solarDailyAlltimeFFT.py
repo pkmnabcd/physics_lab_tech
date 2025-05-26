@@ -135,6 +135,15 @@ def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size):
     print(f"File saved to {outPath} .")
 
 
+def saveDataCSV(frequencies, powers, window_size):
+    lines = []
+    for i in range(frequencies):
+        lines.append(f"{frequencies[i]},{powers[i]}\n")
+    file = open(f"all_time_oh_daily_average_frequencies_win{window_size}.csv", "w")
+    file.writelines(lines)
+    file.close()
+
+
 if __name__ == "__main__":
     alltimeYearmonths = []
     alltimeAvgs = []
@@ -157,4 +166,5 @@ if __name__ == "__main__":
     for window_size in window_sizes:
         ohFrequencies, ohPowers = computeLombScargleGraph(alltimeYearmonths, alltimeAvgs, window_size)
         makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size)
+        saveDataCSV(ohFrequencies, ohPowers, window_size)
 
