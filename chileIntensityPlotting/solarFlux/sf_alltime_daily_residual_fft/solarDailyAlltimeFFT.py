@@ -139,9 +139,11 @@ def saveDataCSV(frequencies, powers, window_size):
     lines = []
     for i in range(len(frequencies)):
         lines.append(f"{frequencies[i]},{powers[i]}\n")
-    file = open(f"all_time_oh_daily_average_frequencies_win{window_size}.csv", "w")
+    outpath = f"all_time_oh_daily_average_frequencies_win{window_size}.csv"
+    file = open(outpath, "w")
     file.writelines(lines)
     file.close()
+    print(f"File saved to {outPath} .")
 
 
 if __name__ == "__main__":
