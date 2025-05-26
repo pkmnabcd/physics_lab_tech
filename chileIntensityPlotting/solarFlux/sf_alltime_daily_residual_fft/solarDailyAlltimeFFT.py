@@ -143,7 +143,7 @@ def saveDataCSV(frequencies, powers, window_size):
     file = open(outpath, "w")
     file.writelines(lines)
     file.close()
-    print(f"File saved to {outPath} .")
+    print(f"File saved to {outpath} .")
 
 
 if __name__ == "__main__":
