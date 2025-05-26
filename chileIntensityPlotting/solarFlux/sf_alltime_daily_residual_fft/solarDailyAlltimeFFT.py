@@ -32,8 +32,8 @@ def readAverages(year, path):
 def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_size):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("OH Temp (K)", fontsize=20)
-    ax1.set_ylabel("Year", fontsize=20)
+    ax1.set_xlabel("Year", fontsize=20)
+    ax1.set_ylabel("OH Temp (K)", fontsize=20)
     ax1.plot(time, dailyAvgs, color="blue", label="Daily Average OH Temp")
     ax1.plot(smoothTime, smoothDailyAvgs, color="red", label="Smoothed Daily Average OH Temp")
     ax1.tick_params(axis="y", labelcolor="blue")
