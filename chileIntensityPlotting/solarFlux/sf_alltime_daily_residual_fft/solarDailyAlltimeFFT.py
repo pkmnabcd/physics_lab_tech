@@ -49,7 +49,7 @@ def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = "all_time_oh_daily_average_smooth_on_top.png"
+    outPath = f"all_time_oh_daily_average_smooth_on_top_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -96,7 +96,7 @@ def computeResidualGraph(time, avgs, window_size):
     return smoothTime, residualAvgs
 
 
-def computeLombScargleGraph(time, avgs, window_size=59):
+def computeLombScargleGraph(time, avgs, window_size):
     residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size)
 
     t = np.array(residualTime)
@@ -111,7 +111,7 @@ def computeLombScargleGraph(time, avgs, window_size=59):
     return frequencyData, powerData
 
 
-def makeAndSaveFFTGraph(ohFrequencies, ohPowers, averagesPath):
+def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
@@ -122,7 +122,7 @@ def makeAndSaveFFTGraph(ohFrequencies, ohPowers, averagesPath):
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "ChileMTM 2009-2024 Daily OH Temp Residual Frequency Analysis"
+    title = f"ChileMTM 2009-2024 Daily OH Temp Residual Frequency Analysis (window size: {window_size})"
     title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
@@ -130,7 +130,7 @@ def makeAndSaveFFTGraph(ohFrequencies, ohPowers, averagesPath):
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = "all_time_oh_daily_average_frequencies.png"
+    outPath = f"all_time_oh_daily_average_frequencies_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -150,7 +150,11 @@ if __name__ == "__main__":
         alltimeAvgs += currentAvgs
         alltimeStdevs += currentStdevs
 
-    ohFrequencies, ohPowers = computeLombScargleGraph(alltimeYearmonths, alltimeAvgs)
-
-    makeAndSaveFFTGraph(ohFrequencies, ohPowers, averagesFile)
+    # NOTE: Solar cycle is 27 days, but in 27 days there's usually about 21 data points
+    # NOTE: 59 is just a decent window size for the size of the dataset
+    # NOTE: The average number of data points in a year is 231
+    window_sizes = [21, 59, 231]
+    for window_size in window_sizes:
+        ohFrequencies, ohPowers = computeLombScargleGraph(alltimeYearmonths, alltimeAvgs, window_size)
+        makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size)
 
