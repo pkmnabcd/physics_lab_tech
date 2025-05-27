@@ -128,6 +128,7 @@ def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, year):
 
     outPath = f"{year}_oh_daily_average_frequencies_win{window_size}.png"
     plt.savefig(outPath)
+    plt.close()
     print(f"File saved to {outPath} .")
 
 
