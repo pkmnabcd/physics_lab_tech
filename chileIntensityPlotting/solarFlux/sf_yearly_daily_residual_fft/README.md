@@ -1,0 +1,2 @@
+# Installation Notes
+You must use poetry with this program to install the dependencies correctly. Follow some guide to install poetry on your system (linux, windows, etc), and then in this directory, run `poetry install`. Then, run `poetry shell` to launch a terminal window that has the correct dependencies loaded. Now you can run `python solarMonthlyFFT.py` or `python3 solarMonthlyFFT.py`, depending on your system.
