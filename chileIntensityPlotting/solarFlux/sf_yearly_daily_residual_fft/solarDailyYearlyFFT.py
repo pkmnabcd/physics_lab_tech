@@ -1,5 +1,6 @@
 from sys import argv
 from textwrap import wrap
+from os import makedirs
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -45,7 +46,7 @@ def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = f"{year}_oh_daily_average_smooth_on_top_win{window_size}.png"
+    outPath = f"yearly_frequencies_graphs/{year}_oh_daily_average_smooth_on_top_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -126,7 +127,7 @@ def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, year):
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = f"{year}_oh_daily_average_frequencies_win{window_size}.png"
+    outPath = f"yearly_frequencies_graphs/{year}_oh_daily_average_frequencies_win{window_size}.png"
     plt.savefig(outPath)
     plt.close()
     print(f"File saved to {outPath} .")
@@ -136,7 +137,7 @@ def saveDataCSV(frequencies, powers, window_size, year):
     lines = []
     for i in range(len(frequencies)):
         lines.append(f"{frequencies[i]},{powers[i]}\n")
-    outpath = f"{year}_oh_daily_average_frequencies_win{window_size}.csv"
+    outpath = f"yearly_frequencies_graphs/{year}_oh_daily_average_frequencies_win{window_size}.csv"
     file = open(outpath, "w")
     file.writelines(lines)
     file.close()
@@ -144,6 +145,7 @@ def saveDataCSV(frequencies, powers, window_size, year):
 
 
 if __name__ == "__main__":
+    makedirs("yearly_frequencies_graphs", exist_ok=True)
     dailyAveragesStub = "dailyAverages.csv"
     years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
     for year in years:
@@ -156,5 +158,5 @@ if __name__ == "__main__":
         for window_size in window_sizes:
             ohFrequencies, ohPowers = computeLombScargleGraph(currentDoys, currentAvgs, window_size, year)
             makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, year)
-            #saveDataCSV(ohFrequencies, ohPowers, window_size, year)
+            saveDataCSV(ohFrequencies, ohPowers, window_size, year)
 
