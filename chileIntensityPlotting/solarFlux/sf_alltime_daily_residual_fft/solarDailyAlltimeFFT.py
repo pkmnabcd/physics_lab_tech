@@ -1,5 +1,6 @@
 from sys import argv
 from textwrap import wrap
+from os import makedirs
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -49,7 +50,7 @@ def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = f"all_time_oh_daily_average_smooth_on_top_win{window_size}.png"
+    outPath = f"all-time_frequencies_graphs/all_time_oh_daily_average_smooth_on_top_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -130,7 +131,7 @@ def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size):
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = f"all_time_oh_daily_average_frequencies_win{window_size}.png"
+    outPath = f"all-time_frequencies_graphs/all_time_oh_daily_average_frequencies_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -139,7 +140,7 @@ def saveDataCSV(frequencies, powers, window_size):
     lines = []
     for i in range(len(frequencies)):
         lines.append(f"{frequencies[i]},{powers[i]}\n")
-    outpath = f"all_time_oh_daily_average_frequencies_win{window_size}.csv"
+    outpath = f"all-time_frequencies_graphs/all_time_oh_daily_average_frequencies_win{window_size}.csv"
     file = open(outpath, "w")
     file.writelines(lines)
     file.close()
@@ -147,6 +148,8 @@ def saveDataCSV(frequencies, powers, window_size):
 
 
 if __name__ == "__main__":
+    makedirs("all-time_frequencies_graphs", exist_ok=True)
+
     alltimeYearmonths = []
     alltimeAvgs = []
     alltimeStdevs = []
