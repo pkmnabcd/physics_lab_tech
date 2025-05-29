@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "sf-alltime-yearly-residual-fft"
+name = "oh-sf-alltime-monthly-avg-residual-fft"
 version = "0.1.0"
 description = ""
 authors = ["Gabe Decker <42gdeckers@gmail.com>"]
