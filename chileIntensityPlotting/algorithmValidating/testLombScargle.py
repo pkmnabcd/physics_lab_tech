@@ -21,11 +21,11 @@ def sort_arrays_together(x, y):
 
 if __name__ == "__main__":
     rng = np.random.default_rng()
-    nin = 160
-    x = rng.uniform(0, 10*np.pi, nin)
+    nin = 150
+    x = rng.uniform(0, 20*np.pi, nin)
 
     amp0 = 40
-    freq0 = 0.10
+    freq0 = 0.20
     angFreq0 = 2*np.pi * freq0
 
     y = amp0*np.cos(angFreq0*x)
@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     angularFrequencyData = angularFrequencyData / (2*np.pi)
 
-    fig, (ax_t, ax_p) = plt.subplots(2, 1, figsize=(5, 6))
+    fig, (ax_t, ax_p) = plt.subplots(2, 1, figsize=(8, 6))
 
     ax_t.scatter(x, y)
     ax_t.set_xlabel('Time [s]')
