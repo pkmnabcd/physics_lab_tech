@@ -109,7 +109,7 @@ def computeLombScargleGraph(time, avgs, window_size, year):
 
 
 def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, year):
-    print(ohFrequenices)
+    print(ohFrequencies)
     ohFrequencies = ohFrequencies / (2*np.pi) # Convert from angular to regular freq
     print(ohFrequenices)
 
