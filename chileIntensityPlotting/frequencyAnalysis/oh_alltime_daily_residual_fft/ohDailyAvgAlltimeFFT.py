@@ -113,17 +113,15 @@ def computeLombScargleGraph(time, avgs, window_size):
 
 
 def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size):
-    print(ohFrequenices)
+    print(ohFrequencies)
     ohFrequencies = ohFrequencies / (2*np.pi) # Convert from angular to regular freq
     print(ohFrequenices)
-    ohPeriods = np.reciprocal(ohFrequencies)
-    print(ohPeriods)
 
     fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("Period (Years per Oscillation)", fontsize=20)
+    ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
     ax1.set_ylabel("OH Power ", fontsize=20)
-    ax1.plot(ohPeriods, ohPowers, color="blue", label="OH Temp")
+    ax1.plot(ohFrequencies, ohPowers, color="blue", label="OH Temp")
     ax1.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
