@@ -14,6 +14,8 @@ def readAverages(year, path):
         lines[i] = lines[i].strip("\n")
 
     ohYearmonths = []  # this is the year and then some multiple of 1/12 to be the month
+    # TODO: Add sf to this. It should just be other parts of the split line
+    sfYearmonths = []
     ohAvgs = []
     ohStdevs = []
     for line in lines:
