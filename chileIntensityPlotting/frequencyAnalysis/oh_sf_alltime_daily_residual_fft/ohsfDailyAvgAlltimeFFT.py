@@ -68,11 +68,14 @@ def readAverages(year, path):
     for line in lines:
         lineYear = line[0:4]
         if year != lineYear:
-            break
+            if yearInt < int(lineYear):
+                break
+            else:
+                continue
         currentYearmonth = int(lineYear)
-        currentYearmonth += getDoy(int(year), int(line[5:7]), int(line[8:10])) / 366
+        currentYearmonth += getDoy(yearInt, int(line[5:7]), int(line[8:10])) / 366
         sfYeardoys.append(currentYearmonth)
-        sfAvgs.append(lines[139 : 149])
+        sfAvgs.append(float(line[139 : 149]))
 
 
     file.close()
