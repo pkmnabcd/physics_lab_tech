@@ -232,8 +232,8 @@ if __name__ == "__main__":
         alltimeOHYeardoys += currentOHYeardoys
         alltimeOHAvgs += currentOHAvgs
         alltimeOHStdevs += currentOHStdevs
-        alltimeSfYeardoys += currentOHYeardoys
-        alltimeSfAvgs += currentOHAvgs
+        alltimeSfYeardoys += currentSfYeardoys
+        alltimeSfAvgs += currentSfAvgs
 
     # NOTE: Solar cycle is 27 days, but in 27 days there's usually about 21 data points
     # NOTE: 59 is just a decent window size for the size of the dataset
