@@ -17,25 +17,25 @@ def getDoy(year, month, day):
         case 2:
             return 31 + day
         case 3:
-            return 59 + leadYearAdd + day
+            return 59 + leapYearAdd + day
         case 4:
-            return 90 + leadYearAdd + day
+            return 90 + leapYearAdd + day
         case 5:
-            return 120 + leadYearAdd + day
+            return 120 + leapYearAdd + day
         case 6:
-            return 151 + leadYearAdd + day
+            return 151 + leapYearAdd + day
         case 7:
-            return 181 + leadYearAdd + day
+            return 181 + leapYearAdd + day
         case 8:
-            return 212 + leadYearAdd + day
+            return 212 + leapYearAdd + day
         case 9:
-            return 243 + leadYearAdd + day
+            return 243 + leapYearAdd + day
         case 10:
-            return 273 + leadYearAdd + day
+            return 273 + leapYearAdd + day
         case 11:
-            return 304 + leadYearAdd + day
+            return 304 + leapYearAdd + day
         case 12:
-            return 334 + leadYearAdd + day
+            return 334 + leapYearAdd + day
 
 def readAverages(year, path):
     # NOTE: Getting daliy OH data
