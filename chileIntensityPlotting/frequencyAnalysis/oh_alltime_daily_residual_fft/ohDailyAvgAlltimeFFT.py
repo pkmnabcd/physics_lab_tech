@@ -6,45 +6,98 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import lombscargle
 
+def getDoy(year, month, day):
+    if year % 4 == 0:
+        leapYearAdd = 1
+    else:
+        leapYearAdd = 0
+    match month:
+        case 1:
+            return 0 + day
+        case 2:
+            return 31 + day
+        case 3:
+            return 59 + leadYearAdd + day
+        case 4:
+            return 90 + leadYearAdd + day
+        case 5:
+            return 120 + leadYearAdd + day
+        case 6:
+            return 151 + leadYearAdd + day
+        case 7:
+            return 181 + leadYearAdd + day
+        case 8:
+            return 212 + leadYearAdd + day
+        case 9:
+            return 243 + leadYearAdd + day
+        case 10:
+            return 273 + leadYearAdd + day
+        case 11:
+            return 304 + leadYearAdd + day
+        case 12:
+            return 334 + leadYearAdd + day
+
 def readAverages(year, path):
+    # NOTE: Getting daliy OH data
     yearInt = int(year)
     file = open(path)
     lines = file.readlines()
     for i in range(len(lines)):
         lines[i] = lines[i].strip("\n")
 
-    ohYearmonths = []  # this is the year and then some multiple of 1/12 to be the month
-    # TODO: Add sf to this. It should just be other parts of the split line
-    sfYearmonths = []
+    ohYeardoys = []  # this is the year and then some multiple of 1/366 to be the doy
+    sfYeardoys = []
+    sfAvgs = []
     ohAvgs = []
     ohStdevs = []
     for line in lines:
         cols = line.split(",")
 
-        yearmonth = yearInt
-        yearmonth += int(cols[0]) / 366  # Divide the day of year by the number of days possibly in the year
+        yeardoy = yearInt
+        yeardoy += int(cols[0]) / 366  # Divide the day of year by the number of days possibly in the year
 
         ohAvgs.append(float(cols[2]))
         ohStdevs.append(float(cols[3]))
-        ohYearmonths.append(yearmonth)
+        ohYeardoys.append(yearmonth)
 
     file.close()
-    return ohYearmonths, ohAvgs, ohStdevs
+
+    # NOTE: Getting daily SF data
+    file = open("solarFlux.txt")
+    lines = file.readlines()
+        for line in lines:
+            lineYear = line[0:4]
+            if year != lineYear:
+                break
+            currentYearmonth = int(lineYear)
+            currentYearmonth += getDoy(int(year), int(line[5:7]), int(line[8:10])) / 366
+            sfYeardoys.append(currentYearmonth)
+            sfAvgs.append(lines[139 : 149])
 
 
-def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_size):
+    file.close()
+    return ohYeardoys, ohAvgs, ohStdevs, sfYeardoys, sfAvgs
+
+
+def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_size, isOH):
+    if isOH:
+        datastub = "oh"
+        datastubcap = "OH"
+    else:
+        datastub = "sf"
+        datastubcap = "SF"
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Year", fontsize=20)
-    ax1.set_ylabel("OH Temp (K)", fontsize=20)
-    ax1.plot(time, dailyAvgs, color="blue", label="Daily Average OH Temp")
-    ax1.plot(smoothTime, smoothDailyAvgs, color="red", label="Smoothed Daily Average OH Temp")
+    ax1.set_ylabel(f"{datastubcap} Temp (K)", fontsize=20)
+    ax1.plot(time, dailyAvgs, color="blue", label=f"Daily Average {datastubcap} Temp")
+    ax1.plot(smoothTime, smoothDailyAvgs, color="red", label=f"Smoothed Daily Average {datastubcap} Temp")
     ax1.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = f"ChileMTM 2009-2024 Daily OH Temp with Smoothed Curve (window size: {window_size})"
+    title = f"ChileMTM 2009-2024 Daily {datastubcap} Temp with Smoothed Curve (window size: {window_size})"
     title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
@@ -52,7 +105,7 @@ def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = f"all-time_frequencies_graphs/all_time_oh_daily_average_smooth_on_top_win{window_size}.png"
+    outPath = f"all-time_frequencies_graphs/all_time_{datastub}_daily_average_smooth_on_top_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -87,20 +140,20 @@ def doEndCutoffFromSmoothing(array, window_size):
     return out_list
 
 
-def computeResidualGraph(time, avgs, window_size):
+def computeResidualGraph(time, avgs, window_size, isOH):
     # NOTE: Make sure window_size is odd
     smoothTime = doEndCutoffFromSmoothing(time, window_size)
     smoothAvgs = doSmoothing(avgs, window_size)
     cutoffAvgs = doEndCutoffFromSmoothing(avgs, window_size)
 
-    makeAndSaveSmoothGraph(time, avgs, smoothTime, smoothAvgs, window_size)
+    makeAndSaveSmoothGraph(time, avgs, smoothTime, smoothAvgs, window_size, isOH)
 
     residualAvgs = np.array(cutoffAvgs) - np.array(smoothAvgs)
     return smoothTime, residualAvgs
 
 
-def computeLombScargleGraph(time, avgs, window_size):
-    residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size)
+def computeLombScargleGraph(time, avgs, window_size, isOH):
+    residualTime, residualAvgs = computeResidualGraph(time, avgs, window_size, isOH)
 
     t = np.array(residualTime)
     x = np.array(residualAvgs)
@@ -114,20 +167,26 @@ def computeLombScargleGraph(time, avgs, window_size):
     return frequencyData, powerData
 
 
-def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size):
+def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, isOH):
+    if isOH:
+        datastub = "oh"
+        datastubcap = "OH"
+    else:
+        datastub = "sf"
+        datastubcap = "SF"
     ohFrequencies = ohFrequencies / (2*np.pi) # Convert from angular to regular freq
 
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
-    ax1.set_ylabel("OH Power ", fontsize=20)
-    ax1.plot(ohFrequencies, ohPowers, color="blue", label="OH Temp")
+    ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
+    ax1.plot(ohFrequencies, ohPowers, color="blue", label=f"{datastubcap} Temp")
     ax1.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = f"ChileMTM 2009-2024 Daily OH Temp Residual Frequency Analysis (window size: {window_size})"
+    title = f"ChileMTM 2009-2024 Daily {datastubcap} Temp Residual Frequency Analysis (window size: {window_size})"
     title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
@@ -135,16 +194,20 @@ def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size):
     ax1.legend(lines1, labels1, loc="lower right")
     plt.tight_layout()
 
-    outPath = f"all-time_frequencies_graphs/all_time_oh_daily_average_frequencies_win{window_size}.png"
+    outPath = f"all-time_frequencies_graphs/all_time_{datastub}_daily_average_frequencies_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
 
-def saveDataCSV(frequencies, powers, window_size):
+def saveDataCSV(frequencies, powers, window_size, isOH):
+    if isOH:
+        datastub = "oh"
+    else:
+        datastub = "sf"
     lines = []
     for i in range(len(frequencies)):
         lines.append(f"{frequencies[i]},{powers[i]}\n")
-    outpath = f"all-time_frequencies_graphs/all_time_oh_daily_average_frequencies_win{window_size}.csv"
+    outpath = f"all-time_frequencies_graphs/all_time_{datastub}_daily_average_frequencies_win{window_size}.csv"
     file = open(outpath, "w")
     file.writelines(lines)
     file.close()
@@ -154,26 +217,33 @@ def saveDataCSV(frequencies, powers, window_size):
 if __name__ == "__main__":
     makedirs("all-time_frequencies_graphs", exist_ok=True)
 
-    alltimeYearmonths = []
-    alltimeAvgs = []
-    alltimeStdevs = []
+    alltimeOHYeardoys = []
+    alltimeOHAvgs = []
+    alltimeOHStdevs = []
+    alltimeSfYeardoys = []
+    alltimeSfAvgs = []
 
     dailyAveragesStub = "dailyAverages.csv"
     years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
     for year in years:
         # NOTE: This is meant to be run at the ChileMTM folder, with all the years
         averagesFile = year + "/" + year + dailyAveragesStub
-        currentYearmonths, currentAvgs, currentStdevs = readAverages(year, averagesFile)
-        alltimeYearmonths += currentYearmonths
-        alltimeAvgs += currentAvgs
-        alltimeStdevs += currentStdevs
+        currentOHYeardoys, currentOHAvgs, currentOHStdevs, currentSfYeardoys, currentSfAvgs = readAverages(year, averagesFile)
+        alltimeOHYeardoys += currentOHYeardoys
+        alltimeOHAvgs += currentOHAvgs
+        alltimeOHStdevs += currentOHStdevs
+        alltimeSfYeardoys += currentOHYeardoys
+        alltimeSfAvgs += currentOHAvgs
 
     # NOTE: Solar cycle is 27 days, but in 27 days there's usually about 21 data points
     # NOTE: 59 is just a decent window size for the size of the dataset
     # NOTE: The average number of data points in a year is 231
     window_sizes = [21, 59, 231]
     for window_size in window_sizes:
-        ohFrequencies, ohPowers = computeLombScargleGraph(alltimeYearmonths, alltimeAvgs, window_size)
-        makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size)
-        saveDataCSV(ohFrequencies, ohPowers, window_size)
+        ohFrequencies, ohPowers = computeLombScargleGraph(alltimeOHYeardoys, alltimeOHAvgs, window_size, isOH=True)
+        sfFrequencies, sfPowers = computeLombScargleGraph(alltimeSfYeardoys, alltimeSfAvgs, window_size, isOH=False)
+        makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, isOH=True)
+        saveDataCSV(ohFrequencies, ohPowers, window_size, isOH=True)
+        makeAndSaveFFTGraph(sfFrequencies, sfPowers, window_size, isOH=False)
+        saveDataCSV(sfFrequencies, sfPowers, window_size, isOH=False)
 
