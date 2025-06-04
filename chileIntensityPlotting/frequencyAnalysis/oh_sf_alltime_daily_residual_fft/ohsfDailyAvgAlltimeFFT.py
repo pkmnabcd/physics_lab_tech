@@ -65,14 +65,14 @@ def readAverages(year, path):
     # NOTE: Getting daily SF data
     file = open("solarFlux.txt")
     lines = file.readlines()
-        for line in lines:
-            lineYear = line[0:4]
-            if year != lineYear:
-                break
-            currentYearmonth = int(lineYear)
-            currentYearmonth += getDoy(int(year), int(line[5:7]), int(line[8:10])) / 366
-            sfYeardoys.append(currentYearmonth)
-            sfAvgs.append(lines[139 : 149])
+    for line in lines:
+        lineYear = line[0:4]
+        if year != lineYear:
+            break
+        currentYearmonth = int(lineYear)
+        currentYearmonth += getDoy(int(year), int(line[5:7]), int(line[8:10])) / 366
+        sfYeardoys.append(currentYearmonth)
+        sfAvgs.append(lines[139 : 149])
 
 
     file.close()
