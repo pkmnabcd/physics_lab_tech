@@ -58,7 +58,7 @@ def readAverages(year, path):
 
         ohAvgs.append(float(cols[2]))
         ohStdevs.append(float(cols[3]))
-        ohYeardoys.append(yearmonth)
+        ohYeardoys.append(yeardoy)
 
     file.close()
 
