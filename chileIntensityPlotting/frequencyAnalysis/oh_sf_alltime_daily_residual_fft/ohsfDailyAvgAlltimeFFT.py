@@ -238,15 +238,18 @@ if __name__ == "__main__":
         alltimeSfYeardoys += currentSfYeardoys
         alltimeSfAvgs += currentSfAvgs
 
-    # NOTE: Solar cycle is 27 days, but in 27 days there's usually about 21 data points
+    # NOTE: Solar cycle is 27 days, but in 27 days there's usually about 21 data points in OH
     # NOTE: 59 is just a decent window size for the size of the dataset
-    # NOTE: The average number of data points in a year is 231
-    window_sizes = [21, 59, 231]
-    for window_size in window_sizes:
+    # NOTE: The average number of OH data points in a year is 231
+    oh_window_sizes = [21, 59, 231]
+    for window_size in oh_window_sizes:
         ohFrequencies, ohPowers = computeLombScargleGraph(alltimeOHYeardoys, alltimeOHAvgs, window_size, isOH=True)
-        sfFrequencies, sfPowers = computeLombScargleGraph(alltimeSfYeardoys, alltimeSfAvgs, window_size, isOH=False)
         makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, isOH=True)
         saveDataCSV(ohFrequencies, ohPowers, window_size, isOH=True)
+
+    sf_window_sizes = [27, 59, 365]
+    for window_size in sf_window_sizes:
+        sfFrequencies, sfPowers = computeLombScargleGraph(alltimeSfYeardoys, alltimeSfAvgs, window_size, isOH=False)
         makeAndSaveFFTGraph(sfFrequencies, sfPowers, window_size, isOH=False)
         saveDataCSV(sfFrequencies, sfPowers, window_size, isOH=False)
 
