@@ -162,28 +162,28 @@ def computeLombScargleGraph(time, avgs, window_size, isOH):
     x = np.array(residualAvgs)
 
     minFreq = 1 / (t.max() - t.min())
-    maxFreq = 0.5 * (1 / np.mean(np.diff(t)))  # Don't ask me why this
+    maxFreq = 0.5 * (1 / np.mean(np.diff(t)))   # Don't ask me why this
 
     frequencyData = np.linspace(minFreq / 2, maxFreq * 1.5, 1000)
+    frequencyData = frequencyData / (2*np.pi)   # Convert from angular to regular freq
     powerData = lombscargle(t, x, frequencyData, normalize=True)
 
     return frequencyData, powerData
 
 
-def makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, isOH):
+def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
     if isOH:
         datastub = "oh"
         datastubcap = "OH"
     else:
         datastub = "sf"
         datastubcap = "SF"
-    ohFrequencies = ohFrequencies / (2*np.pi) # Convert from angular to regular freq
 
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
     ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
-    ax1.plot(ohFrequencies, ohPowers, color="blue", label=f"{datastubcap} Temp")
+    ax1.plot(frequencies, powers, color="blue", label=f"{datastubcap} Temp")
     ax1.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
