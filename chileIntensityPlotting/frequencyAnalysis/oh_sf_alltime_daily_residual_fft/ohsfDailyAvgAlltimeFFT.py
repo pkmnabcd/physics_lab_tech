@@ -76,8 +76,6 @@ def readAverages(year, path):
         currentYearmonth += getDoy(yearInt, int(line[5:7]), int(line[8:10])) / 366
         sfYeardoys.append(currentYearmonth)
         sfAvgs.append(float(line[139 : 149]))
-
-
     file.close()
     return ohYeardoys, ohAvgs, ohStdevs, sfYeardoys, sfAvgs
 
@@ -247,7 +245,7 @@ if __name__ == "__main__":
         makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, isOH=True)
         saveDataCSV(ohFrequencies, ohPowers, window_size, isOH=True)
 
-    sf_window_sizes = [27, 59, 365]
+    sf_window_sizes = [21, 27, 59, 231, 365]
     for window_size in sf_window_sizes:
         sfFrequencies, sfPowers = computeLombScargleGraph(alltimeSfYeardoys, alltimeSfAvgs, window_size, isOH=False)
         makeAndSaveFFTGraph(sfFrequencies, sfPowers, window_size, isOH=False)
