@@ -83,22 +83,24 @@ def readAverages(year, path):
 def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_size, isOH):
     if isOH:
         datastub = "oh"
-        datastubcap = "OH"
+        datastublong = "OH Temp"
+        unit = "K"
     else:
         datastub = "sf"
-        datastubcap = "SF"
+        datastublong = "Solar Flux"
+        unit = "SFU"
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Year", fontsize=20)
-    ax1.set_ylabel(f"{datastubcap} Temp (K)", fontsize=20)
-    ax1.plot(time, dailyAvgs, color="blue", label=f"Daily Average {datastubcap} Temp")
-    ax1.plot(smoothTime, smoothDailyAvgs, color="red", label=f"Smoothed Daily Average {datastubcap} Temp")
+    ax1.set_ylabel(f"{datastublong} ({unit})", fontsize=20)
+    ax1.plot(time, dailyAvgs, color="blue", label=f"Daily Average {datastublong}")
+    ax1.plot(smoothTime, smoothDailyAvgs, color="red", label=f"Smoothed Daily Average {datastublong}")
     ax1.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = f"ChileMTM 2009-2024 Daily {datastubcap} Temp with Smoothed Curve (window size: {window_size})"
+    title = f"ChileMTM 2009-2024 Daily {datastublong} with Smoothed Curve (window size: {window_size})"
     title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
@@ -173,15 +175,17 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
     if isOH:
         datastub = "oh"
         datastubcap = "OH"
+        datastublong = "OH Temp"
     else:
         datastub = "sf"
         datastubcap = "SF"
+        datastublong = "Solar Flux"
 
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
     ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
-    ax1.plot(frequencies, powers, color="blue", label=f"{datastubcap} Temp")
+    ax1.plot(frequencies, powers, color="blue", label=f"{datastublong}")
     ax1.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
