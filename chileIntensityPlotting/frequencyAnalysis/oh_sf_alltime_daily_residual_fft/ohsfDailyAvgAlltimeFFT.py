@@ -111,6 +111,7 @@ def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_
     outPath = f"all-time_frequencies_graphs/all_time_{datastub}_daily_average_smooth_on_top_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
+    plt.close()
 
 
 def doSmoothing(array, window_size):
@@ -202,6 +203,7 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
     outPath = f"all-time_frequencies_graphs/all_time_{datastub}_daily_average_frequencies_win{window_size}.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
+    plt.close()
 
 
 def saveDataCSV(frequencies, powers, window_size, isOH):
