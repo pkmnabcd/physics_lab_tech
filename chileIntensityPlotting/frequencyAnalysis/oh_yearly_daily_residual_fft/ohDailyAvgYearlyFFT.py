@@ -65,7 +65,7 @@ def readAverages(year, path):
     for line in lines:
         lineYear = line[0:4]
         if year != lineYear:
-            if yearInt < int(lineYear):
+            if int(year) < int(lineYear):
                 break
             else:
                 continue
