@@ -192,7 +192,7 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = f"ChileMTM 2009-2024 Daily {datastubcap} Temp Residual Frequency Analysis (window size: {window_size})"
+    title = f"ChileMTM 2009-2024 Daily {datastublong} Residual Frequency Analysis (window size: {window_size})"
     title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
