@@ -161,7 +161,7 @@ def computeLombScargleGraph(time, avgs, window_size, year, isOH):
 
     frequencyData = np.linspace(minFreq / 2, maxFreq * 1.5, 1000)
     powerData = lombscargle(t, x, frequencyData, normalize=True)
-    ohFrequencies = ohFrequencies / (2*np.pi) # Convert from angular to regular freq for graphing
+    frequencyData = frequencyData / (2*np.pi) # Convert from angular to regular freq for graphing
 
     return frequencyData, powerData
 
