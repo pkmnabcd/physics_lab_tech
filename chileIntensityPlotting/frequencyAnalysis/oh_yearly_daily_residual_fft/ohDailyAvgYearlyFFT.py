@@ -69,7 +69,7 @@ def readAverages(year, path):
                 break
             else:
                 continue
-        sfDoys.append(getDoy(int(year), int(line[5:7]), int(line[8:10])) / 366)
+        sfDoys.append(getDoy(int(year), int(line[5:7]), int(line[8:10])))
         sfAvgs.append(float(line[139 : 149]))
     file.close()
     return ohDoys, ohAvgs, ohStdevs, sfDoys, sfAvgs
