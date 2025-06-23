@@ -185,7 +185,7 @@ def computeLombScargleGraph(time, avgs, window_size, isOH):
     periodData = 1 / frequencyData
     periodData = periodData * 365    # Change units to days per oscillation
 
-    periodData, frequencyData, powerData = filterPeriods(periodData, frequencyData, powerData, 5000)
+    periodData, frequencyData, powerData = filterPeriods(periodData, frequencyData, powerData, 500)
 
     return frequencyData, periodData, powerData
 
