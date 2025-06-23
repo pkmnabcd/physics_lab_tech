@@ -14,10 +14,10 @@ def filterPeriods(periods, frequencies, powers, maxPeriod):
     for i in range(len(periods)):
         if periods[i] < maxPeriod:
             newPeriods.append(periods[i])
-            newFrequencies.append(frequenices[i])
+            newFrequencies.append(frequencies[i])
             newPowers.append(powers[i])
 
-    return np.array(newPeriods), np.array(newFrequenices), np.array(newPowers)
+    return np.array(newPeriods), np.array(newFrequencies), np.array(newPowers)
 
 
 def getDoy(year, month, day):
