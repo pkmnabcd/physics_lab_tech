@@ -6,6 +6,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import lombscargle
 
+
+def filterPeriods(periods, frequencies, powers, maxPeriod):
+    newPeriods = []
+    newFrequencies = []
+    newPowers = []
+    for i in range(len(periods)):
+        if periods[i] < maxPeriod:
+            newPeriods.append(periods[i])
+            newFrequencies.append(frequenices[i])
+            newPowers.append(powers[i])
+
+    return np.array(newPeriods), np.array(newFrequenices), np.array(newPowers)
+
+
 def getDoy(year, month, day):
     if year % 4 == 0:
         leapYearAdd = 1
@@ -170,6 +184,8 @@ def computeLombScargleGraph(time, avgs, window_size, isOH):
     frequencyData = frequencyData / (2*np.pi)   # Convert from angular to regular freq for graphing
     periodData = 1 / frequencyData
     periodData = periodData * 365    # Change units to days per oscillation
+
+    periodData, frequencyData, powerData = filterPeriods(periodData, frequencyData, powerData, 5000)
 
     return frequencyData, periodData, powerData
 
