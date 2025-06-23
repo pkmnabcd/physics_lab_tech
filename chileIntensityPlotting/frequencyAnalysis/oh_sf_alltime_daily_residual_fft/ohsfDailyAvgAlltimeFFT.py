@@ -250,7 +250,7 @@ if __name__ == "__main__":
     oh_window_sizes = [21, 59, 231]
     for window_size in oh_window_sizes:
         ohFrequencies, ohPeriods, ohPowers = computeLombScargleGraph(alltimeOHYeardoys, alltimeOHAvgs, window_size, isOH=True)
-        makeAndSaveFFTGraph(ohFrequencies, sfPeriods, ohPowers, window_size, isOH=True)
+        makeAndSaveFFTGraph(ohFrequencies, ohPeriods, ohPowers, window_size, isOH=True)
         saveDataCSV(ohFrequencies, ohPowers, window_size, isOH=True)
 
     sf_window_sizes = [21, 27, 59, 231, 365]
