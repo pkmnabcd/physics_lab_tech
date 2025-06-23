@@ -168,11 +168,12 @@ def computeLombScargleGraph(time, avgs, window_size, isOH):
     frequencyData = np.linspace(minFreq / 2, maxFreq * 1.5, 1000)
     powerData = lombscargle(t, x, frequencyData, normalize=True)
     frequencyData = frequencyData / (2*np.pi)   # Convert from angular to regular freq for graphing
+    periodData = 1 / frequencyData
 
-    return frequencyData, powerData
+    return frequencyData, periodData, powerData
 
 
-def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
+def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
     if isOH:
         datastub = "oh"
         datastubcap = "OH"
@@ -247,13 +248,13 @@ if __name__ == "__main__":
     # NOTE: The average number of OH data points in a year is 231
     oh_window_sizes = [21, 59, 231]
     for window_size in oh_window_sizes:
-        ohFrequencies, ohPowers = computeLombScargleGraph(alltimeOHYeardoys, alltimeOHAvgs, window_size, isOH=True)
-        makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, isOH=True)
+        ohFrequencies, ohPeriods, ohPowers = computeLombScargleGraph(alltimeOHYeardoys, alltimeOHAvgs, window_size, isOH=True)
+        makeAndSaveFFTGraph(ohFrequencies, sfPeriods, ohPowers, window_size, isOH=True)
         saveDataCSV(ohFrequencies, ohPowers, window_size, isOH=True)
 
     sf_window_sizes = [21, 27, 59, 231, 365]
     for window_size in sf_window_sizes:
-        sfFrequencies, sfPowers = computeLombScargleGraph(alltimeSfYeardoys, alltimeSfAvgs, window_size, isOH=False)
-        makeAndSaveFFTGraph(sfFrequencies, sfPowers, window_size, isOH=False)
+        sfFrequencies, sfPeriods, sfPowers = computeLombScargleGraph(alltimeSfYeardoys, alltimeSfAvgs, window_size, isOH=False)
+        makeAndSaveFFTGraph(sfFrequencies, sfPeriods, sfPowers, window_size, isOH=False)
         saveDataCSV(sfFrequencies, sfPowers, window_size, isOH=False)
 
