@@ -169,6 +169,7 @@ def computeLombScargleGraph(time, avgs, window_size, isOH):
     powerData = lombscargle(t, x, frequencyData, normalize=True)
     frequencyData = frequencyData / (2*np.pi)   # Convert from angular to regular freq for graphing
     periodData = 1 / frequencyData
+    periodData = periodData / 365    # Change units to days per oscillation
 
     return frequencyData, periodData, powerData
 
@@ -185,9 +186,9 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
 
     fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
+    ax1.set_xlabel("Period (Days/Oscillation)", fontsize=20)
     ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
-    ax1.plot(frequencies, powers, color="blue", label=f"{datastublong}")
+    ax1.plot(periods, powers, color="blue", label=f"{datastublong}")
     ax1.tick_params(axis="y", labelcolor="blue")
 
     fig.tight_layout()
@@ -207,14 +208,14 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
     plt.close()
 
 
-def saveDataCSV(frequencies, powers, window_size, isOH):
+def saveDataCSV(frequencies, periods, powers, window_size, isOH):
     if isOH:
         datastub = "oh"
     else:
         datastub = "sf"
     lines = []
     for i in range(len(frequencies)):
-        lines.append(f"{frequencies[i]},{powers[i]}\n")
+        lines.append(f"{frequencies[i]},{periods[i]},{powers[i]}\n")
     outpath = f"all-time_frequencies_graphs/all_time_{datastub}_daily_average_frequencies_win{window_size}.csv"
     file = open(outpath, "w")
     file.writelines(lines)
