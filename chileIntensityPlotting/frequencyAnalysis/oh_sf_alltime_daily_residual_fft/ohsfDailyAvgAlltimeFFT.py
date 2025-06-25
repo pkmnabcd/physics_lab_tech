@@ -185,7 +185,7 @@ def computeLombScargleGraph(time, avgs, window_size, isOH):
     periodData = 1 / frequencyData
     periodData = periodData * 365    # Change units to days per oscillation
 
-    periodData, frequencyData, powerData = filterPeriods(periodData, frequencyData, powerData, 50000)
+    periodData, frequencyData, powerData = filterPeriods(periodData, frequencyData, powerData, 1000)
 
     return frequencyData, periodData, powerData
 
@@ -202,11 +202,21 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
 
     fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("Period (Days/Oscillation)", fontsize=20)
+    ax1.set_xlabel("Frequency (1/Days)", fontsize=20)
     ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
     ax1.plot(periods, powers, color="blue", label=f"{datastublong}")
-    ax1.set_xscale("log")
     ax1.tick_params(axis="y", labelcolor="blue")
+
+    ax2 = ax1.twiny()
+    ax2.set_xlabel("Period (Days/Oscillation)", fontsize=20)
+
+    # NOTE: set the period tick markers
+    frequencyTicks = ax1.get_xticks()
+    validFreqTicks = frequencyTicks[frequencyTicks != 0]
+    periodTicks = 1 / validFreqTicks
+    periodTickLabels = [f"{p:.2f}" for p in periodTicks]
+    ax2.set_xticks(frequencyTicks)
+    ax2.set_xticklables(periodTickLabels)
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
