@@ -202,7 +202,7 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
 
     fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("Frequency (1/Days)", fontsize=20)
+    ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
     ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
     ax1.plot(frequencies, powers, color="blue", label=f"{datastublong}")
     ax1.tick_params(axis="y", labelcolor="blue")
@@ -217,7 +217,7 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
         if freq == 0:
             periodTickLabels.append("Inf")
         else:
-            periodTickLabels.append(f'{1/freq:.2f}')
+            periodTickLabels.append(f'{365/freq:.2f}')
     ax2.set_xticks(frequencyTicks)
     ax2.set_xticklabels(periodTickLabels)
 
