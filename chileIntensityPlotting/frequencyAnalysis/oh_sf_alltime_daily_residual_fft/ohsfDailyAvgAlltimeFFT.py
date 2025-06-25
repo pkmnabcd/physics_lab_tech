@@ -204,7 +204,7 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
 
     ax1.set_xlabel("Frequency (1/Days)", fontsize=20)
     ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
-    ax1.plot(periods, powers, color="blue", label=f"{datastublong}")
+    ax1.plot(frequencies, powers, color="blue", label=f"{datastublong}")
     ax1.tick_params(axis="y", labelcolor="blue")
 
     ax2 = ax1.twiny()
