@@ -212,12 +212,12 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
 
     # NOTE: set the period tick markers
     frequencyTicks = ax1.get_xticks()
-    period_tick_labels = []
+    periodTickLabels = []
     for freq in frequencyTicks:
         if freq == 0:
-            period_tick_labels.append("Inf")
+            periodTickLabels.append("Inf")
         else:
-            period_tick_labels.append(f'{1/freq:.2f}')
+            periodTickLabels.append(f'{1/freq:.2f}')
     ax2.set_xticks(frequencyTicks)
     ax2.set_xticklabels(periodTickLabels)
 
