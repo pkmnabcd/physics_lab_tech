@@ -201,7 +201,6 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
         datastublong = "Solar Flux"
 
     fig, ax1 = plt.subplots(figsize=(14,10))
-    fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
     ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
@@ -212,6 +211,7 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
     ax2 = ax1.twiny()
     ax2.set_xlabel("Period (Days/Oscillation)", fontsize=20)
 
+    ax1.set_xlim(np.min(frequencies), np.max(frequencies))
     # NOTE: set the period tick markers
     frequencyTicks = ax1.get_xticks()
     periodTickLabels = []
@@ -222,6 +222,7 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
             periodTickLabels.append(f'{365/freq:.2f}')
     ax2.set_xticks(frequencyTicks)
     ax2.set_xticklabels(periodTickLabels)
+    ax2.set_xlim(ax1.get_xlim())
 
     title = f"ChileMTM 2009-2024 Daily {datastublong} Residual Frequency Analysis (window size: {window_size})"
     title = "\n".join(wrap(title, 40))
