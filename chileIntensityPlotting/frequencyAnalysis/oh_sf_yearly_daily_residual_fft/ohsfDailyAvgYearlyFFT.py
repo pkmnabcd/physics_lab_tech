@@ -195,7 +195,7 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, year, isOH):
         if freq == 0:
             periodTickLabels.append("Inf")
         else:
-            periodTickLabels.append(f'{365/freq:.2f}')
+            periodTickLabels.append(f'{1/freq:.2f}')
     ax2.set_xticks(frequencyTicks)
     ax2.set_xticklabels(periodTickLabels)
     ax2.set_xlim(ax1.get_xlim())
