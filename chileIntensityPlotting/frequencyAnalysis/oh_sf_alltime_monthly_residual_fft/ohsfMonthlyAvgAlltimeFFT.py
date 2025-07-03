@@ -113,11 +113,27 @@ def makeAndSaveGraph(ohFrequencies, sfFrequencies, ohPowers, sfPowers, averagesP
     ax1.set_ylabel("Solar Flux Power", fontsize=20)
     ax1.plot(sfFrequencies, sfPowers, color="red", label="Solar Flux")
     ax1.tick_params(axis="y", labelcolor="red")
+    ax1.set_xlim(np.min(sfFrequencies), np.max(sfFrequencies))
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("OH Power ", fontsize=20)
     ax2.plot(ohFrequencies, ohPowers, color="blue", label="OH Temp")
     ax2.tick_params(axis="y", labelcolor="blue")
+
+    ax3 = ax1.twiny()
+    ax3.set_xlabel("Period (Days/Oscillation)", fontsize=20)
+
+    # NOTE: set the period tick markers
+    frequencyTicks = ax1.get_xticks()
+    periodTickLabels = []
+    for freq in frequencyTicks:
+        if freq == 0:
+            periodTickLabels.append("Inf")
+        else:
+            periodTickLabels.append(f'{365/freq:.2f}')
+    ax3.set_xticks(frequencyTicks)
+    ax3.set_xticklabels(periodTickLabels)
+    ax3.set_xlim(ax1.get_xlim())
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
