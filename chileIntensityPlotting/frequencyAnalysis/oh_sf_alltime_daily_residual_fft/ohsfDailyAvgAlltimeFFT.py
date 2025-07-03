@@ -207,11 +207,11 @@ def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
     ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
     ax1.plot(frequencies, powers, color="blue", label=f"{datastublong}")
     ax1.tick_params(axis="y", labelcolor="blue")
+    ax1.set_xlim(np.min(frequencies), np.max(frequencies))
 
     ax2 = ax1.twiny()
     ax2.set_xlabel("Period (Days/Oscillation)", fontsize=20)
 
-    ax1.set_xlim(np.min(frequencies), np.max(frequencies))
     # NOTE: set the period tick markers
     frequencyTicks = ax1.get_xticks()
     periodTickLabels = []
