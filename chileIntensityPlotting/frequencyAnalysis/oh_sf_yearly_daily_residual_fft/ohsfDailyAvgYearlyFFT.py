@@ -164,7 +164,6 @@ def computeLombScargleGraph(time, avgs, window_size, year, isOH):
     powerData = lombscargle(t, x, frequencyData, normalize=True)
     frequencyData = frequencyData / (2*np.pi) # Convert from angular to regular freq for graphing
     periodData = 1 / frequencyData
-    periodData = periodData * 365    # Change units to days per oscillation
 
     return frequencyData, periodData, powerData
 
