@@ -7,19 +7,6 @@ import numpy as np
 from scipy.signal import lombscargle
 
 
-def filterPeriods(periods, frequencies, powers, maxPeriod):
-    newPeriods = []
-    newFrequencies = []
-    newPowers = []
-    for i in range(len(periods)):
-        if periods[i] < maxPeriod:
-            newPeriods.append(periods[i])
-            newFrequencies.append(frequencies[i])
-            newPowers.append(powers[i])
-
-    return np.array(newPeriods), np.array(newFrequencies), np.array(newPowers)
-
-
 def getDoy(year, month, day):
     if year % 4 == 0:
         leapYearAdd = 1
@@ -185,12 +172,10 @@ def computeLombScargleGraph(time, avgs, window_size, isOH):
     periodData = 1 / frequencyData
     periodData = periodData * 365    # Change units to days per oscillation
 
-    periodData, frequencyData, powerData = filterPeriods(periodData, frequencyData, powerData, 1000)
-
     return frequencyData, periodData, powerData
 
 
-def makeAndSaveFFTGraph(frequencies, periods, powers, window_size, isOH):
+def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
     if isOH:
         datastub = "oh"
         datastubcap = "OH"
@@ -280,12 +265,12 @@ if __name__ == "__main__":
     oh_window_sizes = [21, 59, 231]
     for window_size in oh_window_sizes:
         ohFrequencies, ohPeriods, ohPowers = computeLombScargleGraph(alltimeOHYeardoys, alltimeOHAvgs, window_size, isOH=True)
-        makeAndSaveFFTGraph(ohFrequencies, ohPeriods, ohPowers, window_size, isOH=True)
+        makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, isOH=True)
         saveDataCSV(ohFrequencies, ohPeriods, ohPowers, window_size, isOH=True)
 
     sf_window_sizes = [21, 27, 59, 231, 365]
     for window_size in sf_window_sizes:
         sfFrequencies, sfPeriods, sfPowers = computeLombScargleGraph(alltimeSfYeardoys, alltimeSfAvgs, window_size, isOH=False)
-        makeAndSaveFFTGraph(sfFrequencies, sfPeriods, sfPowers, window_size, isOH=False)
+        makeAndSaveFFTGraph(sfFrequencies, sfPowers, window_size, isOH=False)
         saveDataCSV(sfFrequencies, sfPeriods, sfPowers, window_size, isOH=False)
 

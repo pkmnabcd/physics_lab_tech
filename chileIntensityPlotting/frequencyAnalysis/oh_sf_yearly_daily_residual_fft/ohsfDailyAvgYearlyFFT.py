@@ -163,8 +163,10 @@ def computeLombScargleGraph(time, avgs, window_size, year, isOH):
     frequencyData = np.linspace(minFreq / 2, maxFreq * 1.5, 1000)
     powerData = lombscargle(t, x, frequencyData, normalize=True)
     frequencyData = frequencyData / (2*np.pi) # Convert from angular to regular freq for graphing
+    periodData = 1 / frequencyData
+    periodData = periodData * 365    # Change units to days per oscillation
 
-    return frequencyData, powerData
+    return frequencyData, periodData, powerData
 
 
 def makeAndSaveFFTGraph(frequencies, powers, window_size, year, isOH):
@@ -218,7 +220,7 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, year, isOH):
     plt.close()
 
 
-def saveDataCSV(frequencies, powers, window_size, year, isOH):
+def saveDataCSV(frequencies, periods, powers, window_size, year, isOH):
     if isOH:
         datastub = "oh"
         datastubcap = "OH"
@@ -230,7 +232,7 @@ def saveDataCSV(frequencies, powers, window_size, year, isOH):
 
     lines = []
     for i in range(len(frequencies)):
-        lines.append(f"{frequencies[i]},{powers[i]}\n")
+        lines.append(f"{frequencies[i]},{periods[i]},{powers[i]}\n")
     outpath = f"yearly_frequencies_graphs/{year}_{datastub}_daily_average_frequencies_win{window_size}.csv"
     file = open(outpath, "w")
     file.writelines(lines)
@@ -252,12 +254,12 @@ if __name__ == "__main__":
         oh_window_sizes = [21]
         sf_window_sizes = [27]
         for window_size in oh_window_sizes:
-            ohFrequencies, ohPowers = computeLombScargleGraph(currentOHDoys, currentOHAvgs, window_size, year, isOH=True)
+            ohFrequencies, ohPeriods, ohPowers = computeLombScargleGraph(currentOHDoys, currentOHAvgs, window_size, year, isOH=True)
             makeAndSaveFFTGraph(ohFrequencies, ohPowers, window_size, year, isOH=True)
-            saveDataCSV(ohFrequencies, ohPowers, window_size, year, isOH=True)
+            saveDataCSV(ohFrequencies, ohPeriods, ohPowers, window_size, year, isOH=True)
 
         for window_size in sf_window_sizes:
-            sfFrequencies, sfPowers = computeLombScargleGraph(currentSfDoys, currentSfAvgs, window_size, year, isOH=False)
+            sfFrequencies, sfPeriods, sfPowers = computeLombScargleGraph(currentSfDoys, currentSfAvgs, window_size, year, isOH=False)
             makeAndSaveFFTGraph(sfFrequencies, sfPowers, window_size, year, isOH=False)
-            saveDataCSV(sfFrequencies, sfPowers, window_size, year, isOH=False)
+            saveDataCSV(sfFrequencies, sfPeriods, sfPowers, window_size, year, isOH=False)
 
