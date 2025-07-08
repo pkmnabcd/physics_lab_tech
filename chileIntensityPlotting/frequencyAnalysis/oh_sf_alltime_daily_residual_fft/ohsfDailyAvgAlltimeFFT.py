@@ -167,7 +167,7 @@ def computeLombScargleGraph(time, avgs, window_size, isOH):
     maxFreq = 0.5 * (1 / np.mean(np.diff(t)))   # Don't ask me why this
 
     frequencyData = np.linspace(minFreq / 2, maxFreq * 1.5, 1000)
-    powerData = lombscargle(t, x, frequencyData, normalize=True)
+    powerData = lombscargle(t, x, frequencyData, normalize=False)
     frequencyData = frequencyData / (2*np.pi)   # Convert from angular to regular freq for graphing
     periodData = 1 / frequencyData
     periodData = periodData * 365    # Change units to days per oscillation
