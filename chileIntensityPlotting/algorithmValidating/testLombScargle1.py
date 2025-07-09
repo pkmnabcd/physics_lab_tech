@@ -7,18 +7,6 @@ import numpy as np
 from scipy.signal import lombscargle
 
 
-#def sort_arrays_together(x, y):
-#    if len(x) != len(y):
-#        print("Error: Arrays x and y must have the same length.")
-#        return [], []
-#
-#    sorted_indices = np.argsort(x)
-#    sorted_x = x[sorted_indices]
-#    reordered_y = y[sorted_indices]
-#
-#    return sorted_x, reordered_y
-
-
 def periodicallyRemovePoints(x):
     removeIndices = []
     x_copy = x.tolist()
@@ -28,7 +16,6 @@ def periodicallyRemovePoints(x):
             while j < 7 and i + j < len(x):
                 removeIndices.append(i+j)
                 j += 1
-    # TODO: Finish this
     for i in reversed(removeIndices):
         x_copy.pop(i)
     return np.array(x_copy)
