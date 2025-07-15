@@ -3,7 +3,7 @@ from textwrap import wrap
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import pearsonr, sparmanr, kendalltau
+from scipy.stats import pearsonr, spearmanr, kendalltau
 
 def readAverages(path):
     file = open(path)
@@ -78,16 +78,16 @@ def computeSmoothGraph(time, avgs, window_size=19):
 
 def runPearsonCorrelation(d0, d1):
     print(" --- Running Pearson's r ---")
-    if not size(d0) == size(d1):
-        print(f"WARNING: d0 and d1 are not the same size.\nsize(d0)={size(d0)}\nsize(d1)={size(d1)}")
+    if not len(d0) == len(d1):
+        print(f"WARNING: d0 and d1 are not the same size.\nlen(d0)={len(d0)}\nlen(d1)={len(d1)}")
     correlationCoefficient, r_value = pearsonr(d0, d1)
     print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tr-value: {r_value}")
 
 
 def runSpearmanCorrelation(d0, d1):
     print(" --- Running Spearman's rho ---")
-    if not size(d0) == size(d1):
-        print(f"WARNING: d0 and d1 are not the same size.\nsize(d0)={size(d0)}\nsize(d1)={size(d1)}")
+    if not len(d0) == len(d1):
+        print(f"WARNING: d0 and d1 are not the same size.\nlen(d0)={len(d0)}\nlen(d1)={len(d1)}")
     result = spearmanr(d0, d1)
     correlationCoefficient = result.statistic
     r_value = result.pvalue
@@ -96,8 +96,8 @@ def runSpearmanCorrelation(d0, d1):
 
 def runKendallCorrelation(d0, d1):
     print(" --- Running Kendall's Tau ---")
-    if not size(d0) == size(d1):
-        print(f"WARNING: d0 and d1 are not the same size.\nsize(d0)={size(d0)}\nsize(d1)={size(d1)}")
+    if not len(d0) == len(d1):
+        print(f"WARNING: d0 and d1 are not the same size.\nlen(d0)={len(d0)}\nlen(d1)={len(d1)}")
     result = kendalltau(d0, d1)
     correlationCoefficient = result.statistic
     r_value = result.pvalue
