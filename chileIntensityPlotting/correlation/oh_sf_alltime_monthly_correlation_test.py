@@ -84,7 +84,8 @@ def fillInMissingOH(time, ohData, missing_x_vals):
         t = missing_x_vals[i]
         for j in range(len(time)):
             if t < time[j]:
-                time.insert(j, interpolated_y[i])
+                time.insert(j, missing_x_vals[i])
+                ohData.insert(j, interpolated_y[i])
                 break
 
 
@@ -92,8 +93,8 @@ def runPearsonCorrelation(d0, d1):
     print(" --- Running Pearson's r ---")
     if not len(d0) == len(d1):
         print(f"WARNING: d0 and d1 are not the same size.\nlen(d0)={len(d0)}\nlen(d1)={len(d1)}")
-    correlationCoefficient, r_value = pearsonr(d0, d1)
-    print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tr-value: {r_value}")
+    correlationCoefficient, p_value = pearsonr(d0, d1)
+    print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tp-value: {p_value}")
 
 
 def runSpearmanCorrelation(d0, d1):
@@ -102,8 +103,8 @@ def runSpearmanCorrelation(d0, d1):
         print(f"WARNING: d0 and d1 are not the same size.\nlen(d0)={len(d0)}\nlen(d1)={len(d1)}")
     result = spearmanr(d0, d1)
     correlationCoefficient = result.statistic
-    r_value = result.pvalue
-    print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tr-value: {r_value}")
+    p_value = result.pvalue
+    print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tp-value: {p_value}")
 
 
 def runKendallCorrelation(d0, d1):
@@ -112,8 +113,8 @@ def runKendallCorrelation(d0, d1):
         print(f"WARNING: d0 and d1 are not the same size.\nlen(d0)={len(d0)}\nlen(d1)={len(d1)}")
     result = kendalltau(d0, d1)
     correlationCoefficient = result.statistic
-    r_value = result.pvalue
-    print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tr-value: {r_value}")
+    p_value = result.pvalue
+    print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tp-value: {p_value}")
 
 
 if __name__ == "__main__":
@@ -128,6 +129,8 @@ if __name__ == "__main__":
     runPearsonCorrelation(ohAvgs, sfAvgs)
     runSpearmanCorrelation(ohAvgs, sfAvgs)
     runKendallCorrelation(ohAvgs, sfAvgs)
+
+    print()
 
     print(" ===== Testing Correlation on smoothed data =====")
     runPearsonCorrelation(ohAvgSmoothed, sfAvgSmoothed)
