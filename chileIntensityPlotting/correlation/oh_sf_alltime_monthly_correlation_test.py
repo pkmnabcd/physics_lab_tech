@@ -4,6 +4,7 @@ from textwrap import wrap
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import pearsonr, spearmanr, kendalltau
+from scipy.interpolate import interp1d
 
 def readAverages(path):
     file = open(path)
@@ -20,9 +21,9 @@ def readAverages(path):
     for line in lines:
         cols = line.split(",")
 
-        yearmonth = int(cols[0])
+        yearmonth = int(cols[0])     # First the year
         month = int(cols[1]) - 1
-        yearmonth += (1/12) * month
+        yearmonth += (1/12) * month  # Add the month
 
         ohAvg = cols[2]
         if not ohAvg == '':
@@ -76,6 +77,17 @@ def computeSmoothGraph(time, avgs, window_size=19):
     return smoothTime, smoothAvgs
 
 
+def fillInMissingOH(time, ohData, missing_x_vals):
+    f = interp1d(time, ohData, kind="linear")
+    interpolated_y = f(missing_x_vals)
+    for i in range(len(missing_x_vals)):
+        t = missing_x_vals[i]
+        for j in range(len(time)):
+            if t < time[j]:
+                time.insert(j, interpolated_y[i])
+                break
+
+
 def runPearsonCorrelation(d0, d1):
     print(" --- Running Pearson's r ---")
     if not len(d0) == len(d1):
@@ -107,6 +119,7 @@ def runKendallCorrelation(d0, d1):
 if __name__ == "__main__":
     averagesPath = "all_time_oh_sf_month_averages.csv"
     ohYearmonths, sfYearmonths, ohAvgs, sfAvgs, ohStdevs, sfStdevs = readAverages(averagesPath)
+    fillInMissingOH(ohYearmonths, ohAvgs, [2015+(5/12), 2015+(6/12), 2022+(6/12)])
 
     ohYearmonthSmoothed, ohAvgSmoothed = computeSmoothGraph(ohYearmonths, ohAvgs)
     sfYearmonthSmoothed, sfAvgSmoothed = computeSmoothGraph(sfYearmonths, sfAvgs)
