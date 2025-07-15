@@ -84,6 +84,26 @@ def runPearsonCorrelation(d0, d1):
     print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tr-value: {r_value}")
 
 
+def runSpearmanCorrelation(d0, d1):
+    print(" --- Running Spearman's rho ---")
+    if not size(d0) == size(d1):
+        print(f"WARNING: d0 and d1 are not the same size.\nsize(d0)={size(d0)}\nsize(d1)={size(d1)}")
+    result = spearmanr(d0, d1)
+    correlationCoefficient = result.statistic
+    r_value = result.pvalue
+    print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tr-value: {r_value}")
+
+
+def runKendallCorrelation(d0, d1):
+    print(" --- Running Kendall's Tau ---")
+    if not size(d0) == size(d1):
+        print(f"WARNING: d0 and d1 are not the same size.\nsize(d0)={size(d0)}\nsize(d1)={size(d1)}")
+    result = kendalltau(d0, d1)
+    correlationCoefficient = result.statistic
+    r_value = result.pvalue
+    print(f"\tCorrelation Coefficient: {correlationCoefficient}\n\tr-value: {r_value}")
+
+
 if __name__ == "__main__":
     averagesPath = "all_time_oh_sf_month_averages.csv"
     ohYearmonths, sfYearmonths, ohAvgs, sfAvgs, ohStdevs, sfStdevs = readAverages(averagesPath)
@@ -91,5 +111,13 @@ if __name__ == "__main__":
     ohYearmonthSmoothed, ohAvgSmoothed = computeSmoothGraph(ohYearmonths, ohAvgs)
     sfYearmonthSmoothed, sfAvgSmoothed = computeSmoothGraph(sfYearmonths, sfAvgs)
 
-    runPearsonCorrelation()
+    print(" ===== Testing Correlation on unsmoothed data =====")
+    runPearsonCorrelation(ohAvgs, sfAvgs)
+    runSpearmanCorrelation(ohAvgs, sfAvgs)
+    runKendallCorrelation(ohAvgs, sfAvgs)
+
+    print(" ===== Testing Correlation on smoothed data =====")
+    runPearsonCorrelation(ohAvgSmoothed, sfAvgSmoothed)
+    runSpearmanCorrelation(ohAvgSmoothed, sfAvgSmoothed)
+    runKendallCorrelation(ohAvgSmoothed, sfAvgSmoothed)
 
