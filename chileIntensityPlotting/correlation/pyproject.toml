@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "correlation_finder"
+version = "0.1.0"
+description = ""
+authors = ["Gabe Decker <42gdeckers@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+matplotlib = "^3.10"
+scipy = "^1.15.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
