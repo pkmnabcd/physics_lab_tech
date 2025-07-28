@@ -92,11 +92,12 @@ def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_
         unit = "SFU"
     fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("Year", fontsize=20)
-    ax1.set_ylabel(f"{datastublong} ({unit})", fontsize=20)
+    ax1.set_xlabel("Year", fontsize=22)
+    ax1.set_ylabel(f"{datastublong} ({unit})", fontsize=22)
     ax1.plot(time, dailyAvgs, color="blue", label=f"Daily Average {datastublong}")
     ax1.plot(smoothTime, smoothDailyAvgs, color="red", label=f"Smoothed Daily Average {datastublong}")
     ax1.tick_params(axis="y", labelcolor="blue")
+    ax1.tick_params(axis="both", labelsize=20)
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
@@ -106,7 +107,8 @@ def makeAndSaveSmoothGraph(time, dailyAvgs, smoothTime, smoothDailyAvgs, window_
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
-    ax1.legend(lines1, labels1, loc="lower right")
+    #ax1.legend(lines1, labels1, loc="lower right")
+    ax1.legend(lines1, labels1, fontsize=20)
     plt.tight_layout()
 
     outPath = f"all-time_frequencies_graphs/all_time_{datastub}_daily_average_smooth_on_top_win{window_size}.png"
