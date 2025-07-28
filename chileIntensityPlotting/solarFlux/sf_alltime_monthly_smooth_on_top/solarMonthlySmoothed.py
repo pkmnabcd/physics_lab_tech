@@ -90,10 +90,11 @@ def makeAndSaveGraph(yearmonths, smoothYearmonths, avgs, smoothAvgs, averagesPat
         outPath = "all_time_sf_month_average_smooth.png"
 
     fig, ax1 = plt.subplots(figsize=(14,10))
-    ax1.set_xlabel("Year", fontsize=20)
-    ax1.set_ylabel(ylabel, fontsize=20)
+    ax1.set_xlabel("Year", fontsize=22)
+    ax1.set_ylabel(ylabel, fontsize=22)
     ax1.plot(yearmonths, avgs, color="red", label=dataLabel)
     ax1.plot(smoothYearmonths, smoothAvgs, color="blue", label=smoothLabel)
+    ax1.tick_params(axis="both", labelsize=20)
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
@@ -102,7 +103,8 @@ def makeAndSaveGraph(yearmonths, smoothYearmonths, avgs, smoothAvgs, averagesPat
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
-    ax1.legend(lines1, labels1, loc="lower right")
+    #ax1.legend(lines1, labels1, loc="lower right", fontsize=20)
+    ax1.legend(lines1, labels1, fontsize=20)
     plt.tight_layout()
 
     plt.savefig(outPath)
