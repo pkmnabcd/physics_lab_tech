@@ -190,14 +190,16 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
     fig, ax1 = plt.subplots(figsize=(14,10))
     plt.grid(visible=True, axis="both")
 
-    ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
-    ax1.set_ylabel(f"{datastubcap} Power ", fontsize=20)
+    ax1.set_xlabel("Frequency (1/Year)", fontsize=22)
+    ax1.set_ylabel(f"{datastubcap} Power ", fontsize=22)
     ax1.plot(frequencies, powers, color="blue", label=f"{datastublong}")
     ax1.tick_params(axis="y", labelcolor="blue")
+    ax1.tick_params(axis="both", labelsize=20)
     ax1.set_xlim(np.min(frequencies), np.max(frequencies))
 
     ax2 = ax1.twiny()
-    ax2.set_xlabel("Period (Days/Oscillation)", fontsize=20)
+    ax2.set_xlabel("Period (Days/Oscillation)", fontsize=22)
+    ax2.tick_params(axis="x", labelsize=20)
 
     # NOTE: set the period tick markers
     frequencyTicks = ax1.get_xticks()
@@ -216,7 +218,8 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
-    ax1.legend(lines1, labels1, loc="lower right")
+    #ax1.legend(lines1, labels1, loc="lower right")
+    ax1.legend(lines1, labels1, fontsize=20)
     plt.tight_layout()
 
     outPath = f"all-time_frequencies_graphs/all_time_{datastub}_daily_average_frequencies_win{window_size}.png"
