@@ -79,33 +79,37 @@ def computeResidualGraph(time, avgs, window_size=19):
     return smoothTime, residualAvgs
 
 
-def makeAndSaveGraph(ohYearmonths, sfYearmonths, ohAvgs, solarAvgs, averagesPath):
+def makeAndSaveGraph(yearmonths, avgs, averagesPath, isOH):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("Year", fontsize=20)
-    ax1.set_ylabel("Solar Flux (SFU)", fontsize=20)
-    ax1.plot(sfYearmonths, solarAvgs, color="red", label="Monthly Average Solar Flux")
-    ax1.tick_params(axis="y", labelcolor="red")
+    if isOH:
+        ax1.set_xlabel("Year", fontsize=22)
+        ax1.set_ylabel("OH Temp (K)", fontsize=22)
+        ax1.plot(yearmonths, avgs, color="blue", label="Monthly Average OH Temp")
+        ax1.tick_params(axis="y", labelcolor="blue", labelsize=20)
 
-    ax2 = ax1.twinx()
-    ax2.set_ylabel("OH Temp (K)", fontsize=20)
-    ax2.plot(ohYearmonths, ohAvgs, color="blue", label="Monthly Average OH Temp")
-    ax2.tick_params(axis="y", labelcolor="blue")
+        title = "ChileMTM All-Time (2009-2024) Monthly OH Temp Residual from Smoothed Graph (window: 19)"
+        outPath = "all_time_oh_month_average_residuals.png"
+    else:
+        ax1.set_xlabel("Year", fontsize=22)
+        ax1.set_ylabel("Solar Flux (SFU)", fontsize=22)
+        ax1.plot(yearmonths, avgs, color="blue", label="Monthly Average Solar Flux")
+        ax1.tick_params(axis="y", labelcolor="blue", labelsize=20)
+
+        title = "ChileMTM All-Time (2009-2024) Monthly Solar Flux Residual from Smoothed Graph (window: 19)"
+        outPath = "all_time_sf_month_average_residuals.png"
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "ChileMTM All-Time (2009-2024) Monthly OH Temp and Solar Flux Residual from Smoothed Graph (window: 19)"
     title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
-    ax2.legend(lines1 + lines2, labels1 + labels2, loc="lower right")
+    ax1.legend(lines1, labels1, fontsize=20)
     plt.tight_layout()
 
     # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
-    outPath = "all_time_oh_sf_month_average_residuals.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -117,5 +121,6 @@ if __name__ == "__main__":
     ohYearmonthResiduals, ohAvgResiduals = computeResidualGraph(ohYearmonths, ohAvgs)
     sfYearmonthResiduals, sfAvgResiduals = computeResidualGraph(sfYearmonths, sfAvgs)
 
-    makeAndSaveGraph(ohYearmonthResiduals, sfYearmonthResiduals, ohAvgResiduals, sfAvgResiduals, averagesPath)
+    makeAndSaveGraph(ohYearmonthResiduals, ohAvgResiduals, averagesPath, isOH=True)
+    makeAndSaveGraph(sfYearmonthResiduals, sfAvgResiduals, averagesPath, isOH=False)
 
