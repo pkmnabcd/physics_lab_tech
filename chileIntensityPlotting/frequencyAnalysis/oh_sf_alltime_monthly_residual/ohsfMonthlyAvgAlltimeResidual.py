@@ -79,7 +79,7 @@ def computeResidualGraph(time, avgs, window_size=19):
     return smoothTime, residualAvgs
 
 
-def makeAndSaveGraph(yearmonths, avgs, averagesPath, isOH):
+def makeAndSaveGraph(yearmonths, avgs, isOH):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
     if isOH:
@@ -109,7 +109,6 @@ def makeAndSaveGraph(yearmonths, avgs, averagesPath, isOH):
     ax1.legend(lines1, labels1, fontsize=20)
     plt.tight_layout()
 
-    # NOTE: Assuming averagesPath is the path to ..../all_time_year_averages.csv
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -121,6 +120,6 @@ if __name__ == "__main__":
     ohYearmonthResiduals, ohAvgResiduals = computeResidualGraph(ohYearmonths, ohAvgs)
     sfYearmonthResiduals, sfAvgResiduals = computeResidualGraph(sfYearmonths, sfAvgs)
 
-    makeAndSaveGraph(ohYearmonthResiduals, ohAvgResiduals, averagesPath, isOH=True)
-    makeAndSaveGraph(sfYearmonthResiduals, sfAvgResiduals, averagesPath, isOH=False)
+    makeAndSaveGraph(ohYearmonthResiduals, ohAvgResiduals, isOH=True)
+    makeAndSaveGraph(sfYearmonthResiduals, sfAvgResiduals, isOH=False)
 

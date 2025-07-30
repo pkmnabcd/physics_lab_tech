@@ -106,22 +106,17 @@ def computeFFTGraph(time, avgs, window_size=19, isOH=False):
     return frequencyData, fftData
 
 
-def makeAndSaveGraph(ohFrequencies, sfFrequencies, ohPowers, sfPowers, averagesPath):
+def makeAndSaveGraph(frequencies, powers, isOH):
     fig, ax1 = plt.subplots(figsize=(14,10))
 
-    ax1.set_xlabel("Frequency (1/Year)", fontsize=20)
-    ax1.set_ylabel("Solar Flux Power", fontsize=20)
-    ax1.plot(sfFrequencies, sfPowers, color="red", label="Solar Flux")
-    ax1.tick_params(axis="y", labelcolor="red")
-    ax1.set_xlim(np.min(sfFrequencies), np.max(sfFrequencies))
-
-    ax2 = ax1.twinx()
-    ax2.set_ylabel("OH Power ", fontsize=20)
-    ax2.plot(ohFrequencies, ohPowers, color="blue", label="OH Temp")
-    ax2.tick_params(axis="y", labelcolor="blue")
+    ax1.set_xlabel("Frequency (1/Year)", fontsize=22)
+    ax1.set_ylabel("Power", fontsize=22)
+    ax1.plot(frequencies, powers, color="red")
+    ax1.tick_params(axis="y", labelcolor="red", labelsize=20)
+    ax1.set_xlim(np.min(frequencies), np.max(frequencies))
 
     ax3 = ax1.twiny()
-    ax3.set_xlabel("Period (Days/Oscillation)", fontsize=20)
+    ax3.set_xlabel("Period (Days/Oscillation)", fontsize=22)
 
     # NOTE: set the period tick markers
     frequencyTicks = ax1.get_xticks()
@@ -138,16 +133,18 @@ def makeAndSaveGraph(ohFrequencies, sfFrequencies, ohPowers, sfPowers, averagesP
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
 
-    title = "ChileMTM 2009-2024 Monthly OH Temp and Solar Flux Residual Frequency Analysis"
+    if isOH:
+        title = "ChileMTM 2009-2024 Monthly OH Temp Residual Frequency Analysis"
+        outPath = "all_time_oh_month_average_frequencies.png"
+    else:
+        title = "ChileMTM 2009-2024 Monthly Solar Flux Residual Frequency Analysis"
+        outPath = "all_time_sf_month_average_frequencies.png"
+
     title = "\n".join(wrap(title, 40))
     plt.title(title, fontsize=26)
 
-    lines1, labels1 = ax1.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
-    ax2.legend(lines1 + lines2, labels1 + labels2, loc="lower right")
     plt.tight_layout()
 
-    outPath = "all_time_oh_sf_month_average_frequencies.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -159,5 +156,6 @@ if __name__ == "__main__":
     ohFrequencies, ohPowers = computeFFTGraph(ohYearmonths, ohAvgs, isOH=True)
     sfFrequencies, sfPowers = computeFFTGraph(sfYearmonths, sfAvgs)
 
-    makeAndSaveGraph(ohFrequencies, sfFrequencies, ohPowers, sfPowers, averagesPath)
+    makeAndSaveGraph(ohFrequencies, ohPowers, isOH=True)
+    makeAndSaveGraph(sfFrequencies, sfPowers, isOH=False)
 
