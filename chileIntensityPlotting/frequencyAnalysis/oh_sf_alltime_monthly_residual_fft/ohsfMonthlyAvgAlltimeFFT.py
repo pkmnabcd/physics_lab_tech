@@ -130,6 +130,7 @@ def makeAndSaveGraph(frequencies, powers, isOH):
     ax3.set_xticks(frequencyTicks)
     ax3.set_xticklabels(periodTickLabels)
     ax3.set_xlim(ax1.get_xlim())
+    ax3.tick_params(axis="x", labelsize=20)
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
