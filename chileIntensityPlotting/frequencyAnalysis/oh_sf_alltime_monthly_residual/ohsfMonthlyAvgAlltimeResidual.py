@@ -86,7 +86,8 @@ def makeAndSaveGraph(yearmonths, avgs, isOH):
         ax1.set_xlabel("Year", fontsize=22)
         ax1.set_ylabel("OH Temp (K)", fontsize=22)
         ax1.plot(yearmonths, avgs, color="blue", label="Monthly Average OH Temp")
-        ax1.tick_params(axis="y", labelcolor="blue", labelsize=20)
+        ax1.tick_params(axis="y", labelcolor="blue")
+        ax1.tick_params(axis="both", labelsize=20)
 
         title = "ChileMTM All-Time (2009-2024) Monthly OH Temp Residual from Smoothed Graph (window: 19)"
         outPath = "all_time_oh_month_average_residuals.png"
@@ -94,7 +95,8 @@ def makeAndSaveGraph(yearmonths, avgs, isOH):
         ax1.set_xlabel("Year", fontsize=22)
         ax1.set_ylabel("Solar Flux (SFU)", fontsize=22)
         ax1.plot(yearmonths, avgs, color="blue", label="Monthly Average Solar Flux")
-        ax1.tick_params(axis="y", labelcolor="blue", labelsize=20)
+        ax1.tick_params(axis="y", labelcolor="blue")
+        ax1.tick_params(axis="both", labelsize=20)
 
         title = "ChileMTM All-Time (2009-2024) Monthly Solar Flux Residual from Smoothed Graph (window: 19)"
         outPath = "all_time_sf_month_average_residuals.png"

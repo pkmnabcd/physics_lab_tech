@@ -112,7 +112,8 @@ def makeAndSaveGraph(frequencies, powers, isOH):
     ax1.set_xlabel("Frequency (1/Year)", fontsize=22)
     ax1.set_ylabel("Power", fontsize=22)
     ax1.plot(frequencies, powers, color="blue")
-    ax1.tick_params(axis="y", labelcolor="blue", labelsize=20)
+    ax1.tick_params(axis="y", labelcolor="blue")
+    ax1.tick_params(axis="both", labelsize=20)
     ax1.set_xlim(np.min(frequencies), np.max(frequencies))
 
     ax3 = ax1.twiny()
