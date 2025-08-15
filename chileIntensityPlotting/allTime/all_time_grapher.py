@@ -23,22 +23,22 @@ def readAverages(path):
 
 
 def makeAndSaveGraph(times, temps, stdevs):
-    fig, ax1 = plt.figure(figsize=(14,10))
+    plt.figure(figsize=(14,10))
     plt.grid(visible=True, axis="both")
 
     plt.xlabel("Year", fontsize=22)
     plt.ylabel("OH Temp (K)", fontsize=22)
     plt.plot(times, temps, color="blue", label="Daily Average OH Temp")
-    ax1.tick_params(axis="both", labelsize=20)
+    plt.tick_params(axis="both", labelsize=20)
 
-    fig.tight_layout()
+    plt.tight_layout()
     plt.grid(visible=True, axis="both")
 
     title = "2009-2024 OH Temp Daily Averages"
     plt.title(title, fontsize=26)
 
     plt.legend(fontsize=20)
-    fig.tight_layout()
+    plt.tight_layout()
 
     # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
     outPath = "all_time_oh_daily_average.png"
