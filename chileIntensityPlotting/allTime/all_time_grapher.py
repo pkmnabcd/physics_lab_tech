@@ -2,25 +2,6 @@ from sys import argv
 
 import matplotlib.pyplot as plt
 
-YEAR_COLORS = {
-    "2009": "black",
-    "2010": "darkgray",
-    "2011": "rosybrown",
-    "2012": "brown",
-    "2013": "red",
-    "2014": "sandybrown",
-    "2015": "gold",
-    "2016": "darkkhaki",
-    "2017": "yellow",
-    "2018": "lawngreen",
-    "2019": "forestgreen",
-    "2020": "aquamarine",
-    "2021": "teal",
-    "2022": "deepskyblue",
-    "2023": "purple",
-    "2024": "hotpink",
-}
-
 
 def readAverages(path):
     file = open(path)
@@ -81,12 +62,11 @@ if __name__ == "__main__":
         newDays, newTemps, newStdevs = getYearAverages(year, path)
         for day in newDays:
             # NOTE: Assuming day is day of year number
-            days.append(year + (day / 366))
+            days.append(int(year) + (day / 366))
         for temp in newTemps:
             temps.append(temp)
         for stdev in newStdevs:
             stdevs.append(stdev)
-
 
     makeAndSaveGraph(years, days, temps, stdevs)
 
