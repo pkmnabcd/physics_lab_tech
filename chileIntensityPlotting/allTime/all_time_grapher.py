@@ -48,6 +48,7 @@ def makeAndSaveGraph(times, temps, stdevs):
     plt.xlabel("Year", fontsize=22)
     plt.ylabel("OH Temp (K)", fontsize=22)
     plt.plot(times, temps, color="blue", label="Daily Average OH Temp")
+    ax1.tick_params(axis="both", labelsize=20)
 
     fig.tight_layout()
     plt.grid(visible=True, axis="both")
