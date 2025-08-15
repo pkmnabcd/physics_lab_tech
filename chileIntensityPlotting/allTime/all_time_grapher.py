@@ -68,5 +68,5 @@ if __name__ == "__main__":
         for stdev in newStdevs:
             stdevs.append(stdev)
 
-    makeAndSaveGraph(years, days, temps, stdevs)
+    makeAndSaveGraph(days, temps, stdevs)
 
