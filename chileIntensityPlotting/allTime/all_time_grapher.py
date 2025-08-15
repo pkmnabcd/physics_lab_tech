@@ -41,26 +41,25 @@ def readAverages(path):
     return times, temps, stdevs
 
 
-def makeAndSaveGraph(years, allTimes, allTemps, allStdevs):
-    plt.figure(figsize=(20,13))
+def makeAndSaveGraph(times, temps, stdevs):
+    plt.figure(figsize=(14,10))
     plt.grid(visible=True, axis="both")
-    title = "OH Temp Daily Averages from All Years"
+
+    plt.xlabel("Year", fontsize=22)
+    plt.ylabel("OH Temp (K)", fontsize=22)
+    plt.plot(times, temps, color="blue", label="Daily Average OH Temp")
+
+    fig.tight_layout()
+    plt.grid(visible=True, axis="both")
+
+    title = "2009-2024 OH Temp Daily Averages"
     plt.title(title, fontsize=26)
-    #plt.errorbar(times, temps, yerr=stdevs, fmt='o', capsize=5, ecolor="r", elinewidth=.5, label="Daily Average OH Temp")
-    for i in range(len(years)):
-        year = years[i]
-        times = allTimes[i]
-        temps = allTemps[i]
-        stdevs = allStdevs[i]
-        plt.scatter(times, temps, label=year, color=YEAR_COLORS[year])
 
-    plt.xlabel("Day of Year", fontsize=20)
-    plt.ylabel("OH Temp (K)", fontsize=20)
-
-    plt.legend(fontsize=15)
+    plt.legend(fontsize=20)
+    fig.tight_layout()
 
     # NOTE: Assuming averagesPath is the path to ..../YEARdailyAverages.csv
-    outPath = "allTime_OH_temp.png"
+    outPath = "all_time_oh_daily_average.png"
     plt.savefig(outPath)
     print(f"File saved to {outPath} .")
 
@@ -79,9 +78,13 @@ if __name__ == "__main__":
     for year in years:
         path = f"{year}/{year}dailyAverages.csv"
         newDays, newTemps, newStdevs = getYearAverages(year, path)
-        days.append(newDays)
-        temps.append(newTemps)
-        stdevs.append(newStdevs)
+        for day in newDays:
+            # NOTE: Assuming day is day of year number
+            days.append(year + (day / 366))
+        for temp in newTemps:
+            temps.append(temp)
+        for stdev in newStdevs:
+            stdevs.append(stdev)
 
 
     makeAndSaveGraph(years, days, temps, stdevs)
