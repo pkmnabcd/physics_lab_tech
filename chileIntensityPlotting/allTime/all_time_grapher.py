@@ -23,7 +23,7 @@ def readAverages(path):
 
 
 def makeAndSaveGraph(times, temps, stdevs):
-    plt.figure(figsize=(14,10))
+    fig, ax1 = plt.figure(figsize=(14,10))
     plt.grid(visible=True, axis="both")
 
     plt.xlabel("Year", fontsize=22)
