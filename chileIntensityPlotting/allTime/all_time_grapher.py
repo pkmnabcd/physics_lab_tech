@@ -51,6 +51,17 @@ def getYearAverages(year, yearPath):
     return times, temps, stdevs
 
 
+def saveDataCSV(yearDays, ohTemps, stdevs):
+    lines = ["Time,OH Temp (K),STD DEV\n"]
+    for i in range(len(yearDays)):
+        lines.append(f"{yearDays[i]},{ohTemps[i]},{stdevs[i]}\n")
+    outpath = f"alltime_daily_avg_oh.csv"
+    file = open(outpath, "w")
+    file.writelines(lines)
+    file.close()
+    print(f"File saved to {outpath} .")
+
+
 if __name__ == "__main__":
     years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
     days = []
@@ -69,4 +80,5 @@ if __name__ == "__main__":
             stdevs.append(stdev)
 
     makeAndSaveGraph(days, temps, stdevs)
+    saveDataCSV(days, temps, stdevs)
 
