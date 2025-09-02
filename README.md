@@ -13,3 +13,7 @@ This is all one python program with main driver code with a bunch of options. Th
 ### Homebrew Origin
 
 This silly-named project is a project to replace my lab's use of some software called Origin. This makes a program that takes ChileMTM OH image intensity and calculated temperature data and detects useless twilight and cloud data and removes it by making edited files that will later be graphed.
+
+### AMTM Total Power
+
+This has code associated with a project on the Advanced Mesospheric Temperature Mapper (AMTM), measuring the total power.
