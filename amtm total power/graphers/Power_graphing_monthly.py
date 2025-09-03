@@ -20,11 +20,11 @@ import matplotlib.colors as colors
 from os.path import exists
 
 
-mainpath = 'C:/Users/Ken/Desktop/AMTM_McMurdo' 
+mainpath = '.' 
 
-months =['April', 'May', 'June', 'July', 'August', 'September'] # ['April', 'May'] #For month folder names
-mons = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'] #['Apr'] #Abbreviated version is needed as its used in day folders
-years = ['2018'] #['2017', '2018', '2019', '2020']
+months = ['June'] #['April', 'May', 'June', 'July', 'August', 'September'] # ['April', 'May'] #For month folder names
+mons = ['Jun'] #['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'] #['Apr'] #Abbreviated version is needed as its used in day folders
+years = ['2020'] #['2017', '2018', '2019', '2020']
 
 
 for i in range(np.size(years)): # code going into each year folder
@@ -37,20 +37,20 @@ for i in range(np.size(years)): # code going into each year folder
         color ='darkmagenta'
     elif year == '2017':
         color = 'palevioletred'
-    
+
     print(year)
     for i in range(np.size(months)): # once inside the year, going into each month folder
         month = months[i]
         mon = mons[i]
         print(month)
         path = mainpath +f'/{year}/{month}{year}/' 
-        
+
         daypath = path + 'days.txt'  # path to get to the days.txt file
         with open(daypath, 'r') as dayfile:   # opens the days.txt file to get days with data                .
                                               #within each month, also the names of the next 
                                               # layer of folders
-        
-            days =[]                         
+
+            days =[]
             for line in dayfile:
                 if line[0] != '#':
                     if line.rstrip() != mon: # takes away the \n, 
@@ -59,47 +59,55 @@ for i in range(np.size(years)): # code going into each year folder
                         b = a.replace(" ","_",1) #this replace is necessary as the txt file has whitespace
                         entry = b.replace(" ","-",1) #where the folders have _ and -'s
                         days.append(entry)
-           
+
             for i in range(len(days)):
                 date, sep, nix = days[i].partition('_')
-               
+
                 date2 = date + '_'
                 justday.append(date2)
-    
-        
+
+
                     #the days.txt  is closed, so we're using the 'days' list to get 
                     #to the power and time logs for each day
-        
+
+        print("here")
+        all_month_times = np.array([])
+        all_month_powers = np.array([])
         for n in range(0,len(days)): 
-          
+
             day = days[n]
             filethere = mainpath+f'/{year}/{month}{year}/{day}/'\
-                 
+
             file0 = filethere +  'TempOH0_TOTAL.csv' 
             file1 = filethere + 'TempOH1_TOTAL.csv'
             onlyday = justday[n]
             dayfolder = path+f'{day}'
             power = dayfolder + '/T_and_power.txt'
-          
+
             if exists(file0) == True and exists(file1) == True:
                 powr = np.loadtxt(power) #opens the files in a np, index-able array 6 column array,
                 # 0-year 1-month 2-day 3-time in decimal hour
                 # 4- power value(x) 5-exponent(y) of power in base 10(power)
                 lp = len(powr)
-              
-             
-               
+                # TODO: Change this to np.append()
+                all_month_times = all_month_times.append(powr[:,2]+powr[:,3]) # TODO: Make sure this adds the day to the hour
+                all_month_powers = all_month_powers.append(powr[0:lp,4])
+                print(all_month_times)
+                print(all_month_powers)
+
+
+
                 f = plot.figure()
                 f.set_figwidth(7)
                 plot.plot(powr[:,3], powr[0:lp,4], marker = '.',linestyle = 'solid', markersize = 5,\
                           color = f'{color}' )
-    
+
                 plot.title(f'Total Power {day}')
                 plot.ylabel('Total power')
                 plot.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
                 plot.xlabel('Ut hours')
                 plot.xlim(0,24)
-    
+
                 graphlocation = path + f'{onlyday}Totpowr.png' #gives the location to save graph
                 plot.show()
                 #plot.savefig(graphlocation)
