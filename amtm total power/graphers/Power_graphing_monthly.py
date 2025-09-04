@@ -89,9 +89,16 @@ for i in range(np.size(years)): # code going into each year folder
                 # 0-year 1-month 2-day 3-time in decimal hour
                 # 4- power value(x) 5-exponent(y) of power in base 10(power)
                 lp = len(powr)
-                # TODO: Change this to np.append()
-                all_month_times = all_month_times.append(powr[:,2]+powr[:,3]) # TODO: Make sure this adds the day to the hour
-                all_month_powers = all_month_powers.append(powr[0:lp,4])
+                all_month_times = np.append(all_month_times, (powr[:,2]+powr[:,3])) 
+                # TODO: change above to add a fraction of 24 hours to the day
+                all_month_powers = np.append(all_month_powers, (powr[0:lp,4]))
+                print("Days")
+                print(powr[:,2])
+                print("Times")
+                print(powr[:,3])
+                print("Powers")
+                print(powr[0:lp,4])
+                print("Total results so far")
                 print(all_month_times)
                 print(all_month_powers)
 
