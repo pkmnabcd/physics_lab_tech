@@ -15,7 +15,7 @@ Code modified by Gabe Decker from Jenny's code which originally plotted one day'
 #the monthyear folder.
 
 import numpy as np
-import matplotlib.pyplot as plot
+import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from os.path import exists
 
@@ -70,7 +70,6 @@ for i in range(np.size(years)): # code going into each year folder
                     #the days.txt  is closed, so we're using the 'days' list to get 
                     #to the power and time logs for each day
 
-        print("here")
         all_month_times = np.array([])
         all_month_powers = np.array([])
         for n in range(0,len(days)): 
@@ -92,33 +91,19 @@ for i in range(np.size(years)): # code going into each year folder
                 all_month_times = np.append(all_month_times, (powr[:,2]+(powr[:,3] / 24))) 
                 # TODO: change above to add a fraction of 24 hours to the day
                 all_month_powers = np.append(all_month_powers, (powr[0:lp,4]))
-                print("Days")
-                print(powr[:,2])
-                print("Times")
-                print(powr[:,3])
-                print("Powers")
-                print(powr[0:lp,4])
-                print("Total results so far")
-                print(all_month_times)
-                print(all_month_powers)
 
         # TODO: Continue here to plot only after gathering the month's data
+        f = plt.figure(figsize=(14,10))
+        #f.set_figwidth(7)
+        plt.plot(all_month_times, all_month_powers, marker = '.',linestyle = 'solid', markersize = 5,\
+                  color = f'{color}' )
 
+        plt.title(f'Total Power {month}')
+        plt.ylabel('Total power')
+        #plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
+        plt.xlabel('Day')
+        #plt.xlim(0,24)
 
-                f = plot.figure()
-                f.set_figwidth(7)
-                plot.plot(powr[:,3], powr[0:lp,4], marker = '.',linestyle = 'solid', markersize = 5,\
-                          color = f'{color}' )
-
-                plot.title(f'Total Power {day}')
-                plot.ylabel('Total power')
-                plot.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
-                plot.xlabel('Ut hours')
-                plot.xlim(0,24)
-
-                graphlocation = path + f'{onlyday}Totpowr.png' #gives the location to save graph
-                plot.show()
-                #plot.savefig(graphlocation)
-                #plot.close('all')
-                # plot.show()
+        graphlocation = path + f'{mon}Totpowr.png' #gives the location to save graph
+        plt.show()
 print('Finis')
