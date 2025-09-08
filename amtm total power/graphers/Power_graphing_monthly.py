@@ -89,7 +89,7 @@ for i in range(np.size(years)): # code going into each year folder
                 # 0-year 1-month 2-day 3-time in decimal hour
                 # 4- power value(x) 5-exponent(y) of power in base 10(power)
                 lp = len(powr)
-                all_month_times = np.append(all_month_times, (powr[:,2]+powr[:,3])) 
+                all_month_times = np.append(all_month_times, (powr[:,2]+(powr[:,3] / 24))) 
                 # TODO: change above to add a fraction of 24 hours to the day
                 all_month_powers = np.append(all_month_powers, (powr[0:lp,4]))
                 print("Days")
@@ -102,6 +102,7 @@ for i in range(np.size(years)): # code going into each year folder
                 print(all_month_times)
                 print(all_month_powers)
 
+        # TODO: Continue here to plot only after gathering the month's data
 
 
                 f = plot.figure()
