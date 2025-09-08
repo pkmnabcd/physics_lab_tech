@@ -70,6 +70,7 @@ for i in range(np.size(years)): # code going into each year folder
                     #the days.txt  is closed, so we're using the 'days' list to get 
                     #to the power and time logs for each day
 
+        f = plt.figure(figsize=(14,10))
         all_month_times = np.array([])
         all_month_powers = np.array([])
         for n in range(0,len(days)): 
@@ -88,15 +89,19 @@ for i in range(np.size(years)): # code going into each year folder
                 # 0-year 1-month 2-day 3-time in decimal hour
                 # 4- power value(x) 5-exponent(y) of power in base 10(power)
                 lp = len(powr)
+
+                plt.plot((powr[:,2]+(powr[:,3] / 24)), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+
+
                 all_month_times = np.append(all_month_times, (powr[:,2]+(powr[:,3] / 24))) 
                 # TODO: change above to add a fraction of 24 hours to the day
                 all_month_powers = np.append(all_month_powers, (powr[0:lp,4]))
 
         # TODO: Continue here to plot only after gathering the month's data
-        f = plt.figure(figsize=(14,10))
+
+        #f = plt.figure(figsize=(14,10))
         #f.set_figwidth(7)
-        plt.plot(all_month_times, all_month_powers, marker = '.',linestyle = 'solid', markersize = 5,\
-                  color = f'{color}' )
+        #plt.plot(all_month_times, all_month_powers, marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
 
         plt.title(f'Total Power {month}')
         plt.ylabel('Total power')
