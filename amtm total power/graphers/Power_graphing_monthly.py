@@ -20,15 +20,20 @@ import matplotlib.colors as colors
 from os.path import exists
 
 
+# NOTE: You should run this in the AMTM_McMurdo directory
 mainpath = '.' 
 
-months = ['June'] #['April', 'May', 'June', 'July', 'August', 'September'] # ['April', 'May'] #For month folder names
-mons = ['Jun'] #['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'] #['Apr'] #Abbreviated version is needed as its used in day folders
-years = ['2020'] #['2017', '2018', '2019', '2020']
+months = ['April', 'May', 'June', 'July', 'August', 'September'] # ['April', 'May'] #For month folder names
+mons = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'] #['Apr'] #Abbreviated version is needed as its used in day folders
+years = ['2017', '2018', '2019', '2020']
 
 
 for i in range(np.size(years)): # code going into each year folder
     year = years[i]
+
+    if not exists(year):
+        continue
+
     if year == '2020': # Color coding the years
         color = 'blue'
     elif year =='2019':
@@ -42,6 +47,10 @@ for i in range(np.size(years)): # code going into each year folder
     for i in range(np.size(months)): # once inside the year, going into each month folder
         month = months[i]
         mon = mons[i]
+
+        if not exists(f'{year}/{month}{year}'):
+            continue
+
         print(month)
         path = mainpath +f'/{year}/{month}{year}/' 
 
