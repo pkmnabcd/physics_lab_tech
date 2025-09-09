@@ -99,7 +99,7 @@ for i in range(np.size(years)): # code going into each year folder
 
                 plt.plot((powr[:,2]+(powr[:,3] / 24)), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
 
-        plt.title(f'Total Power {month}')
+        plt.title(f'Total Power {month}, {year}')
         plt.ylabel('Total power')
         #plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
         plt.xlabel('Day')
