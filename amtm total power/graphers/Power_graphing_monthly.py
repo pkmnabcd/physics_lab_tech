@@ -105,6 +105,7 @@ for i in range(np.size(years)): # code going into each year folder
         plt.xlabel('Day')
         #plt.xlim(0,24)
 
-        graphlocation = path + f'{mon}Totpowr.png' #gives the location to save graph
-        plt.show()
+        saveLocation = path + f'{mon}Totpowr.png'
+        plt.savefig(saveLocation)
+        plt.close()
 print('Finis')
