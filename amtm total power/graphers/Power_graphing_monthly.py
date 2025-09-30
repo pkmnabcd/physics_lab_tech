@@ -105,7 +105,7 @@ for i in range(np.size(years)): # code going into each year folder
         plt.xlabel('Day')
         #plt.xlim(0,24)
 
-        saveLocation = path + f'{mon}Totpowr.png'
+        saveLocation = path + f'../{mon}Totpowr{year}.png' # NOTE: putting file in year folder
         plt.savefig(saveLocation)
         plt.close()
 print('Finis')
