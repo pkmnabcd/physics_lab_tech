@@ -182,10 +182,12 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
         datastub = "oh"
         datastubcap = "OH"
         datastublong = "OH Temp"
+        chileMTM = "ChileMTM"
     else:
         datastub = "sf"
         datastubcap = "SF"
         datastublong = "Solar Flux"
+        chileMTM = ""
 
     fig, ax1 = plt.subplots(figsize=(14,10))
     plt.grid(visible=True, axis="both")
@@ -213,12 +215,11 @@ def makeAndSaveFFTGraph(frequencies, powers, window_size, isOH):
     ax2.set_xticklabels(periodTickLabels)
     ax2.set_xlim(ax1.get_xlim())
 
-    title = f"ChileMTM 2009-2024 Daily {datastublong} Residual Frequency Analysis (window size: {window_size})"
-    title = "\n".join(wrap(title, 40))
+    title = f"{chileMTM} 2009-2024 Daily {datastublong} Residual Frequency Analysis (window size: {window_size})"
+    title = "\n".join(wrap(title, 60))
     plt.title(title, fontsize=26)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
-    #ax1.legend(lines1, labels1, loc="lower right")
     ax1.legend(lines1, labels1, fontsize=20)
     plt.tight_layout()
 
