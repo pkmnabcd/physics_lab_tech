@@ -20,7 +20,7 @@ import matplotlib.colors as colors
 from os.path import exists
 
 
-def getTimeInDoY(powr) {
+def getTimeInDoY(powr):
     """
     Takes powr 2-D numpy array (of floats).
     Each subarray has the following relevant indexes:
@@ -99,7 +99,7 @@ def getTimeInDoY(powr) {
         outlist.append(dayOfYearAdd + dayOfMonth + dayFraction)
 
     return np.array(outlist)
-}
+
 
 
 # NOTE: You should run this in the AMTM_McMurdo directory
