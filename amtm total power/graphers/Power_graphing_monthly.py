@@ -155,7 +155,7 @@ for i in range(np.size(years)): # code going into each year folder
                     #the days.txt  is closed, so we're using the 'days' list to get 
                     #to the power and time logs for each day
 
-        f = plt.figure(figsize=(7,6))
+        f = plt.figure(figsize=(9,8))
         for n in range(0,len(days)): 
 
             day = days[n]
@@ -178,7 +178,7 @@ for i in range(np.size(years)): # code going into each year folder
         plt.title(f'Total Power {month}, {year}')
         plt.ylabel('Total power')
         plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
-        plt.xlabel('Day')
+        plt.xlabel('Day of Year')
         #plt.xlim(0,24)
 
         saveLocation = path + f'../{mon}Totpowr{year}.png' # NOTE: putting file in year folder
