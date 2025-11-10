@@ -20,12 +20,95 @@ import matplotlib.colors as colors
 from os.path import exists
 
 
+def getTimeInDoY(powr) {
+    """
+    Takes powr 2-D numpy array (of floats).
+    Each subarray has the following relevant indexes:
+        0 - year
+        1 - month
+        2 - day of the month
+        3 - hour of the day
+    Returns an array of equal length that just has the [day of year].[hour / 24 hr]
+    """
+    outlist = []
+    for i in range(len(powr)):
+        year = powr[i][0]
+        month = powr[i][1]
+        dayOfMonth = powr[i][2]
+        hourOfDay = powr[i][3]
+
+        dayFraction = hourOfDay / 24
+        dayOfYearAdd = 0
+        isLeapYear = year % 4 == 0
+
+        if month == 2:
+            dayOfYearAdd = 31
+        elif month == 3:
+            if isLeapYear:
+                dayOfYearAdd = 60
+            else:
+                dayOfYearAdd = 59
+        elif month == 4:
+            if isLeapYear:
+                dayOfYearAdd = 91
+            else:
+                dayOfYearAdd = 90
+        elif month == 5:
+            if isLeapYear:
+                dayOfYearAdd = 121
+            else:
+                dayOfYearAdd = 120
+        elif month == 6:
+            if isLeapYear:
+                dayOfYearAdd = 152
+            else:
+                dayOfYearAdd = 151
+        elif month == 7:
+            if isLeapYear:
+                dayOfYearAdd = 182
+            else:
+                dayOfYearAdd = 181
+        elif month == 8:
+            if isLeapYear:
+                dayOfYearAdd = 213
+            else:
+                dayOfYearAdd = 212
+        elif month == 9:
+            if isLeapYear:
+                dayOfYearAdd = 244
+            else:
+                dayOfYearAdd = 243
+        elif month == 10:
+            if isLeapYear:
+                dayOfYearAdd = 274
+            else:
+                dayOfYearAdd = 273
+        elif month == 11:
+            if isLeapYear:
+                dayOfYearAdd = 305
+            else:
+                dayOfYearAdd = 304
+        elif month == 12:
+            if isLeapYear:
+                dayOfYearAdd = 335
+            else:
+                dayOfYearAdd = 334
+        else:
+            print("WARNING!! The month may not be correct")
+
+        outlist.append(dayOfYearAdd + dayOfMonth + dayFraction)
+
+    return np.array(outlist)
+}
+
+
 # NOTE: You should run this in the AMTM_McMurdo directory
 mainpath = '.' 
 
-months = ['April', 'May', 'June', 'July', 'August', 'September'] # ['April', 'May'] #For month folder names
-mons = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'] #['Apr'] #Abbreviated version is needed as its used in day folders
-years = ['2017', '2018', '2019', '2020']
+months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']  # Full month names
+mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']  #Abbreviated version is needed as its used in day folders
+#years = ['2016']
+years = ['2017']
 
 
 for i in range(np.size(years)): # code going into each year folder
@@ -34,14 +117,7 @@ for i in range(np.size(years)): # code going into each year folder
     if not exists(year):
         continue
 
-    if year == '2020': # Color coding the years
-        color = 'blue'
-    elif year =='2019':
-        color = 'turquoise'
-    elif year =='2018':
-        color ='darkmagenta'
-    elif year == '2017':
-        color = 'palevioletred'
+    color = "blue"
 
     print(year)
     for i in range(np.size(months)): # once inside the year, going into each month folder
@@ -97,11 +173,11 @@ for i in range(np.size(years)): # code going into each year folder
                 # 4- power value(x) 5-exponent(y) of power in base 10(power)
                 lp = len(powr)
 
-                plt.plot((powr[:,2]+(powr[:,3] / 24)), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+                plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
 
         plt.title(f'Total Power {month}, {year}')
         plt.ylabel('Total power')
-        #plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
+        plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
         plt.xlabel('Day')
         #plt.xlim(0,24)
 
