@@ -157,7 +157,6 @@ def getPowrForYear(year, mons, months, mainpath):
 
             if exists(file0) == True and exists(file1) == True:
                 powrs.append(np.loadtxt(power))  #opens the files in a np, index-able array 6 column array,
-    print(powrs)
     return powrs
 
 
@@ -185,15 +184,16 @@ f = plt.figure(figsize=(10,10))
 # 4- power value(x) 5-exponent(y) of power in base 10(power)
 year1_powrs = getPowrForYear(year1, mons1, months1, mainpath)
 year2_powrs = getPowrForYear(year2, mons2, months2, mainpath)
-exit()
-# TODO: continue here
-lp = len(powr)
 
-plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+for i in range(len(year1_powrs)):
+    powr = year1_powrs[i]
+
+    lp = len(powr)
+    plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
 
 plt.title(f'Total Power {month}, {year}')
 plt.ylabel('Total power')
-plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
+#plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
 plt.xlabel('Day of Year')
 #plt.xlim(0,24)
 
