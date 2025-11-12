@@ -157,6 +157,8 @@ def getPowrForYear(year, mons, months, mainpath):
 
             if exists(file0) == True and exists(file1) == True:
                 powr = np.append(np.loadtxt(power), powr) #opens the files in a np, index-able array 6 column array,
+                print(np.loadtxt(power))
+                print(powr)
     print(powr)
     return powr
 
