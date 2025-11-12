@@ -108,7 +108,7 @@ def getPowrForYear(year, mons, months, mainpath):
     color = "blue"
 
     print(year)
-    powr = np.array()
+    powr = np.array([])
     for i in range(np.size(months)): # once inside the year, going into each month folder
         month = months[i]
         mon = mons[i]
