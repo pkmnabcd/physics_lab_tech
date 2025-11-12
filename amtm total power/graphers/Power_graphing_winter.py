@@ -105,8 +105,6 @@ def getPowrForYear(year, mons, months, mainpath):
     if not exists(year):
         return
 
-    color = "blue"
-
     print(year)
     powrs = []
     for i in range(np.size(months)): # once inside the year, going into each month folder
@@ -176,6 +174,7 @@ mons2 = ['Jan', 'Feb', 'Mar', 'Apr']
 
 title = f"Total Power Winter {year1}-{year2}"
 
+color = "blue"
 
 f = plt.figure(figsize=(10,10))
 
@@ -190,8 +189,13 @@ for i in range(len(year1_powrs)):
 
     lp = len(powr)
     plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+for i in range(len(year2_powrs)):
+    powr = year2_powrs[i]
 
-plt.title(f'Total Power {month}, {year}')
+    lp = len(powr)
+    plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+
+plt.title(title)
 plt.ylabel('Total power')
 #plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
 plt.xlabel('Day of Year')
