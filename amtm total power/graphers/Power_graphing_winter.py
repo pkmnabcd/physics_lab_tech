@@ -103,7 +103,7 @@ def getTimeInDoY(powr):
 
 def getPowrForYear(year, mons, months, mainpath):
     if not exists(year):
-        continue
+        return
 
     color = "blue"
 
