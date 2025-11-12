@@ -172,8 +172,8 @@ year1 = '2016'
 months1 = ['September', 'October', 'November']
 mons1 = ['Sep', 'Oct', 'Nov']
 year2 = '2017'
-months1 = ['January', 'February', 'March', 'April']
-mons1 = ['Jan', 'Feb', 'Mar', 'Apr']
+months2 = ['January', 'February', 'March', 'April']
+mons2 = ['Jan', 'Feb', 'Mar', 'Apr']
 
 title = f"Total Power Winter {year1}-{year2}"
 
