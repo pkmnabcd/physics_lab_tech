@@ -108,7 +108,7 @@ def getPowrForYear(year, mons, months, mainpath):
     color = "blue"
 
     print(year)
-    powr = np.array([])
+    powrs = []
     for i in range(np.size(months)): # once inside the year, going into each month folder
         month = months[i]
         mon = mons[i]
@@ -156,9 +156,7 @@ def getPowrForYear(year, mons, months, mainpath):
             power = dayfolder + '/T_and_power.txt'
 
             if exists(file0) == True and exists(file1) == True:
-                powr = np.append(np.loadtxt(power), powr) #opens the files in a np, index-able array 6 column array,
-                print(np.loadtxt(power))
-                print(powr)
+                powrs.append(np.loadtxt(power))  #opens the files in a np, index-able array 6 column array,
     print(powr)
     return powr
 
