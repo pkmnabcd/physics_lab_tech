@@ -172,9 +172,11 @@ year2 = '2017'
 months2 = ['January', 'February', 'March', 'April']
 mons2 = ['Jan', 'Feb', 'Mar', 'Apr']
 
+color1 = "blue"
+color2 = "red"
+
 title = f"Total Power Winter {year1}-{year2}"
 
-color = "blue"
 
 f = plt.figure(figsize=(13,13))
 
@@ -188,12 +190,12 @@ for i in range(len(year1_powrs)):
     powr = year1_powrs[i]
 
     lp = len(powr)
-    plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+    plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color1}', label=f"{year1} Total Power")
 for i in range(len(year2_powrs)):
     powr = year2_powrs[i]
 
     lp = len(powr)
-    plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+    plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color2}', label=f"{year2} Total Power")
 
 plt.title(title, fontsize=26)
 plt.ylabel('Total power', fontsize=22)
@@ -201,6 +203,8 @@ plt.ylabel('Total power', fontsize=22)
 plt.xlabel('Day of Year', fontsize=22)
 plt.xticks(fontsize=20)
 plt.yticks(fontsize=20)
+
+plt.legend(fontsize=20)
 
 saveLocation = mainpath + f'../Totpowr_winter_{year1}_to_{year2}.png'
 plt.savefig(saveLocation)
