@@ -183,9 +183,9 @@ f = plt.figure(figsize=(10,10))
 # powr layout
 # 0-year 1-month 2-day 3-time in decimal hour
 # 4- power value(x) 5-exponent(y) of power in base 10(power)
-year1_powrs = getPowrForYear(year1)
-year2_powrs = getPowrForYear(year2)
-return
+year1_powrs = getPowrForYear(year1, mons1, months1, mainpath)
+year2_powrs = getPowrForYear(year2, mons2, months2, mainpath)
+exit()
 # TODO: continue here
 lp = len(powr)
 
