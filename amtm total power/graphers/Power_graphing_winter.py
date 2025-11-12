@@ -176,7 +176,7 @@ title = f"Total Power Winter {year1}-{year2}"
 
 color = "blue"
 
-f = plt.figure(figsize=(10,10))
+f = plt.figure(figsize=(13,13))
 
 # powr layout
 # 0-year 1-month 2-day 3-time in decimal hour
@@ -195,13 +195,14 @@ for i in range(len(year2_powrs)):
     lp = len(powr)
     plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
 
-plt.title(title)
-plt.ylabel('Total power')
+plt.title(title, fontsize=26)
+plt.ylabel('Total power', fontsize=22)
 #plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
-plt.xlabel('Day of Year')
-#plt.xlim(0,24)
+plt.xlabel('Day of Year', fontsize=22)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
 
-saveLocation = path + f'../{mon}Totpowr{year}.png' # NOTE: putting file in year folder
+saveLocation = mainpath + f'../Totpowr_winter{year1}_to_{year2}.png'
 plt.savefig(saveLocation)
 plt.close()
 print('Finis')
