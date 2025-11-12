@@ -202,7 +202,7 @@ plt.xlabel('Day of Year', fontsize=22)
 plt.xticks(fontsize=20)
 plt.yticks(fontsize=20)
 
-saveLocation = mainpath + f'../Totpowr_winter{year1}_to_{year2}.png'
+saveLocation = mainpath + f'../Totpowr_winter_{year1}_to_{year2}.png'
 plt.savefig(saveLocation)
 plt.close()
 print('Finis')
