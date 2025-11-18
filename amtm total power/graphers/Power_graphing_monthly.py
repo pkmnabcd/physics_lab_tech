@@ -174,6 +174,8 @@ for i in range(np.size(years)): # code going into each year folder
                 lp = len(powr)
 
                 plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+            else:
+                print(f"WARNING: {day} is too short to have TempOH1_TOTAL.csv file, so its total power won't be used.")
 
         plt.title(f'Total Power {month}, {year}')
         plt.ylabel('Total power')

@@ -155,6 +155,8 @@ def getPowrForYear(year, mons, months, mainpath):
 
             if exists(file0) == True and exists(file1) == True:
                 powrs.append(np.loadtxt(power))  #opens the files in a np, index-able array 6 column array,
+            else:
+                print(f"WARNING: {day} is too short to have TempOH1_TOTAL.csv file, so its total power won't be used.")
     return powrs
 
 
