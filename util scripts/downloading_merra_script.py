@@ -177,10 +177,8 @@ def get_username_password():
     file = open(path)
     lines = file.readlines()
 
-    username_line = lines[0].split(": ").strip("\n")
-    username = username_line[1]
-    password_line = lines[1].split(": ").strip("\n")
-    password = username_line[1]
+    username = lines[0].split(": ")[1].strip("\n")
+    password = lines[1].split(": ")[1].strip("\n")
 
     return username, password
 
