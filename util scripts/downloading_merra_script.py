@@ -116,7 +116,7 @@ def write_file(filename, save_count, path, response):
         if getsize(filename) > 900_000_000:
             print("There is a size error")
             raise DownloadingException("This file was too big. Retry")
-        if getsize(filename) < 800_000_000:
+        if getsize(filename) < 600_000_000:
             print("There is a size error")
             raise DownloadingException("This file was too small. Retry")
     else:
