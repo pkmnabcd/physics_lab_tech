@@ -41,7 +41,9 @@ def getTimeInDoY(powr):
         dayOfYearAdd = 0
         isLeapYear = year % 4 == 0
 
-        if month == 2:
+        if month == 1:
+            dayOfYearAdd = 0
+        elif month == 2:
             dayOfYearAdd = 31
         elif month == 3:
             if isLeapYear:
