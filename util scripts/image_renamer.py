@@ -16,8 +16,15 @@ def getMatchingFiles(pattern, all_files):
     return matching_files
 
 
-def filterImagesBeforeIndex(cutoff_index, images):
-    pass  # TODO: finish this
+def filterImagesBeforeIndex(cutoff_index, images, number_start):
+    filteredImages = []
+    for image in images:
+        index_str = image[number_start:number_start+4]
+        index = int(index_str)
+        if index >= cutoff_index:
+            filteredImages.append(image)
+
+    return filteredImages
 
 
 def main():
@@ -45,6 +52,11 @@ def main():
     print("Making copies of the processed data")
     for file in all_processed_files:
         copy2(join(processed_path, file), tmp_folder_path_processed)
+
+    print("Filtering out images that are below the cutoff index")
+    incorrect_bg = filterImagesBeforeIndex(first_incorrect_index, raw_bg_files, 6)
+    incorrect_p12 = filterImagesBeforeIndex(first_incorrect_index, raw_p12_files, 7)
+    incorrect_p14 = filterImagesBeforeIndex(first_incorrect_index, raw_p14_files, 7)
 
 
 main()
