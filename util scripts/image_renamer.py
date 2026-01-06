@@ -16,6 +16,9 @@ def getMatchingFiles(pattern, all_files):
     return matching_files
 
 
+def filterImagesBeforeIndex(cutoff_index, images):
+    pass  # TODO: finish this
+
 
 def main():
     path = "./data"  # TODO: change this to "." once I'm done testing
