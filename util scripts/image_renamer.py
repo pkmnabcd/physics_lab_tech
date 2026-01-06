@@ -22,23 +22,23 @@ def main():
     all_files = [f for f in listdir(path) if isfile(join(path, f))]
 
     tmp_folder_path = join(path, "tmp_backup")
-    tmp_folder_already_exists = exists(tmp_folder_path)
-    if not tmp_folder_already_exists:
-        mkdir(tmp_folder_path)
+    if exists(tmp_folder_path):
+        return  # NOTE: don't want to overwrite existing copies or redo the renaming
+
+    mkdir(tmp_folder_path)
 
     raw_file_patterns = ["BG_31_[0-9]{4}.tif", "P12_31_[0-9]{4}.tif", "P14_31_[0-9]{4}.tif"]
     raw_bg_files = getMatchingFiles(raw_file_patterns[0], all_files)
     raw_p12_files = getMatchingFiles(raw_file_patterns[1], all_files)
     raw_p14_files = getMatchingFiles(raw_file_patterns[2], all_files)
 
-    if not tmp_folder_already_exists:  # NOTE: don't want to overwrite existing copies
-        print("Making copies of the raw data")
-        for file in raw_bg_files:
-            copy2(join(path, file), tmp_folder_path)
-        for file in raw_p12_files:
-            copy2(join(path, file), tmp_folder_path)
-        for file in raw_p14_files:
-            copy2(join(path, file), tmp_folder_path)
+    print("Making copies of the raw data")
+    for file in raw_bg_files:
+        copy2(join(path, file), tmp_folder_path)
+    for file in raw_p12_files:
+        copy2(join(path, file), tmp_folder_path)
+    for file in raw_p14_files:
+        copy2(join(path, file), tmp_folder_path)
 
 
 main()
