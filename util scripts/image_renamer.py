@@ -3,6 +3,18 @@ from os.path import isfile, join, exists
 from re import compile
 from shutil import copy2
 
+"""
+This program is to be used when the camera filter wheel malfunctions slightly so the BG, P12, and P14 images are mislabeled for the rest of the night.
+This program assumes that BG, P12, and P14 all have the same number of images and they start being incorrect at the same index.
+
+Below (the 'first_incorrect_index' is the image number of the first image that needs to be renamed.
+This program should be run in the directory of the raw images that need to be renamed.
+This program backs up the images to a new directory './incorrect_backup/' before changing the filenames.
+
+Note: once the './incorrect_backup/' directory is created the first time this program is run, this program won't run until that directory is deleted.
+This is to prevent overwriting the original data.
+"""
+
 
 first_incorrect_index = 253
 
@@ -25,6 +37,14 @@ def filterImagesBeforeIndex(cutoff_index, images, number_start):
             filteredImages.append(image)
 
     return filteredImages
+
+
+def saveReadmeToBackupDir(readme_path):
+    warning_text = "This folder contains a backup of the images that were originally in the raw data directory. Due to a temporary error in the filter wheel that affects the camera only for one night, these images were incorrectly named. These images still have this error while those in the parent directory should be fixed.\n"
+
+    file = open(readme_path, "w")
+    file.write(warning_text)
+    file.close()
 
 
 def main():
@@ -74,6 +94,9 @@ def main():
         new_image = image.replace("P14", "P12")
         copy2(join(tmp_folder_path, image), join(path, new_image))
 
+    readme_path = join(tmp_folder_path, "README.txt")
+    print(f"Saving a warning message to {readme_path}.")
+    saveReadmeToBackupDir(readme_path)
 
 main()
 
