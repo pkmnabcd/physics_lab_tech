@@ -28,12 +28,12 @@ def filterImagesBeforeIndex(cutoff_index, images, number_start):
 
 
 def main():
-    path = "./data"  # TODO: change this to "." once I'm done testing
+    path = "."
     processed_path = join(path, "Processed")
     all_raw_files = [f for f in listdir(path) if isfile(join(path, f))]
     all_processed_files = [f for f in listdir(processed_path) if isfile(join(processed_path, f))]
 
-    tmp_folder_path = join(path, "tmp_backup")
+    tmp_folder_path = join(path, "incorrect_backup")
     tmp_folder_path_processed = join(tmp_folder_path, "Processed")
     if exists(tmp_folder_path):
         return  # NOTE: don't want to overwrite existing copies or redo the renaming
@@ -53,10 +53,27 @@ def main():
     for file in all_processed_files:
         copy2(join(processed_path, file), tmp_folder_path_processed)
 
+    print(f"Rotating the filenames after image number {first_incorrect_index}")
     print("Filtering out images that are below the cutoff index")
     incorrect_bg = filterImagesBeforeIndex(first_incorrect_index, raw_bg_files, 6)
     incorrect_p12 = filterImagesBeforeIndex(first_incorrect_index, raw_p12_files, 7)
     incorrect_p14 = filterImagesBeforeIndex(first_incorrect_index, raw_p14_files, 7)
 
+    print("Moving incorrect BG images to P14")
+    for image in incorrect_bg:
+        new_image = image.replace("BG", "P14")
+        copy2(join(tmp_folder_path, image), join(path, new_image))
+
+    print("Moving incorrect P12 images to BG")
+    for image in incorrect_p12:
+        new_image = image.replace("P12", "BG")
+        copy2(join(tmp_folder_path, image), join(path, new_image))
+
+    print("Moving incorrect P14 images to P12")
+    for image in incorrect_p14:
+        new_image = image.replace("P14", "P12")
+        copy2(join(tmp_folder_path, image), join(path, new_image))
+
 
 main()
+
