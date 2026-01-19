@@ -106,66 +106,66 @@ def getTimeInDoY(powr):
 def getXLimits(mon, year):
     """
     Returns appropriate x-axis limits for each month in a leap year or non-leap year.
-    I try to include one day on each end that isn't in the month so that the plot looks better.
+    I try to include one extra day at the beginning and two extra days on the end that aren't in the month so that the plot looks better.
     """
     isLeapYear = int(year) % 4 == 0
     if mon == "Jan":
         return 0, 32
     elif mon == "Feb":
         if isLeapYear:
-            return 31, 61
+            return 31, 62
         else:
-            return 31, 60
+            return 31, 61
     elif mon == "Mar":
         if isLeapYear:
-            return 60, 92
+            return 60, 93
         else:
-            return 59, 91
+            return 59, 92
     elif mon == "Apr":
         if isLeapYear:
-            return 91, 122
+            return 91, 123
         else:
-            return 90, 121
+            return 90, 122
     elif mon == "May":
         if isLeapYear:
-            return 121, 153
+            return 121, 154
         else:
-            return 120, 152
+            return 120, 153
     elif mon == "Jun":
         if isLeapYear:
-            return 152, 183
+            return 152, 184
         else:
-            return 151, 182
+            return 151, 183
     elif mon == "Jul":
         if isLeapYear:
-            return 182, 214
+            return 182, 215
         else:
-            return 181, 213
+            return 181, 214
     elif mon == "Aug":
         if isLeapYear:
-            return 213, 245
+            return 213, 246
         else:
-            return 212, 244
+            return 212, 245
     elif mon == "Sep":
         if isLeapYear:
-            return 244, 275
+            return 244, 276
         else:
-            return 243, 274
+            return 243, 275
     elif mon == "Oct":
         if isLeapYear:
-            return 274, 306
+            return 274, 307
         else:
-            return 273, 305
+            return 273, 306
     elif mon == "Nov":
         if isLeapYear:
-            return 305, 336
+            return 305, 337
         else:
-            return 304, 335
+            return 304, 336
     elif mon == "Dec":
         if isLeapYear:
-            return 335, 367
+            return 335, 368
         else:
-            return 334, 366
+            return 334, 367
     else:
         print("WARNING!! The month may not be correct")
 
