@@ -103,6 +103,74 @@ def getTimeInDoY(powr):
     return np.array(outlist)
 
 
+def getXLimits(mon, year):
+    """
+    Returns appropriate x-axis limits for each month in a leap year or non-leap year.
+    I try to include one extra day at the beginning and two extra days on the end that aren't in the month so that the plot looks better.
+    """
+    isLeapYear = int(year) % 4 == 0
+    if mon == "Jan":
+        return 0, 32
+    elif mon == "Feb":
+        if isLeapYear:
+            return 31, 62
+        else:
+            return 31, 61
+    elif mon == "Mar":
+        if isLeapYear:
+            return 60, 93
+        else:
+            return 59, 92
+    elif mon == "Apr":
+        if isLeapYear:
+            return 91, 123
+        else:
+            return 90, 122
+    elif mon == "May":
+        if isLeapYear:
+            return 121, 154
+        else:
+            return 120, 153
+    elif mon == "Jun":
+        if isLeapYear:
+            return 152, 184
+        else:
+            return 151, 183
+    elif mon == "Jul":
+        if isLeapYear:
+            return 182, 215
+        else:
+            return 181, 214
+    elif mon == "Aug":
+        if isLeapYear:
+            return 213, 246
+        else:
+            return 212, 245
+    elif mon == "Sep":
+        if isLeapYear:
+            return 244, 276
+        else:
+            return 243, 275
+    elif mon == "Oct":
+        if isLeapYear:
+            return 274, 307
+        else:
+            return 273, 306
+    elif mon == "Nov":
+        if isLeapYear:
+            return 305, 337
+        else:
+            return 304, 336
+    elif mon == "Dec":
+        if isLeapYear:
+            return 335, 368
+        else:
+            return 334, 367
+    else:
+        print("WARNING!! The month may not be correct")
+
+
+
 
 # NOTE: You should run this in the AMTM_McMurdo directory
 mainpath = '.' 
@@ -183,7 +251,8 @@ for i in range(np.size(years)): # code going into each year folder
         plt.ylabel('Total power')
         plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
         plt.xlabel('Day of Year')
-        #plt.xlim(0,24)
+        xlim0, xlim1 = getXLimits(mon, year)
+        plt.xlim(xlim0,xlim1)
 
         saveLocation = path + f'../{mon}Totpowr{year}.png' # NOTE: putting file in year folder
         plt.savefig(saveLocation)
