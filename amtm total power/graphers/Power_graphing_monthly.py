@@ -157,7 +157,7 @@ for i in range(np.size(years)): # code going into each year folder
                     #the days.txt  is closed, so we're using the 'days' list to get 
                     #to the power and time logs for each day
 
-        f = plt.figure(figsize=(9,8))
+        f = plt.figure(figsize=(12,8))
         for n in range(0,len(days)): 
 
             day = days[n]

@@ -184,7 +184,7 @@ dataLabel2 = f"{year2} Total Power"
 title = f"Total Power Winter {year1}-{year2}"
 
 
-f = plt.figure(figsize=(13,13))
+f = plt.figure(figsize=(20,13))
 
 # powr layout
 # 0-year 1-month 2-day 3-time in decimal hour
