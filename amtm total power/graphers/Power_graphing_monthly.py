@@ -194,7 +194,7 @@ for i in range(np.size(years)): # code going into each year folder
         month = months[i]
         mon = mons[i]
 
-        path = join(mainpath, f'/{year}/{month}{year}/')
+        path = join(mainpath, f'{year}/{month}{year}/')
         if not exists(path):
             continue
 
