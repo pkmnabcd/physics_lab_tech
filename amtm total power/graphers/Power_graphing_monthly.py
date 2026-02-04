@@ -184,7 +184,7 @@ years = ['2017']
 for i in range(np.size(years)): # code going into each year folder
     year = years[i]
 
-    if not exists(year):
+    if not exists(join(mainpath,year)):
         continue
 
     color = "blue"
