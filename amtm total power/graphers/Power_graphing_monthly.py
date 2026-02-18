@@ -17,7 +17,7 @@ Code modified by Gabe Decker from Jenny's code which originally plotted one day'
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-from os.path import exists
+from os.path import exists, join
 
 
 def getTimeInDoY(powr):
@@ -184,7 +184,7 @@ years = ['2017']
 for i in range(np.size(years)): # code going into each year folder
     year = years[i]
 
-    if not exists(year):
+    if not exists(join(mainpath,year)):
         continue
 
     color = "blue"
@@ -194,21 +194,21 @@ for i in range(np.size(years)): # code going into each year folder
         month = months[i]
         mon = mons[i]
 
-        if not exists(f'{year}/{month}{year}'):
+        path = join(mainpath, f'{year}/{month}{year}/')
+        if not exists(path):
             continue
 
         print(month)
-        path = mainpath +f'/{year}/{month}{year}/' 
 
-        daypath = path + 'days.txt'  # path to get to the days.txt file
-        with open(daypath, 'r') as dayfile:   # opens the days.txt file to get days with data                .
-                                              #within each month, also the names of the next 
+        daypath = join(path, 'days.txt')  # path to get to the days.txt file
+        with open(daypath, 'r') as dayfile:   # opens the days.txt file to get days with data
+                                              #within each month, also the names of the next
                                               # layer of folders
 
             days =[]
             for line in dayfile:
                 if line[0] != '#':
-                    if line.rstrip() != mon: # takes away the \n, 
+                    if line.rstrip() != mon: # takes away the \n,
                         justday = []
                         a =  mon+line.rstrip()    #a and b are used because I ran out of meaningful names
                         b = a.replace(" ","_",1) #this replace is necessary as the txt file has whitespace
@@ -225,7 +225,7 @@ for i in range(np.size(years)): # code going into each year folder
                     #the days.txt  is closed, so we're using the 'days' list to get 
                     #to the power and time logs for each day
 
-        f = plt.figure(figsize=(9,8))
+        f = plt.figure(figsize=(12,8))
         for n in range(0,len(days)): 
 
             day = days[n]

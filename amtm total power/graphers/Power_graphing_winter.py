@@ -17,7 +17,7 @@ Code modified by Gabe Decker from Jenny's code which originally plotted one day'
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-from os.path import exists
+from os.path import exists, join
 
 
 def getTimeInDoY(powr):
@@ -104,7 +104,7 @@ def getTimeInDoY(powr):
 
 
 def getPowrForYear(year, mons, months, mainpath):
-    if not exists(year):
+    if not exists(join(mainpath, year)):
         return
 
     print(year)
@@ -113,13 +113,13 @@ def getPowrForYear(year, mons, months, mainpath):
         month = months[i]
         mon = mons[i]
 
-        if not exists(f'{year}/{month}{year}'):
+        path = join(mainpath, f'{year}/{month}{year}/')
+        if not exists(path):
             continue
 
         print(month)
-        path = mainpath +f'/{year}/{month}{year}/' 
 
-        daypath = path + 'days.txt'  # path to get to the days.txt file
+        daypath = join(path, 'days.txt')  # path to get to the days.txt file
         with open(daypath, 'r') as dayfile:   # opens the days.txt file to get days with data                .
                                               #within each month, also the names of the next 
                                               # layer of folders
@@ -184,7 +184,7 @@ dataLabel2 = f"{year2} Total Power"
 title = f"Total Power Winter {year1}-{year2}"
 
 
-f = plt.figure(figsize=(13,13))
+f = plt.figure(figsize=(20,13))
 
 # powr layout
 # 0-year 1-month 2-day 3-time in decimal hour
