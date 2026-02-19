@@ -21,3 +21,5 @@ SHELLRUNNER_FILENAME = "mlshellrunnertest.pro"
 idl_scripts_dir = join("C:/", "Users", "Domi", "OneDrive", "Desktop", "MachineLearning", "IDLCode")
 
 IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
+IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
+IDL.run(f".compile {join(idl_scripts_dir, SHELLRUNNER_FILENAME)}")
