@@ -24,3 +24,6 @@ IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, SHELLRUNNER_FILENAME)}")
 IDL.run("MLSHELLRUNNERTEST")
+
+# TODO: Change this code to read the days.txt window files and parse them. Specify the read and save folders. Pass them to shellrunner
+
