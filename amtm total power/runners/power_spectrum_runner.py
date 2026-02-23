@@ -41,7 +41,14 @@ save_dir = join("C:/", "Gabes_stuff", "AMTM_ALOMAR")
 # NOTE: this should be the main directory of the drive you're using. It should contain the month-year folders (like October2016/) and months.txt file.
 read_dir = join("I:/")
 
+# NOTE: this is the year you're making power spectrums for.
 year = "2016"
+
+# NOTE: Put the nights you want inside the tuples like
+# "January": (
+#    "01-02",
+#    "05-06"
+# ),
 days = {
     "January": (
     ),
@@ -72,12 +79,49 @@ days = {
     )
 }
 
-# NOTE: we can get a list of the months from list(days.keys())
+
+# NOTE: YOU SHOULD NOT EDIT ANYTHING AFTER THIS
+# NOTE: YOU SHOULD NOT EDIT ANYTHING AFTER THIS
+# NOTE: YOU SHOULD NOT EDIT ANYTHING AFTER THIS
+# NOTE: YOU SHOULD NOT EDIT ANYTHING AFTER THIS
+# --
+# --
+# --
+# --
+# --
+
+months = list(days.keys())
 
 IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, SHELLRUNNER_FILENAME)}")
 IDL.run("MLSHELLRUNNERTEST")
 
-# TODO: Change this code to read the days.txt window files and parse them. Specify the read and save folders. Pass them to shellrunner
+print(f"--- Generating power spectrums for {year} ---")
+for month in months:
+    print(f"--- Looking for days in month: {month} ---")
+    days_tuple = days[month]
+    for day in days_tuple:
+        month_stub = MONTH_STUBS[month]
+        print(f"--- Making power spectrum for {month_stub}{day} ---")
+        # TODO: add code that reads the days.txt file to get the frames that match the day to get begin and end
+        begin = 0
+        end = 700
+
+        # Prepares the strings needed by read_images
+        source_path = join(read_dir, f"{month}{year}")
+        day_string = join(f"{month_stub}{day}", "")
+        end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}")
+        begin_str = str(begin)
+        end_str = str(end)
+
+        # Create csv files using the IDL code in read_images
+        IDL.read_images(day_string, source_path, begin_str, end_str, end_path)
+
+# NOTE: The read_images function is expecting the following parameters
+# dateString: something like "Nov07-08/"
+# sourcePath: the path to the MonthYear folder in the drive eg "I:/November2016/"
+# begins: a string of the start index number. Just the shortest form of a number like "0" not "0000".
+# ends: same as begins but the end index.
+# endDir: path to the save folder of the outputted csv files. eg "C:/Gabes_stuff/AMTM_ALOMAR/2016/November2016/Nov07-08_0000-0779"
 
