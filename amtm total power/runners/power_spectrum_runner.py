@@ -129,19 +129,21 @@ for month in months:
     for day in days_tuple:
         month_stub = MONTH_STUBS[month]
         print(f"--- Making power spectrum for {month_stub}{day} ---")
-        # TODO: add code that reads the days.txt file to get the frames that match the day to get begin and end
-        begin = 0
-        end = 700
 
-        # Prepares the strings needed by read_images
-        source_path = join(read_dir, f"{month}{year}")
-        day_string = join(f"{month_stub}{day}", "")
-        end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}")
-        begin_str = str(begin)
-        end_str = str(end)
+        begin_ends = readDaysTxt(year, month, day, save_dir)
+        for begin_end in begin_ends:
+            begin = begin_end[0]
+            end = begin_end[1]
 
-        # Create csv files using the IDL code in read_images
-        IDL.read_images(day_string, source_path, begin_str, end_str, end_path)
+            # Prepares the strings needed by read_images
+            source_path = join(read_dir, f"{month}{year}")
+            day_string = join(f"{month_stub}{day}", "")
+            end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}")
+            begin_str = str(begin)
+            end_str = str(end)
+
+            # Create csv files using the IDL code in read_images
+            IDL.read_images(day_string, source_path, begin_str, end_str, end_path)
 
 # NOTE: The read_images function is expecting the following parameters
 # dateString: something like "Nov07-08/"
