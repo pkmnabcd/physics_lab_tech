@@ -120,7 +120,7 @@ months = list(days.keys())
 IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, SHELLRUNNER_FILENAME)}")
-IDL.run("MLSHELLRUNNERTEST")
+#IDL.run("MLSHELLRUNNERTEST")
 
 print(f"--- Generating power spectrums for {year} ---")
 for month in months:
