@@ -50,33 +50,33 @@ year = "2016"
 #    "05-06"
 # ),
 days = {
-    "January": (
-    ),
-    "February": (
-    ),
-    "March": (
-    ),
-    "April": (
-    ),
-    "May": (
-    ),
-    "June": (
-    ),
-    "July": (
-    ),
-    "August": (
-    ),
-    "September": (
+    "January": [
+    ],
+    "February": [
+    ],
+    "March": [
+    ],
+    "April": [
+    ],
+    "May": [
+    ],
+    "June": [
+    ],
+    "July": [
+    ],
+    "August": [
+    ],
+    "September": [
         "16-17"
-    ),
-    "October": (
-    ),
-    "November": (
+    ],
+    "October": [
+    ],
+    "November": [
         "07-08",
         "08-09"
-    ),
-    "December": (
-    )
+    ],
+    "December": [
+    ]
 }
 
 
@@ -93,10 +93,10 @@ days = {
 
 def readDaysTxt(year, month, day, main_path):
     read_path = join(main_path, year, f"{month}{year}", "days.txt")
-    lines = []
+    split_lines = []
     with open(read_path) as f:
         lines = f.readlines()
-        for i in range(len(lines):
+        for i in range(len(lines)):
             if i == 0: # The first line should be the month stub
                 continue
             line = lines[i]
@@ -106,7 +106,7 @@ def readDaysTxt(year, month, day, main_path):
             parts = line.split()
             if len(parts) != 3:
                 print(f"WARNING! parts has a length of {len(parts)} instead of 3.")
-            line[i] = parts
+            split_line.append(parts)
 
     begin_ends = []
     for line in lines:
@@ -125,8 +125,8 @@ IDL.run("MLSHELLRUNNERTEST")
 print(f"--- Generating power spectrums for {year} ---")
 for month in months:
     print(f"--- Looking for days in month: {month} ---")
-    days_tuple = days[month]
-    for day in days_tuple:
+    days_list = days[month]
+    for day in days_list:
         month_stub = MONTH_STUBS[month]
         print(f"--- Making power spectrum for {month_stub}{day} ---")
 
