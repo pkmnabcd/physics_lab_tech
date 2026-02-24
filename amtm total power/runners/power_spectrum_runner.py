@@ -90,6 +90,31 @@ days = {
 # --
 # --
 
+
+def readDaysTxt(year, month, day, main_path):
+    read_path = join(main_path, year, f"{month}{year}", "days.txt")
+    lines = []
+    with open(read_path) as f:
+        lines = f.readlines()
+        for i in range(len(lines):
+            if i == 0: # The first line should be the month stub
+                continue
+            line = lines[i]
+            line = line.strip("\n\r")
+            if len(line) == 0 or line[0] == '#':
+                continue
+            parts = line.split()
+            if len(parts) != 3:
+                print(f"WARNING! parts has a length of {len(parts)} instead of 3.")
+            line[i] = parts
+
+    begin_ends = []
+    for line in lines:
+        if line[0] == day:
+            begin_ends.append((int(line[1]), int(line[2])))
+    return begin_ends
+
+
 months = list(days.keys())
 
 IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
