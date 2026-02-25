@@ -4,27 +4,38 @@ from os.path import join
 
 
 # NOTE: you may have to adjust IDL_DIR for your system
-IDL_DIR = join("C:/", "Program Files", "Harris", "IDL89")
+IDL_DIR = join("C:\\", "Program Files", "Harris", "IDL89")
 sys.path.append(f"{IDL_DIR}/lib/bridges")
 
 from idlpy import *
 
 
 
+
+# NOTE: Begin editing here!!!!!!!
+# NOTE: Begin editing here!!!!!!!
+# NOTE: Begin editing here!!!!!!!
+# NOTE: Begin editing here!!!!!!!
+# NOTE: Begin editing here!!!!!!!
+
+
 # NOTE: the following code yields the path
 # C:\Users\Domi\OneDrive\Desktop\MachineLearning\IDLCode
-idl_scripts_dir = join("C:/", "Users", "Domi", "OneDrive", "Desktop", "MachineLearning", "IDLCode")
+idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "MachineLearning", "IDLCode")
 
-# NOTE: this should the directory where ALOMAR output data goes. It should contain your year folders, plots of the winter, etc
+# NOTE: this should the directory where ALOMAR output data goes.
+# It should contain your year folders, plots of the winter, etc.
+# This is where the output CSV files go.
 save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
 
-# NOTE: this should be the main directory of the drive you're using. It should contain the month-year folders (like October2016/) and months.txt file.
+# NOTE: this should be the main directory of the drive you're using.
+# It should contain the month-year folders (like October2016/) and months.txt file.
 read_dir = join("I:\\")
 
 # NOTE: this is the year you're making power spectrums for.
 year = "2016"
 
-# NOTE: Put the nights you want inside the tuples like
+# NOTE: Put the nights you want inside the lists like
 # "January": (
 #    "01-02",
 #    "05-06"
@@ -111,7 +122,7 @@ def readDaysTxt(year, month, day, main_path):
                 continue
             parts = line.split()
             if len(parts) != 3:
-                print(f"WARNING! parts has a length of {len(parts)} instead of 3.")
+                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
             split_lines.append(parts)
 
     begin_ends = []
@@ -125,8 +136,6 @@ months = list(days.keys())
 
 IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-#IDL.run(f".compile {join(idl_scripts_dir, SHELLRUNNER_FILENAME)}")
-#IDL.run("MLSHELLRUNNERTEST")
 
 print(f"--- Generating power spectrums for {year} ---")
 for month in months:
@@ -140,6 +149,7 @@ for month in months:
         for begin_end in begin_ends:
             begin = begin_end[0]
             end = begin_end[1]
+            print(f"--- {month_stub}{day} frame: [{begin:04d},{end:04d}]")
 
             # Prepares the strings needed by read_images
             source_path = join(read_dir, f"{month}{year}", "")
@@ -149,13 +159,5 @@ for month in months:
             end_str = str(end)
 
             # Create csv files using the IDL code in read_images
-            #IDL.run(f"read_images('{day_string}', '{source_path}', '{begin_str}', '{end_str}', '{end_path}')")
             IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
-
-# NOTE: The read_images function is expecting the following parameters
-# dateString: something like "Nov07-08/"
-# sourcePath: the path to the MonthYear folder in the drive eg "I:/November2016/"
-# begins: a string of the start index number. Just the shortest form of a number like "0" not "0000".
-# ends: same as begins but the end index.
-# endDir: path to the save folder of the outputted csv files. eg "C:/Gabes_stuff/AMTM_ALOMAR/2016/November2016/Nov07-08_0000-0779"
 
