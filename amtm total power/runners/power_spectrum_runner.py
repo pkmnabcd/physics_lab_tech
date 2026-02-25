@@ -115,7 +115,7 @@ def readDaysTxt(year, month, day, main_path):
             split_lines.append(parts)
 
     begin_ends = []
-    for line in lines:
+    for line in split_lines:
         if line[0] == day:
             begin_ends.append((int(line[1]), int(line[2])))
     return begin_ends
