@@ -150,7 +150,7 @@ for month in months:
 
             # Create csv files using the IDL code in read_images
             #IDL.run(f"read_images('{day_string}', '{source_path}', '{begin_str}', '{end_str}', '{end_path}')")
-            IDL.read_images(day_string, source_path, begin_str, end_str, end_path)
+            IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
 
 # NOTE: The read_images function is expecting the following parameters
 # dateString: something like "Nov07-08/"
