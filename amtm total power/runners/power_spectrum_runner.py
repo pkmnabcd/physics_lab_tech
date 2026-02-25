@@ -16,10 +16,10 @@ from idlpy import *
 idl_scripts_dir = join("C:/", "Users", "Domi", "OneDrive", "Desktop", "MachineLearning", "IDLCode")
 
 # NOTE: this should the directory where ALOMAR output data goes. It should contain your year folders, plots of the winter, etc
-save_dir = join("C:/", "Gabes_stuff", "AMTM_ALOMAR")
+save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
 
 # NOTE: this should be the main directory of the drive you're using. It should contain the month-year folders (like October2016/) and months.txt file.
-read_dir = join("I:/")
+read_dir = join("I:\\")
 
 # NOTE: this is the year you're making power spectrums for.
 year = "2016"
@@ -142,9 +142,9 @@ for month in months:
             end = begin_end[1]
 
             # Prepares the strings needed by read_images
-            source_path = join(read_dir, f"{month}{year}")
+            source_path = join(read_dir, f"{month}{year}", "")
             day_string = join(f"{month_stub}{day}", "")
-            end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}")
+            end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "")
             begin_str = str(begin)
             end_str = str(end)
 
