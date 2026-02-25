@@ -10,26 +10,6 @@ sys.path.append(f"{IDL_DIR}/lib/bridges")
 from idlpy import *
 
 
-FFT_FILENAME = "m_fft_asi.pro"
-READ_IMAGE_FILENAME = "read_images_ALOMAR.pro"
-SHELLRUNNER_FILENAME = "mlshellrunnertest.pro"
-
-
-MONTH_STUBS = {
-    "January": "Jan",
-    "February": "Feb",
-    "March": "Mar",
-    "April": "Apr",
-    "May": "May",
-    "June": "Jun",
-    "July": "Jul",
-    "August": "Aug",
-    "September": "Sep",
-    "October": "Oct",
-    "November": "Nov",
-    "December": "Dec"
-}
-
 
 # NOTE: the following code yields the path
 # C:\Users\Domi\OneDrive\Desktop\MachineLearning\IDLCode
@@ -89,6 +69,32 @@ days = {
 # --
 # --
 # --
+# --
+# --
+# --
+# --
+
+
+FFT_FILENAME = "m_fft_asi.pro"
+READ_IMAGE_FILENAME = "read_images_ALOMAR.pro"
+SHELLRUNNER_FILENAME = "mlshellrunnertest.pro"
+
+
+MONTH_STUBS = {
+    "January": "Jan",
+    "February": "Feb",
+    "March": "Mar",
+    "April": "Apr",
+    "May": "May",
+    "June": "Jun",
+    "July": "Jul",
+    "August": "Aug",
+    "September": "Sep",
+    "October": "Oct",
+    "November": "Nov",
+    "December": "Dec"
+}
+
 
 
 def readDaysTxt(year, month, day, main_path):
@@ -119,7 +125,7 @@ months = list(days.keys())
 
 IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-IDL.run(f".compile {join(idl_scripts_dir, SHELLRUNNER_FILENAME)}")
+#IDL.run(f".compile {join(idl_scripts_dir, SHELLRUNNER_FILENAME)}")
 #IDL.run("MLSHELLRUNNERTEST")
 
 print(f"--- Generating power spectrums for {year} ---")
