@@ -2,6 +2,7 @@
 import sys
 from os.path import join
 from power_spectrum_daily import makeWindowPowerSpectrum
+# NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
 
 # NOTE: you may have to adjust IDL_DIR for your system
@@ -106,6 +107,8 @@ MONTH_STUBS = {
     "November": "Nov",
     "December": "Dec"
 }
+MONTHS = list(MONTH_STUBS.keys())
+
 
 
 
@@ -133,13 +136,11 @@ def readDaysTxt(year, month, day, main_path):
     return begin_ends
 
 
-months = list(days.keys())
-
 IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
 IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
 print(f"--- Generating power spectrums for {year} ---")
-for month in months:
+for month in MONTHS:
     print(f"--- Looking for days in month: {month} ---")
     days_list = days[month]
     for day in days_list:
@@ -161,5 +162,6 @@ for month in months:
 
             # Create csv files using the IDL code in read_images
             IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
+            print("FFT processing finished. Starting to generate the power spectrum plot")
             makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
 
