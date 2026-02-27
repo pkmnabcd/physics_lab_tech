@@ -135,33 +135,33 @@ def readDaysTxt(year, month, day, main_path):
             begin_ends.append((int(line[1]), int(line[2])))
     return begin_ends
 
+if __name__ == "__main__":
+    IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
+    IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
-IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
-IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
+    print(f"--- Generating power spectrums for {year} ---")
+    for month in MONTHS:
+        print(f"--- Looking for days in month: {month} ---")
+        days_list = days[month]
+        for day in days_list:
+            month_stub = MONTH_STUBS[month]
+            print(f"--- Making power spectrum for {month_stub}{day} ---")
 
-print(f"--- Generating power spectrums for {year} ---")
-for month in MONTHS:
-    print(f"--- Looking for days in month: {month} ---")
-    days_list = days[month]
-    for day in days_list:
-        month_stub = MONTH_STUBS[month]
-        print(f"--- Making power spectrum for {month_stub}{day} ---")
+            begin_ends = readDaysTxt(year, month, day, save_dir)
+            for begin_end in begin_ends:  # Iterating over each window for the day
+                begin = begin_end[0]
+                end = begin_end[1]
+                print(f"--- {month_stub}{day} frame: [{begin:04d},{end:04d}]")
 
-        begin_ends = readDaysTxt(year, month, day, save_dir)
-        for begin_end in begin_ends:  # Iterating over each window for the day
-            begin = begin_end[0]
-            end = begin_end[1]
-            print(f"--- {month_stub}{day} frame: [{begin:04d},{end:04d}]")
+                # Prepares the strings needed by read_images
+                source_path = join(read_dir, f"{month}{year}", "")
+                day_string = join(f"{month_stub}{day}", "")
+                end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "")
+                begin_str = str(begin)
+                end_str = str(end)
 
-            # Prepares the strings needed by read_images
-            source_path = join(read_dir, f"{month}{year}", "")
-            day_string = join(f"{month_stub}{day}", "")
-            end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "")
-            begin_str = str(begin)
-            end_str = str(end)
-
-            # Create csv files using the IDL code in read_images
-            IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
-            print("FFT processing finished. Starting to generate the power spectrum plot")
-            makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
+                # Create csv files using the IDL code in read_images
+                IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
+                print("FFT processing finished. Starting to generate the power spectrum plot")
+                makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
 
