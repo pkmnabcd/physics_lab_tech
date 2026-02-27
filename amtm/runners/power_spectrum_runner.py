@@ -90,7 +90,6 @@ days = {
 
 FFT_FILENAME = "m_fft_asi.pro"
 READ_IMAGE_FILENAME = "read_images_ALOMAR.pro"
-SHELLRUNNER_FILENAME = "mlshellrunnertest.pro"
 
 
 MONTH_STUBS = {
