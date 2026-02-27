@@ -42,27 +42,6 @@ month2 = ['Aug','Sep', 'Oct', 'Nov', 'Dec']
 month1 = ['September', 'October', 'November']
 month2 = ['Sep', 'Oct', 'Nov']
 
-doWholeMonth = False
-
-
-def month_to_number(string):
-    m = {
-         'Jan':1,
-         'Feb':2,
-         'Mar':3,
-         'Apr':4,
-         'May':5,
-         'Jun':6,
-         'Jul':7,
-         'Aug':8,
-         'Sep':9,
-         'Oct':10,
-         'Nov':11,
-         'Dec':12
-        }
-    out = m[string]
-    return out
-
 
 for r in range(np.size(month1)):
     #Path of csv files but also need to mkdir Figures to save all these figure to.
@@ -74,11 +53,6 @@ for r in range(np.size(month1)):
     days=glob.glob(Filez+'*')
     numDays=np.size(days)
 
-    winTotals = []  # Stores the total power for each window
-    winDays = []  # Stores the day of each window
-
-    totdata=np.zeros((300,301,numDays))
-
     #Loops through days that were analyzed
     for z in range(numDays):
         d=days[z]
@@ -89,26 +63,21 @@ for r in range(np.size(month1)):
         perpath=d
         date=months+d[0]
 
-        patha=perpath+'\OH_TOTAL.csv'
-
-        filesa=patha
+        oh_total_path=perpath+'\OH_TOTAL.csv'
 
         data=np.zeros((300,301))
         Avgdata=np.zeros((300,301))
         data3=np.zeros((300,301))
         data1=np.zeros((300,301))
 
-        print(filesa)
-        if not exists(filesa):
-            print("WARNING! File missing: " + filesa)
+        print(oh_total_path)
+        if not exists(oh_total_path):
+            print("WARNING! File missing: " + oh_total_path)
             continue
-        data2 = pd.read_csv(filesa)
+        data2 = pd.read_csv(oh_total_path)
         data1[:,:]=(data2.values)
         #To keep range from 5-150 m/s
         data1[149-3:149+3,150-3:150+3]=np.full((6,6),-22.0)
-
-        winTotals.append(np.sum(10**data1[:,:]))  # Stores the total power of the window
-        winDays.append(int(b[3:5]))  # Stores the day of the month of the window
 
         x=np.arange(-len(data)/2,len(data)/2,1)
         y=np.arange(-len(data)/2,len(data)/2,1)
@@ -154,7 +123,6 @@ for r in range(np.size(month1)):
         plt.pcolormesh(x,y,(data[:,:-1]),cmap='jet',vmin=-10, vmax = -6.5)
         plt.colorbar(label='log$_{10}$(PSD)')
 
-        totdata[:,:,z]=data[:,:]
         plt.plot()
         plt.title('Average')
 
@@ -190,3 +158,17 @@ for r in range(np.size(month1)):
 
         # Save Name and Location !!!!
         plt.savefig(os.path.join(MonFilez,b0+"OH_"+b1+".jpg"))
+
+
+def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_path):
+    """
+    year: str: form of "2024"
+    month: str: form of "December"
+    month_stub: str: form of "Dec"
+    night: str: form of "09-10"
+    begin: str: form of "0000"
+    end: str: form of "1462"
+    main_path: str: path to main folder. Ex: "C:\Users\Ken\Desktop\AMTM_McMurdo"
+        In this directory is the various year folders, summary files, winter total power graphs, etc.
+    """
+    pass
