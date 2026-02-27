@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 import glob as glob
 import os
-from os.path import exists
+from os.path import exists, join
 
 
 plt.rcParams.update({'font.size': 15})
@@ -66,8 +66,6 @@ for r in range(np.size(month1)):
         oh_total_path=perpath+'\OH_TOTAL.csv'
 
         data=np.zeros((300,301))
-        Avgdata=np.zeros((300,301))
-        data3=np.zeros((300,301))
         data1=np.zeros((300,301))
 
         print(oh_total_path)
@@ -171,4 +169,12 @@ def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_pat
     main_path: str: path to main folder. Ex: "C:\Users\Ken\Desktop\AMTM_McMurdo"
         In this directory is the various year folders, summary files, winter total power graphs, etc.
     """
-    pass
+    # Prep a bunch of strings/paths I'll need later
+    base_path = join(main_path, year, f"{month}{year}")
+    oh_total_path = join(base_path, f"{month_stub}{night}_{begin}-{end}", "OH_TOTAL.csv")
+    fig_save_path = join(base_path, f"{month_stub}{night}OH_{begin}-{end}.jpg")
+    fig_title = f"Power Spectrum {month_stub}{night}, {year}"
+
+    if not exists(oh_total_path):
+        print("WARNING! File missing: " + oh_total_path)
+        return
