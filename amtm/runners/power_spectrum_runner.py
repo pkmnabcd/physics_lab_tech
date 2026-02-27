@@ -1,6 +1,7 @@
 
 import sys
 from os.path import join
+from power_spectrum_daily import makeWindowPowerSpectrum
 
 
 # NOTE: you may have to adjust IDL_DIR for your system
@@ -146,7 +147,7 @@ for month in months:
         print(f"--- Making power spectrum for {month_stub}{day} ---")
 
         begin_ends = readDaysTxt(year, month, day, save_dir)
-        for begin_end in begin_ends:
+        for begin_end in begin_ends:  # Iterating over each window for the day
             begin = begin_end[0]
             end = begin_end[1]
             print(f"--- {month_stub}{day} frame: [{begin:04d},{end:04d}]")
@@ -160,4 +161,5 @@ for month in months:
 
             # Create csv files using the IDL code in read_images
             IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
+            makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
 
