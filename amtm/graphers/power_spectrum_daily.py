@@ -119,7 +119,7 @@ def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_pat
     night: str: form of "09-10"
     begin: str: form of "0000"
     end: str: form of "1462"
-    main_path: str: path to main folder. Ex: "C:\Users\Ken\Desktop\AMTM_McMurdo"
+    main_path: str: path to main folder. Ex: "C:/Users/Ken/Desktop/AMTM_McMurdo"
         In this directory is the various year folders, summary files, winter total power graphs, etc.
     """
     # Prep a bunch of strings/paths I'll need later
