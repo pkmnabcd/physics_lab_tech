@@ -12,4 +12,5 @@ It is typically installed at a path similar to `C:\Program Files\Harris\IDL89` f
 I think you need IDL version 8.5 or higher.
 
 # Setup
-Make sure to have the following programs
+Make sure to have the following python programs in the same directory.
+* 
