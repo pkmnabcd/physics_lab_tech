@@ -89,7 +89,7 @@ days = {
 
 
 FFT_FILENAME = "m_fft_asi.pro"
-READ_IMAGE_FILENAME = "read_images_ALOMAR.pro"
+READ_IMAGE_FILENAME = "read_images_AMTM.pro"
 
 
 MONTH_STUBS = {
