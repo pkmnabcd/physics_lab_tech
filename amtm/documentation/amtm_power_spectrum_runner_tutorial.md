@@ -32,6 +32,28 @@ idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "MachineL
 ```
 This directory should contain the IDL `.pro` files described above.
 
+## **save_dir**
+The second line you'll have to edit is the following.
+```python
+save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
+```
+This directory is the main save directory for all processing output.
+It should contain year folders and winter total power plots.
+In the year directories, there should be month-year directories like `October2016`, inside which there should be (at least) the `days.txt` and will contain folders corresponding to the windows.
+I hope I'm not overexplaining things, but I want to make clear that this is not the main directory of the drive where the images are stored.
+This is the directory where data derived from those images are stored.
+
+## **read_dir**
+The third line you'll have to edit is the following.
+```python
+read_dir = join("I:\\")
+```
+This is the main directory where the raw data images are stored at, usually the root of the drive, but sometimes there's another subdirectory of the root you have to navigate to.
+This directory should contain your `months.txt` file and the month-year folders like `October2016`.
+
+## **year**
+
+
 
 # Appendix A: os.path.join
 ## Motivation
