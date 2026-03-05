@@ -30,6 +30,39 @@ The first line you'll have to edit is the following.
 ```python
 idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "MachineLearning", "IDLCode")
 ```
+This directory should contain the IDL `.pro` files described above.
 
 
 # Appendix A: os.path.join
+## Motivation
+The purpose of `join()` is to easily create a path, without having to consider your OS.
+Windows typically follows the convention of using `\` to denote a directory, most other operating systems use `/`.
+It also generally simplifies the combination of paths.
+When given some number of paths or strings, it returns a path with directory markers put between the paths.
+
+Consider the following example.
+```python
+from os.path import join
+
+def combinePathsNoJoin(path1, path2, path3):
+    return path1 + "\\" + path2 + "\\" + path3
+
+def combinePathsWithJoin(path1, path2, path3):
+    return join(path1, path2, path3)
+```
+Both of the defined functions do the same thing.
+
+## Usage
+In the code that I have you edit, I have you put your paths in as `join()`s.
+This makes the code more cross-platform, and it ensures that the same conventions are followed throughout the program.
+
+Take the following example.
+```python
+idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "MachineLearning", "IDLCode")
+```
+It may seem like it would be easier to just do the following.
+```python
+idl_scripts_dir = "C:\\Users\\Domi\\OneDrive\\Desktop\\MachineLearning\\IDLCode"
+```
+However, someone may use `/` instead of `\\`, or even try `\`, which would produce errors.
+These may mess with the system, so I think that it would be easier to just use `join()`.
