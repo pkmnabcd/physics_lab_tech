@@ -23,7 +23,7 @@ They are often found in a directory similar to `C:\Users\Person\OneDrive\Desktop
 # Setup
 After making sure all of the prerequisites are met, open the python script `amtm_power_spectrum_runner.py` in spyder or an editor.
 To use the program, you'll need to change several lines near the top of the script.
-If you're unfamiliar with the `os.path.join` function, see [Appendix A](#appendix-a-anchor) before editing.
+If you're unfamiliar with the `os.path.join` function, see [Appendix A](#appendix-a-ospathjoin) before editing.
 
 ## **idl_scripts_dir**
 The first line you'll have to edit is the following.
@@ -32,5 +32,4 @@ idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "MachineL
 ```
 
 
-<a name="appendix-a-anchor></a>
 # Appendix A: os.path.join
