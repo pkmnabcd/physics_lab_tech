@@ -109,21 +109,59 @@ MONTH_STUBS = {
 MONTHS = list(MONTH_STUBS.keys())
 
 
+#def getAllWindows(year, read_path):
+#    # Clear the days dict since we'll be filling it with new ones
+#    for key in days:
+#        days[key] = []
+#
+#    base_path = join(read_path, year)
+#    for month in MONTHS:
+#        days_txt_days = readDaysTxtAllDays(year, month, read_path)
+#        for day in days_txt_days:
+#            j
 
 
-def readDaysTxt(year, month, day, main_path):
+
+def readDaysTxtAllDays(year, month, main_path):
     read_path = join(main_path, year, f"{month}{year}", "days.txt")
     split_lines = []
     with open(read_path) as f:
         lines = f.readlines()
         for i in range(len(lines)):
-            if i == 0: # The first line should be the month stub
-                continue
             line = lines[i]
             line = line.strip("\n\r")
             if len(line) == 0 or line[0] == '#':
                 continue
             parts = line.split()
+            if i == 0: # The first line should be the month stub
+                if len(parts) != 1:
+                    print(f"WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
+                continue
+            if len(parts) != 3:
+                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
+            split_lines.append(parts)
+
+    begin_ends = []
+    for line in split_lines:
+        begin_ends.append((line[0], int(line[1]), int(line[2])))
+    return begin_ends
+
+
+def readDaysTxtOneDay(year, month, day, main_path):
+    read_path = join(main_path, year, f"{month}{year}", "days.txt")
+    split_lines = []
+    with open(read_path) as f:
+        lines = f.readlines()
+        for i in range(len(lines)):
+            line = lines[i]
+            line = line.strip("\n\r")
+            if len(line) == 0 or line[0] == '#':
+                continue
+            parts = line.split()
+            if i == 0: # The first line should be the month stub
+                if len(parts) != 1:
+                    print(f"WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
+                continue
             if len(parts) != 3:
                 print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
             split_lines.append(parts)
@@ -146,7 +184,7 @@ if __name__ == "__main__":
             month_stub = MONTH_STUBS[month]
             print(f"--- Making power spectrum for {month_stub}{day} ---")
 
-            begin_ends = readDaysTxt(year, month, day, save_dir)
+            begin_ends = readDaysTxtOneDay(year, month, day, save_dir)
             for begin_end in begin_ends:  # Iterating over each window for the day
                 begin = begin_end[0]
                 end = begin_end[1]
