@@ -1,6 +1,6 @@
 
 import sys
-from os.path import join
+from os.path import join, exists
 from power_spectrum_daily import makeWindowPowerSpectrum
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
@@ -36,6 +36,15 @@ read_dir = join("I:\\")
 
 # NOTE: this is the year you're making power spectrums for.
 year = "2016"
+
+# NOTE: If you want to make a power spectrum for each window in all
+# the days.txt files in that year's part of the drive, set the following as true
+# If you do so, you don't need to modify the days dict below. It will be wiped
+do_all_windows = False
+
+# NOTE: If you want to skip the IDL code because it has already
+# done, and you just want new plots, set the following as true
+skip_IDL = False
 
 # NOTE: Put the nights you want inside the lists like
 # "January": (
@@ -109,21 +118,23 @@ MONTH_STUBS = {
 MONTHS = list(MONTH_STUBS.keys())
 
 
-#def getAllWindows(year, read_path):
-#    # Clear the days dict since we'll be filling it with new ones
-#    for key in days:
-#        days[key] = []
-#
-#    base_path = join(read_path, year)
-#    for month in MONTHS:
-#        days_txt_days = readDaysTxtAllDays(year, month, read_path)
-#        for day in days_txt_days:
-#            j
+def getAllWindows(year, read_path):
+    # Clear the days dict since we'll be filling it with new ones
+    for key in days:
+        days[key] = []
+
+    base_path = join(read_path, year)
+    for month in MONTHS:
+        days_txt_days = readDaysTxtAllDays(year, month, read_path)
+        for day in days_txt_days:
+            days[month] = days_txt_days
 
 
 
 def readDaysTxtAllDays(year, month, main_path):
     read_path = join(main_path, year, f"{month}{year}", "days.txt")
+    if not exists(read_path): # Skip files that don't exist
+        continue
     split_lines = []
     with open(read_path) as f:
         lines = f.readlines()
@@ -141,10 +152,11 @@ def readDaysTxtAllDays(year, month, main_path):
                 print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
             split_lines.append(parts)
 
-    begin_ends = []
+    days = []
     for line in split_lines:
-        begin_ends.append((line[0], int(line[1]), int(line[2])))
-    return begin_ends
+        if line[0] not in days:
+            days.append(line[0])
+    return days
 
 
 def readDaysTxtOneDay(year, month, day, main_path):
@@ -176,6 +188,11 @@ if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
+    if do_all_windows:
+        print(f"--- Getting power spectrums for all windows in year {year} on the drive ---")
+        # NOTE: wipe and add all nights in days.txt files into days dict.
+        getAllWindows(year, read_dir)
+
     print(f"--- Generating power spectrums for {year} ---")
     for month in MONTHS:
         print(f"--- Looking for days in month: {month} ---")
@@ -198,7 +215,10 @@ if __name__ == "__main__":
                 end_str = str(end)
 
                 # Create csv files using the IDL code in read_images
-                IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
-                print("FFT processing finished. Starting to generate the power spectrum plot")
+                if not skip_IDL:
+                    IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
+                    print("FFT processing finished. Starting to generate the power spectrum plot")
+                else:
+                    print("Skipping FFT processing. Starting to generate the power spectrum plot")
                 makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
 
