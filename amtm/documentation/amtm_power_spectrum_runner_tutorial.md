@@ -25,14 +25,17 @@ After making sure all of the prerequisites are met, open the python script `amtm
 To use the program, you'll need to change several lines near the top of the script.
 If you're unfamiliar with the `os.path.join` function, see [Appendix A](#appendix-a-ospathjoin) before editing.
 
-## **idl_scripts_dir**
+## Main Settings
+The following are the most important settings
+
+### **idl_scripts_dir**
 The first line you'll have to edit is the following.
 ```python
 idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "MachineLearning", "IDLCode")
 ```
 This directory should contain the IDL `.pro` files described above.
 
-## **save_dir**
+### **save_dir**
 The second line you'll have to edit is the following.
 ```python
 save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
@@ -43,7 +46,7 @@ In the year directories, there should be month-year directories like `October201
 I hope I'm not overexplaining things, but I want to make clear that this is not the main directory of the drive where the images are stored.
 This is the directory where data derived from those images are stored.
 
-## **read_dir**
+### **read_dir**
 The third line you'll have to edit is the following.
 ```python
 read_dir = join("I:\\")
@@ -51,8 +54,71 @@ read_dir = join("I:\\")
 This is the main directory where the raw data images are stored at, usually the root of the drive, but sometimes there's another subdirectory of the root you have to navigate to.
 This directory should contain your `months.txt` file and the month-year folders like `October2016`.
 
-## **year**
+### **year**
+You'll edit the following line with the year that you are looking at.
+In one drive, there is typically two different years since the drive is for a winter's worth of data.
+You can choose one year to process at a time.
+```python
+year = "2016"
+```
 
+### **days**
+Finally, you'll edit the following code.
+```python
+days = {
+    "January": [
+    ],
+    "February": [
+    ],
+    "March": [
+    ],
+    "April": [
+    ],
+    "May": [
+    ],
+    "June": [
+    ],
+    "July": [
+    ],
+    "August": [
+    ],
+    "September": [
+        "16-17"
+    ],
+    "October": [
+    ],
+    "November": [
+        "07-08",
+        "08-09"
+    ],
+    "December": [
+    ]
+}
+```
+This object `days` is a python dictionary with the month names as keys and a list of nights as the values.
+If you have no nights in that month, you can leave the month's list empty.
+If you want to do multiple nights in a month, make sure to put commas after each line (except the last one, but python is okay even if you leave the comma there).
+Each of these nights should have at least one entry in the corresponding month's `days.txt` file.
+
+## Some Options
+The following are a few options that you can use, if desired. They are turned off (or `False`) by default.
+
+### **do_all**
+This involves the following code.
+```python
+do_all_windows = False
+```
+If you want to just make a power spectrum for each window, set this option to True.
+It will make a power spectrum for each window in the drive's `days.txt` file for each month in the `year`, designated above.
+So, to make the power spectrums for all the windows in the drive, you will have to do it twice, once for each year your drive covers.
+
+
+### **skip_IDL**
+This involves the following code.
+```python
+skip_IDL = False
+```
+If you have already done the IDL processing previously (so you already have the CSV files), you can skip that processing by setting this option to True.
 
 
 # Appendix A: os.path.join
