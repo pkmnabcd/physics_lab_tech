@@ -109,6 +109,7 @@ def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
 
     plt.savefig(fig_save_path)
     print(f"Figure saved to {fig_save_path}!")
+    plt.close()
 
 
 def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_path):

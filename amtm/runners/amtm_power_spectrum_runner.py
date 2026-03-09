@@ -215,6 +215,9 @@ if __name__ == "__main__":
 
                 # Create csv files using the IDL code in read_images
                 if not skip_IDL:
+                    # TODO: change this to catch memory errors from IDL and then
+                    # run ".FULL_RESET_SESSION" then recompile the modules and try again
+                    # This should hopefully fix memory running out issues.
                     IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
                     print("FFT processing finished. Starting to generate the power spectrum plot")
                 else:
