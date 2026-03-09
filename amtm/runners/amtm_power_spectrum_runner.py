@@ -9,7 +9,7 @@ from power_spectrum_daily import makeWindowPowerSpectrum
 IDL_DIR = join("C:\\", "Program Files", "Harris", "IDL89")
 sys.path.append(f"{IDL_DIR}/lib/bridges")
 
-from idlpy import *
+from idlpy import IDL
 
 
 
@@ -123,7 +123,6 @@ def getAllWindows(year, read_path):
     for key in days:
         days[key] = []
 
-    base_path = join(read_path, year)
     for month in MONTHS:
         days_txt_days = readDaysTxtAllDays(year, month, read_path)
         for day in days_txt_days:
@@ -134,7 +133,7 @@ def getAllWindows(year, read_path):
 def readDaysTxtAllDays(year, month, main_path):
     read_path = join(main_path, year, f"{month}{year}", "days.txt")
     if not exists(read_path): # Skip files that don't exist
-        continue
+        return
     split_lines = []
     with open(read_path) as f:
         lines = f.readlines()
@@ -146,17 +145,17 @@ def readDaysTxtAllDays(year, month, main_path):
             parts = line.split()
             if i == 0: # The first line should be the month stub
                 if len(parts) != 1:
-                    print(f"WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
+                    print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
                 continue
             if len(parts) != 3:
                 print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
             split_lines.append(parts)
 
-    days = []
+    days_list = []
     for line in split_lines:
-        if line[0] not in days:
-            days.append(line[0])
-    return days
+        if line[0] not in days_list:
+            days_list.append(line[0])
+    return days_list
 
 
 def readDaysTxtOneDay(year, month, day, main_path):
@@ -172,7 +171,7 @@ def readDaysTxtOneDay(year, month, day, main_path):
             parts = line.split()
             if i == 0: # The first line should be the month stub
                 if len(parts) != 1:
-                    print(f"WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
+                    print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
                 continue
             if len(parts) != 3:
                 print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
