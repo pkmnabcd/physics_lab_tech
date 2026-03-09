@@ -37,49 +37,10 @@ read_dir = join("I:\\")
 # NOTE: this is the year you're making power spectrums for.
 year = "2016"
 
-# NOTE: If you want to make a power spectrum for each window in all
-# the days.txt files in that year's part of the drive, set the following as true
-# If you do so, you don't need to modify the days dict below. It will be wiped
-do_all_windows = False
-
 # NOTE: If you want to skip the IDL code because it has already
 # done, and you just want new plots, set the following as true
 skip_IDL = False
 
-# NOTE: Put the nights you want inside the lists like
-# "January": (
-#    "01-02",
-#    "05-06"
-# ),
-days = {
-    "January": [
-    ],
-    "February": [
-    ],
-    "March": [
-    ],
-    "April": [
-    ],
-    "May": [
-    ],
-    "June": [
-    ],
-    "July": [
-    ],
-    "August": [
-    ],
-    "September": [
-        "16-17"
-    ],
-    "October": [
-    ],
-    "November": [
-        "07-08",
-        "08-09"
-    ],
-    "December": [
-    ]
-}
 
 
 # NOTE: YOU SHOULD NOT EDIT ANYTHING AFTER THIS
@@ -97,8 +58,8 @@ days = {
 # --
 
 
-FFT_FILENAME = "m_fft_asi.pro"
-READ_IMAGE_FILENAME = "read_images_AMTM.pro"
+FFT_FILENAME = "m_fft_amtm_loop.pro"
+READ_IMAGE_FILENAME = "read_images_AMTM_total_power.pro"
 
 
 MONTH_STUBS = {
@@ -160,7 +121,7 @@ def readDaysTxtAllDays(year, month, main_path):
 
 # NOTE: I know it's a bit inefficient that I'm reading the days.txt files
 # twice, but it won't add too much time and it was easier to write it this
-# way.
+# way since I started with the power spectrum runner first.
 def readDaysTxtOneDay(year, month, day, main_path):
     read_path = join(main_path, year, f"{month}{year}", "days.txt")
     split_lines = []
@@ -190,10 +151,8 @@ if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
-    if do_all_windows:
-        print(f"--- Getting power spectrums for all windows in year {year} on the drive ---")
-        # NOTE: wipe and add all nights in days.txt files into days dict.
-        getAllWindows(year, read_dir)
+    print(f"--- Getting power spectrums for all windows in year {year} on the drive ---")
+    getAllWindows(year, read_dir)
 
     print(f"--- Generating power spectrums for {year} ---")
     for month in MONTHS:
