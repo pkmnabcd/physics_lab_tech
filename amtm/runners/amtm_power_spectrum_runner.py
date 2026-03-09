@@ -131,7 +131,7 @@ def getAllWindows(year, read_path):
 
 
 def readDaysTxtAllDays(year, month, main_path):
-    read_path = join(main_path, year, f"{month}{year}", "days.txt")
+    read_path = join(main_path, f"{month}{year}", "days.txt")
     if not exists(read_path): # Skip files that don't exist
         return []
     split_lines = []
