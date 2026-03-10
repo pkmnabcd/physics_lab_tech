@@ -23,7 +23,7 @@ for the whole month or year since that info is redundant and not used.
 import numpy as np
 import math as math
 import csv
-from os.path import exists
+from os.path import exists, join
 
 L1 = 301 #numbers of rows in csv file
 L2 = 301 #numbers of column in csv file
@@ -40,8 +40,11 @@ mons = ['Jan', 'Feb', 'Apr'] # abbreviated months
 #years = ['2015']
 years = ['2014']
 
-def calcWindowTotalPowerOverTime(year, month, night, mainpath):
+def getDaysTxtData(days_path):
     pass
+
+def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
+    days_path = join(mainpath, year, f'{month}{year}', 'days.txt')
 
 for i in range(np.size(years)): # Tells code go into each year folder
     year = years[i]
@@ -51,11 +54,11 @@ for i in range(np.size(years)): # Tells code go into each year folder
     for i in range(np.size(months)): # once inside the year, go into each month folder
         month = months[i]
         mon = mons[i]
-        path = mainpath +f'/{year}/{month}{year}/days.txt' 
+        days_path = join(mainpath, year, f'{month}{year}', 'days.txt')
         print(month)
 
 
-        with open(path, 'r') as dayfile:            # opens the days.txt file to get the names                .
+        with open(days_path, 'r') as dayfile:            # opens the days.txt file to get the names                .
             daysf =[]                                #of the day folders within each month
             for line in dayfile:
                 if line[0] != '#':
@@ -64,9 +67,9 @@ for i in range(np.size(years)): # Tells code go into each year folder
                         b = a.replace(" ","_",1) #this replacement is necessary as the txt file has whitespace
                         entry = b.replace(" ","-",1) #where the folders have _ and -'s
                         daysf.append(entry)
-        path2 = mainpath +f'/{year}/{month}{year}/timestamp.txt'
+        timestamp_path = join(mainpath, year, f'{month}{year}', 'timestamp.txt')
  
-        timefile = np.loadtxt(path2)
+        timefile = np.loadtxt(timestamp_path)
         if timefile.ndim == 1:
             timefile = np.array([timefile])  # This covers when np.loadtxt automatically reshapes single-row files
 
