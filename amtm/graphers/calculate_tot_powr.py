@@ -65,6 +65,7 @@ def getDaysTxtData(days_path):
 
 def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
     days_path = join(mainpath, year, f'{month}{year}', 'days.txt')
+    days_data = getDaysTxtData(days_path)
     # TODO: Add code to make sure days.txt and timestamp.txt have the same amount of data
     # Look for the given day's index in the timestamp data
 
@@ -80,7 +81,7 @@ for i in range(np.size(years)): # Tells code go into each year folder
         print(month)
 
 
-        with open(days_path, 'r') as dayfile:            # opens the days.txt file to get the names                .
+        with open(days_path, 'r') as dayfile:            # opens the days.txt file to get the names.
             daysf =[]                                #of the day folders within each month
             for line in dayfile:
                 if line[0] != '#':
@@ -90,7 +91,7 @@ for i in range(np.size(years)): # Tells code go into each year folder
                         entry = b.replace(" ","-",1) #where the folders have _ and -'s
                         daysf.append(entry)
         timestamp_path = join(mainpath, year, f'{month}{year}', 'timestamp.txt')
- 
+
         timefile = np.loadtxt(timestamp_path)
         if timefile.ndim == 1:
             timefile = np.array([timefile])  # This covers when np.loadtxt automatically reshapes single-row files
@@ -109,7 +110,7 @@ for i in range(np.size(years)): # Tells code go into each year folder
 
 
 
-        holder = [] 
+        holder = []
 
         for i in range(0,tL):
 
@@ -146,7 +147,7 @@ for i in range(np.size(years)): # Tells code go into each year folder
                 wholepath = dayofinterest+ filename
 
                 if exists(wholepath) == True: #since each day has different number of .csv file, this only uses the ones that exist
-                                      #code above was to get to the right location, everthing below is gets the power 
+                                      #code above was to get to the right location, everthing below is gets the power
                     tally = hour + i*0.5 #Gets the time associated with the power file
 
 
@@ -162,12 +163,12 @@ for i in range(np.size(years)): # Tells code go into each year folder
 
                     with open( wholepath, 'r') as file: #opening and reading csv
                         datafile = csv.reader(file)
-                        for row in datafile:         #taking each row of the csv and putting into 
+                        for row in datafile:         #taking each row of the csv and putting into
                             rows.append(row)         # a list, which results in a nested list
 
-            #         #Takes each element that is not a value of -22 of the nested list (row[i][j] 
+            #         #Takes each element that is not a value of -22 of the nested list (row[i][j]
             #         #and places it the cooresponding array location (array[i,j]), the values of
-            #         #-22 are repalced by zero, 
+            #         #-22 are repalced by zero,
 
                         for i in range(0,L1):
                             for j in range(0,L2):
