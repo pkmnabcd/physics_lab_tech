@@ -57,6 +57,7 @@ skip_IDL = False
 # --
 # --
 
+days = {}
 
 FFT_FILENAME = "m_fft_amtm_loop.pro"
 READ_IMAGE_FILENAME = "read_images_AMTM_total_power.pro"
@@ -88,7 +89,6 @@ def getAllWindows(year, read_path):
         days_txt_days = readDaysTxtAllDays(year, month, read_path)
         for day in days_txt_days:
             days[month] = days_txt_days
-
 
 
 def readDaysTxtAllDays(year, month, main_path):
@@ -147,6 +147,7 @@ def readDaysTxtOneDay(year, month, day, main_path):
             begin_ends.append((int(line[1]), int(line[2])))
     return begin_ends
 
+
 if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
@@ -170,10 +171,12 @@ if __name__ == "__main__":
 
                 # Prepares the strings needed by read_images
                 source_path = join(read_dir, f"{month}{year}", "")
-                day_string = join(f"{month_stub}{day}", "")
-                end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "")
-                begin_str = str(begin)
-                end_str = str(end)
+                #day_string = join(f"{month_stub}{day}", "")
+                day_string = f"{month_stub}{day}"
+                end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}")
+                #end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "")
+                #begin_str = str(begin)
+                #end_str = str(end)
 
                 # Create csv files using the IDL code in read_images
                 if not skip_IDL:
@@ -182,7 +185,8 @@ if __name__ == "__main__":
                     # This should hopefully fix memory running out issues.
                     # The reason I haven't fixed it is because I don't know the exact
                     # exception.
-                    IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
+                    IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
+                    #IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
                     print("FFT processing finished. Starting to generate the power spectrum plot")
                 else:
                     print("Skipping FFT processing. Starting to generate the power spectrum plot")
