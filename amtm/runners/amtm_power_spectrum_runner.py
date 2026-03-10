@@ -97,7 +97,7 @@ days = {
 # --
 
 
-FFT_FILENAME = "m_fft_asi.pro"
+FFT_FILENAME = "m_fft_amtm.pro"
 READ_IMAGE_FILENAME = "read_images_AMTM.pro"
 
 
