@@ -45,6 +45,8 @@ def getDaysTxtData(days_path):
 
 def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
     days_path = join(mainpath, year, f'{month}{year}', 'days.txt')
+    # TODO: Add code to make sure days.txt and timestamp.txt have the same amount of data
+    # Look for the given day's index in the timestamp data
 
 for i in range(np.size(years)): # Tells code go into each year folder
     year = years[i]
