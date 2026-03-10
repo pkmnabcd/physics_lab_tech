@@ -41,7 +41,27 @@ mons = ['Jan', 'Feb', 'Apr'] # abbreviated months
 years = ['2014']
 
 def getDaysTxtData(days_path):
-    pass
+    split_lines = []
+    with open(read_path) as f:
+        lines = f.readlines()
+        for i in range(len(lines)):
+            line = lines[i]
+            line = line.strip("\n\r")
+            if len(line) == 0 or line[0] == '#':
+                continue
+            parts = line.split()
+            if i == 0: # The first line should be the month stub
+                if len(parts) != 1:
+                    print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
+                continue
+            if len(parts) != 3:
+                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
+            split_lines.append(parts)
+
+    data = []
+    for line in split_lines:
+        data.append((line[0], int(line[1]), int(line[2])))
+    return data
 
 def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
     days_path = join(mainpath, year, f'{month}{year}', 'days.txt')
