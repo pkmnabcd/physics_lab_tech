@@ -64,10 +64,44 @@ def getDaysTxtData(days_path):
     return data
 
 def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
+    dayframe = f'{mon}{night}_{begin}-{end}'
+
     days_path = join(mainpath, year, f'{month}{year}', 'days.txt')
+    timestamp_path = join(mainpath, year, f'{month}{year}', 'timestamp.txt')
+    save_location = join(mainpath, year, f'{month}{year}', dayframe, "T_and_power.txt")
+
     days_data = getDaysTxtData(days_path)
+    timestamp_data = np.loadtxt(timestamp_path)
     # TODO: Add code to make sure days.txt and timestamp.txt have the same amount of data
     # Look for the given day's index in the timestamp data
+
+    if timefile.ndim == 1:
+        timefile = np.array([timefile])  # This covers when np.loadtxt automatically reshapes single-row files
+
+    if not len(days_data) == len(timestamp_data):
+        print(f"WARNING: The length of days.txt: {len(days_data)} does not equal the length of timestamp.txt: {len(timestamp_data)}")
+        return
+
+    tL = len(timefile) # Length of the columns in the file
+
+    myear = timefile[:,0]
+    mmonth = timefile[:,1]
+    mday = timefile[:,2]
+    mhour = timefile[:,3]
+    mmin = timefile[:,4]
+    msec = timefile[:,5]
+
+    # creates a numpy array containing the starting time in decimal hours
+    tmp_dec_hour_holder = []
+    for i in range(0,tL):
+        replace = mhour[i] + mmin[i]/60 + msec[i]/3600
+        tmp_dec_hour_holder.append(replace)
+    dec_hour = np.array(tmp_dec_hour_holder)
+
+
+
+
+
 
 for i in range(np.size(years)): # Tells code go into each year folder
     year = years[i]
@@ -110,15 +144,13 @@ for i in range(np.size(years)): # Tells code go into each year folder
 
 
 
-        holder = []
-
+        # creates a numpy array containing the starting time in decimal hours
+        tmp_dec_hour_holder = []
         for i in range(0,tL):
-
             replace = mhour[i] + mmin[i]/60 + msec[i]/3600
-            holder.append(replace)
+            tmp_dec_hour_holder.append(replace)
+        dec_hour = np.array(tmp_dec_hour_holder)
 
-        dec_hour = np.array(holder) #creates a numpy array containing the 
-                                    #starting time in decimal hours
         for n in range(np.size(daysf)): #  Use the days list to get to the path each .csv file
             dyear = myear[n]
             dmonth = mmonth[n]
