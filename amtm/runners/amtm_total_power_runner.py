@@ -1,7 +1,7 @@
 
 import sys
 from os.path import join, exists
-from power_spectrum_daily import makeWindowPowerSpectrum
+from calculate_tot_powr import calcWindowTotalPowerOverTime
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
 
@@ -37,9 +37,9 @@ read_dir = join("I:\\")
 # NOTE: this is the year you're making power spectrums for.
 year = "2016"
 
-# NOTE: If you want to skip the IDL code because it has already
-# done, and you just want new plots, set the following as true
-skip_IDL = False
+# NOTE: If you want to skip the IDL code or total power caculation because
+# it has already done, and you just want new plots, set the following as true
+skip_processing = False
 
 
 
@@ -187,8 +187,10 @@ if __name__ == "__main__":
                     # exception.
                     IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
                     #IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
-                    print("FFT processing finished. Starting to generate the power spectrum plot")
+                    calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
+                    print("FFT and total power processing finished. Starting to generate the power spectrum plot")
                 else:
                     print("Skipping FFT processing. Starting to generate the power spectrum plot")
+                # TODO: change this to the actual graphers
                 makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
 
