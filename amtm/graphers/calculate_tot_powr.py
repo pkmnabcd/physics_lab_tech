@@ -31,7 +31,7 @@ L2 = 301 #numbers of column in csv file
 
 def getDaysTxtData(days_path):
     split_lines = []
-    with open(read_path) as f:
+    with open(days_path) as f:
         lines = f.readlines()
         for i in range(len(lines)):
             line = lines[i]
@@ -76,19 +76,19 @@ def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
     days_data = getDaysTxtData(days_path)
     timestamp_data = np.loadtxt(timestamp_path)
 
-    if timefile.ndim == 1:
-        timefile = np.array([timefile])  # This covers when np.loadtxt automatically reshapes single-row files
+    if timestamp_data.ndim == 1:
+        timestamp_data = np.array([timestamp_data])  # This covers when np.loadtxt automatically reshapes single-row files
 
     if not len(days_data) == len(timestamp_data):
         print(f"WARNING: The length of days.txt: {len(days_data)} does not equal the length of timestamp.txt: {len(timestamp_data)}")
         return
 
-    myear = timefile[:,0]
-    mmonth = timefile[:,1]
-    mday = timefile[:,2]
-    mhour = timefile[:,3]
-    mmin = timefile[:,4]
-    msec = timefile[:,5]
+    myear = timestamp_data[:,0]
+    mmonth = timestamp_data[:,1]
+    mday = timestamp_data[:,2]
+    mhour = timestamp_data[:,3]
+    mmin = timestamp_data[:,4]
+    msec = timestamp_data[:,5]
 
     tL = len(timefile) # Length of the columns in the file
     # creates a numpy array containing the starting time in decimal hours
@@ -118,7 +118,7 @@ def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
 
     # Iterating over each possible TempOH _TOTAL.csv file
     for i in range(0,50):
-        csv_path = join(main_path, year, f"{month}{year}", dayframe, f"TempOH{i}_TOTAL.csv")
+        csv_path = join(mainpath, year, f"{month}{year}", dayframe, f"TempOH{i}_TOTAL.csv")
         if not exists(csv_path):
             break
         tally = hour + i*0.5 #Gets the time associated with the power file

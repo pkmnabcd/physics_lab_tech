@@ -1,4 +1,3 @@
-
 import sys
 from os.path import join, exists
 from calculate_tot_powr import calcWindowTotalPowerOverTime
@@ -153,7 +152,6 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
     for month in MONTHS:
         print(f"--- Looking for days in month: {month} ---")
         days_list = days[month]
-        hasDays = len(days_list) != 0
         for day in days_list:
             month_stub = MONTH_STUBS[month]
             print(f"--- Making total power for {month_stub}{day} ---")
@@ -190,7 +188,7 @@ def getMonthsInYear(days):
     valid_mons = []
     for month in MONTHS:
         if len(days[month]) > 0:
-            valid_monts.append(month)
+            valid_months.append(month)
     for month in valid_months:
         valid_mons.append(MONTH_STUBS[month])
     return valid_months, valid_mons

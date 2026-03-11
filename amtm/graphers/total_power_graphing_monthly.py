@@ -173,7 +173,8 @@ def makeMonthlyPlot(year, month, mon, mainpath):
     color = "blue"
     path = join(mainpath, f'{year}/{month}{year}/')
     if not exists(path):
-        continue
+        print(f"WARNING!! Not finding the path {path}.")
+        return
 
     print(month)
 
@@ -202,15 +203,14 @@ def makeMonthlyPlot(year, month, mon, mainpath):
                 #the days.txt  is closed, so we're using the 'days' list to get 
                 #to the power and time logs for each day
 
-    f = plt.figure(figsize=(12,8))
-    for n in range(0,len(days)): 
+    plt.figure(figsize=(12,8))
+    for n in range(0,len(days)):
 
         day = days[n]
         filethere = mainpath+f'/{year}/{month}{year}/{day}/'\
 
-        file0 = filethere +  'TempOH0_TOTAL.csv' 
+        file0 = filethere +  'TempOH0_TOTAL.csv'
         file1 = filethere + 'TempOH1_TOTAL.csv'
-        onlyday = justday[n]
         dayfolder = path+f'{day}'
         power = dayfolder + '/T_and_power.txt'
 

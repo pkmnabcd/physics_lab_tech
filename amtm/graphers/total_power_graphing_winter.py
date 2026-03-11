@@ -150,7 +150,6 @@ def getPowrForYear(year, mons, months, mainpath):
 
             file0 = filethere +  'TempOH0_TOTAL.csv' 
             file1 = filethere + 'TempOH1_TOTAL.csv'
-            onlyday = justday[n]
             dayfolder = path+f'{day}'
             power = dayfolder + '/T_and_power.txt'
 
@@ -171,7 +170,7 @@ def makeWinterPlot(year1, year2, months1, months2, mons1, mons2, mainpath):
     title = f"Total Power Winter {year1}-{year2}"
 
 
-    f = plt.figure(figsize=(20,13))
+    plt.figure(figsize=(20,13))
 
     # powr layout
     # 0-year 1-month 2-day 3-time in decimal hour
