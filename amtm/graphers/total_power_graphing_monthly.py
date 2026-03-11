@@ -170,6 +170,7 @@ def getXLimits(mon, year):
 
 
 def makeMonthlyPlot(year, month, mon, mainpath):
+    color = "blue"
     path = join(mainpath, f'{year}/{month}{year}/')
     if not exists(path):
         continue
@@ -234,6 +235,7 @@ def makeMonthlyPlot(year, month, mon, mainpath):
     saveLocation = path + f'../{mon}Totpowr{year}.png' # NOTE: putting file in year folder
     plt.savefig(saveLocation)
     plt.close()
+    print('Finis')
 
 
 if __name__ == "__main__":
@@ -250,8 +252,6 @@ if __name__ == "__main__":
 
         if not exists(join(mainpath,year)):
             continue
-
-        color = "blue"
 
         print(year)
     for i in range(np.size(months)): # once inside the year, going into each month folder

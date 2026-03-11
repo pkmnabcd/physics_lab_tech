@@ -162,59 +162,63 @@ def getPowrForYear(year, mons, months, mainpath):
     return powrs
 
 
+def makeWinterPlot(year1, year2, months1, months2, mons1, mons2, mainpath):
+    color1 = "blue"
+    dataLabel1 = f"{year1} Total Power"
+    color2 = "red"
+    dataLabel2 = f"{year2} Total Power"
 
-# NOTE: You should run this in the AMTM_McMurdo directory
-mainpath = '.' 
-
-#months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']  # Full month names
-#mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']  #Abbreviated version is needed as its used in day folders
-
-year1 = '2016'
-months1 = ['September', 'October', 'November']
-mons1 = ['Sep', 'Oct', 'Nov']
-year2 = '2017'
-months2 = ['January', 'February', 'March', 'April']
-mons2 = ['Jan', 'Feb', 'Mar', 'Apr']
-
-color1 = "blue"
-dataLabel1 = f"{year1} Total Power"
-color2 = "red"
-dataLabel2 = f"{year2} Total Power"
-
-title = f"Total Power Winter {year1}-{year2}"
+    title = f"Total Power Winter {year1}-{year2}"
 
 
-f = plt.figure(figsize=(20,13))
+    f = plt.figure(figsize=(20,13))
 
-# powr layout
-# 0-year 1-month 2-day 3-time in decimal hour
-# 4- power value(x) 5-exponent(y) of power in base 10(power)
-year1_powrs = getPowrForYear(year1, mons1, months1, mainpath)
-year2_powrs = getPowrForYear(year2, mons2, months2, mainpath)
+    # powr layout
+    # 0-year 1-month 2-day 3-time in decimal hour
+    # 4- power value(x) 5-exponent(y) of power in base 10(power)
+    year1_powrs = getPowrForYear(year1, mons1, months1, mainpath)
+    year2_powrs = getPowrForYear(year2, mons2, months2, mainpath)
 
-for i in range(len(year1_powrs)):
-    powr = year1_powrs[i]
-    currentLabel = dataLabel1 if i == 0 else "_nolegend_"
+    for i in range(len(year1_powrs)):
+        powr = year1_powrs[i]
+        currentLabel = dataLabel1 if i == 0 else "_nolegend_"
 
-    lp = len(powr)
-    plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color1}', label=currentLabel)
-for i in range(len(year2_powrs)):
-    powr = year2_powrs[i]
-    currentLabel = dataLabel2 if i == 0 else "_nolegend_"
+        lp = len(powr)
+        plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color1}', label=currentLabel)
+    for i in range(len(year2_powrs)):
+        powr = year2_powrs[i]
+        currentLabel = dataLabel2 if i == 0 else "_nolegend_"
 
-    lp = len(powr)
-    plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color2}', label=currentLabel)
+        lp = len(powr)
+        plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color2}', label=currentLabel)
 
-plt.title(title, fontsize=26)
-plt.ylabel('Total power', fontsize=22)
-#plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
-plt.xlabel('Day of Year', fontsize=22)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
+    plt.title(title, fontsize=26)
+    plt.ylabel('Total power', fontsize=22)
+    #plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
+    plt.xlabel('Day of Year', fontsize=22)
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
 
-plt.legend(fontsize=20)
+    plt.legend(fontsize=20)
 
-saveLocation = mainpath + f'../Totpowr_winter_{year1}_to_{year2}.png'
-plt.savefig(saveLocation)
-plt.close()
-print('Finis')
+    saveLocation = mainpath + f'../Totpowr_winter_{year1}_to_{year2}.png'
+    plt.savefig(saveLocation)
+    plt.close()
+    print('Finis')
+
+
+if __name__ == "__main__":
+    # NOTE: You should run this in the AMTM_McMurdo directory unless you change mainpath
+    mainpath = '.'
+
+    #months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']  # Full month names
+    #mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']  #Abbreviated version is needed as its used in day folders
+
+    year1 = '2016'
+    months1 = ['September', 'October', 'November']
+    mons1 = ['Sep', 'Oct', 'Nov']
+    year2 = '2017'
+    months2 = ['January', 'February', 'March', 'April']
+    mons2 = ['Jan', 'Feb', 'Mar', 'Apr']
+
+    makeWinterPlot(year1, year2, months1, months2, mons1, mons2, mainpath)
