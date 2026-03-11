@@ -34,8 +34,9 @@ save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
 # It should contain the month-year folders (like October2016/) and months.txt file.
 read_dir = join("I:\\")
 
-# NOTE: this is the year you're making power spectrums for.
-year = "2016"
+# NOTE: this is the years in your winter
+year1 = "2016"
+year2 = "2017"
 
 # NOTE: If you want to skip the IDL code or total power caculation because
 # it has already done, and you just want new plots, set the following as true
@@ -57,7 +58,6 @@ skip_processing = False
 # --
 # --
 
-days = {}
 
 FFT_FILENAME = "m_fft_amtm_loop.pro"
 READ_IMAGE_FILENAME = "read_images_AMTM_total_power.pro"
@@ -80,7 +80,7 @@ MONTH_STUBS = {
 MONTHS = list(MONTH_STUBS.keys())
 
 
-def getAllWindows(year, read_path):
+def getAllWindows(year, days, read_path):
     # Clear the days dict since we'll be filling it with new ones
     for key in days:
         days[key] = []
@@ -148,20 +148,16 @@ def readDaysTxtOneDay(year, month, day, main_path):
     return begin_ends
 
 
-if __name__ == "__main__":
-    IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
-    IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-
-    print(f"--- Getting power spectrums for all windows in year {year} on the drive ---")
-    getAllWindows(year, read_dir)
-
-    print(f"--- Generating power spectrums for {year} ---")
+def doIDLAndTotPowrProcessingOneYear(year, days):
+    print(f"--- Getting total power for all windows in year {year} on the drive ---")
+    print(f"--- Generating total power for {year} ---")
     for month in MONTHS:
         print(f"--- Looking for days in month: {month} ---")
         days_list = days[month]
+        hasDays = len(days_list) != 0
         for day in days_list:
             month_stub = MONTH_STUBS[month]
-            print(f"--- Making power spectrum for {month_stub}{day} ---")
+            print(f"--- Making total power for {month_stub}{day} ---")
 
             begin_ends = readDaysTxtOneDay(year, month, day, save_dir)
             for begin_end in begin_ends:  # Iterating over each window for the day
@@ -179,18 +175,35 @@ if __name__ == "__main__":
                 #end_str = str(end)
 
                 # Create csv files using the IDL code in read_images
-                if not skip_IDL:
-                    # TODO: change this to catch memory errors from IDL and then
-                    # run ".FULL_RESET_SESSION" then recompile the modules and try again
-                    # This should hopefully fix memory running out issues.
-                    # The reason I haven't fixed it is because I don't know the exact
-                    # exception.
-                    IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
-                    #IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
-                    calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
-                    print("FFT and total power processing finished. Starting to generate the power spectrum plot")
-                else:
-                    print("Skipping FFT processing. Starting to generate the power spectrum plot")
-                # TODO: change this to the actual graphers
-                makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
+                # TODO: change this to catch memory errors from IDL and then
+                # run ".FULL_RESET_SESSION" then recompile the modules and try again
+                # This should hopefully fix memory running out issues.
+                # The reason I haven't fixed it is because I don't know the exact
+                # exception.
+                IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
+                #IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
+                calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
+                print("FFT and total power processing finished. Starting to generate the power spectrum plot")
 
+
+
+if __name__ == "__main__":
+    IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
+    IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
+
+    days1 = {}
+    days2 = {}
+    getAllWindows(year1, days1 read_dir)
+    getAllWindows(year2, days2 read_dir)
+
+    if skip_processing:
+        print("Skipping FFT and total power processing.")
+    else:
+        doIDLAndTotPowrProcessingOneYear(year1, days1)
+        doIDLAndTotPowrProcessingOneYear(year2, days2)
+
+    print("--- Generating Plots ---")
+    # Back in the month block
+    if hasDays:
+        print(f"--- Making montly plot for {month} {year} ---")
+        makeMonthlyPlot(year, month, mon, mainpath)
