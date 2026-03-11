@@ -2,6 +2,8 @@
 import sys
 from os.path import join, exists
 from calculate_tot_powr import calcWindowTotalPowerOverTime
+from total_power_graphing_monthly import makeMonthlyPlot
+from total_power_graphing_winter import makeWinterPlot
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
 
@@ -208,9 +210,21 @@ if __name__ == "__main__":
     else:
         doIDLAndTotPowrProcessingOneYear(year1, days1)
         doIDLAndTotPowrProcessingOneYear(year2, days2)
-
     print("--- Generating Plots ---")
-    # Back in the month block
-    if hasDays:
-        print(f"--- Making montly plot for {month} {year} ---")
-        makeMonthlyPlot(year, month, mon, mainpath)
+
+    # Making monthly plots for year 1
+    for i in range(len(months1)):
+        month = months1[i]
+        mon = mons1[i]
+        print(f"--- Making montly plot for {month} {year1} ---")
+        makeMonthlyPlot(year1, month, mon, save_dir)
+
+    # Making monthly plots for year 2
+    for i in range(len(months2)):
+        month = months2[i]
+        mon = mons2[i]
+        print(f"--- Making montly plot for {month} {year2} ---")
+        makeMonthlyPlot(year2, month, mon, save_dir)
+
+    print(f"--- Making winter plot for the {year1}-{year2} winter ---")
+    makeWinterPlot(year1, year2, months1, months2, mons1, mons2, save_dir)
