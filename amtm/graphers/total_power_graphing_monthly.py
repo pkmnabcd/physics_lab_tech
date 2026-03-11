@@ -16,7 +16,6 @@ Code modified by Gabe Decker from Jenny's code which originally plotted one day'
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
 from os.path import exists, join
 
 
@@ -170,91 +169,92 @@ def getXLimits(mon, year):
         print("WARNING!! The month may not be correct")
 
 
-
-
-# NOTE: You should run this in the AMTM_McMurdo directory
-mainpath = '.' 
-
-months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']  # Full month names
-mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']  #Abbreviated version is needed as its used in day folders
-#years = ['2016']
-years = ['2017']
-
-
-for i in range(np.size(years)): # code going into each year folder
-    year = years[i]
-
-    if not exists(join(mainpath,year)):
+def makeMonthlyPlot(year, month, mon, mainpath):
+    path = join(mainpath, f'{year}/{month}{year}/')
+    if not exists(path):
         continue
 
-    color = "blue"
+    print(month)
 
-    print(year)
+    daypath = join(path, 'days.txt')  # path to get to the days.txt file
+    with open(daypath, 'r') as dayfile:   # opens the days.txt file to get days with data
+                                          #within each month, also the names of the next
+                                          # layer of folders
+
+        days =[]
+        for line in dayfile:
+            if line[0] != '#':
+                if line.rstrip() != mon: # takes away the \n,
+                    justday = []
+                    a =  mon+line.rstrip()    #a and b are used because I ran out of meaningful names
+                    b = a.replace(" ","_",1) #this replace is necessary as the txt file has whitespace
+                    entry = b.replace(" ","-",1) #where the folders have _ and -'s
+                    days.append(entry)
+
+        for i in range(len(days)):
+            date, sep, nix = days[i].partition('_')
+
+            date2 = date + '_'
+            justday.append(date2)
+
+
+                #the days.txt  is closed, so we're using the 'days' list to get 
+                #to the power and time logs for each day
+
+    f = plt.figure(figsize=(12,8))
+    for n in range(0,len(days)): 
+
+        day = days[n]
+        filethere = mainpath+f'/{year}/{month}{year}/{day}/'\
+
+        file0 = filethere +  'TempOH0_TOTAL.csv' 
+        file1 = filethere + 'TempOH1_TOTAL.csv'
+        onlyday = justday[n]
+        dayfolder = path+f'{day}'
+        power = dayfolder + '/T_and_power.txt'
+
+        # TODO: change this so it only checks for file0 and makes sure np array is 2-D
+        if exists(file0) == True and exists(file1) == True:
+            powr = np.loadtxt(power) #opens the files in a np, index-able array 6 column array,
+            # 0-year 1-month 2-day 3-time in decimal hour
+            # 4- power value(x) 5-exponent(y) of power in base 10(power)
+            lp = len(powr)
+
+            plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
+        else:
+            print(f"WARNING: {day} is too short to have TempOH1_TOTAL.csv file, so its total power won't be used.")
+
+    plt.title(f'Total Power {month}, {year}')
+    plt.ylabel('Total power')
+    plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
+    plt.xlabel('Day of Year')
+    xlim0, xlim1 = getXLimits(mon, year)
+    plt.xlim(xlim0,xlim1)
+
+    saveLocation = path + f'../{mon}Totpowr{year}.png' # NOTE: putting file in year folder
+    plt.savefig(saveLocation)
+    plt.close()
+
+
+if __name__ == "__main__":
+    # NOTE: You should run this in the AMTM_McMurdo directory unless you change mainpath
+    mainpath = '.'
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']  # Full month names
+    mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']  #Abbreviated version is needed as its used in day folders
+    #years = ['2016']
+    years = ['2017']
+
+
+    for i in range(np.size(years)): # code going into each year folder
+        year = years[i]
+
+        if not exists(join(mainpath,year)):
+            continue
+
+        color = "blue"
+
+        print(year)
     for i in range(np.size(months)): # once inside the year, going into each month folder
         month = months[i]
         mon = mons[i]
-
-        path = join(mainpath, f'{year}/{month}{year}/')
-        if not exists(path):
-            continue
-
-        print(month)
-
-        daypath = join(path, 'days.txt')  # path to get to the days.txt file
-        with open(daypath, 'r') as dayfile:   # opens the days.txt file to get days with data
-                                              #within each month, also the names of the next
-                                              # layer of folders
-
-            days =[]
-            for line in dayfile:
-                if line[0] != '#':
-                    if line.rstrip() != mon: # takes away the \n,
-                        justday = []
-                        a =  mon+line.rstrip()    #a and b are used because I ran out of meaningful names
-                        b = a.replace(" ","_",1) #this replace is necessary as the txt file has whitespace
-                        entry = b.replace(" ","-",1) #where the folders have _ and -'s
-                        days.append(entry)
-
-            for i in range(len(days)):
-                date, sep, nix = days[i].partition('_')
-
-                date2 = date + '_'
-                justday.append(date2)
-
-
-                    #the days.txt  is closed, so we're using the 'days' list to get 
-                    #to the power and time logs for each day
-
-        f = plt.figure(figsize=(12,8))
-        for n in range(0,len(days)): 
-
-            day = days[n]
-            filethere = mainpath+f'/{year}/{month}{year}/{day}/'\
-
-            file0 = filethere +  'TempOH0_TOTAL.csv' 
-            file1 = filethere + 'TempOH1_TOTAL.csv'
-            onlyday = justday[n]
-            dayfolder = path+f'{day}'
-            power = dayfolder + '/T_and_power.txt'
-
-            if exists(file0) == True and exists(file1) == True:
-                powr = np.loadtxt(power) #opens the files in a np, index-able array 6 column array,
-                # 0-year 1-month 2-day 3-time in decimal hour
-                # 4- power value(x) 5-exponent(y) of power in base 10(power)
-                lp = len(powr)
-
-                plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
-            else:
-                print(f"WARNING: {day} is too short to have TempOH1_TOTAL.csv file, so its total power won't be used.")
-
-        plt.title(f'Total Power {month}, {year}')
-        plt.ylabel('Total power')
-        plt.ylim([0*10**(-5),3.5*10**(-5)]) #All plots will have same scales
-        plt.xlabel('Day of Year')
-        xlim0, xlim1 = getXLimits(mon, year)
-        plt.xlim(xlim0,xlim1)
-
-        saveLocation = path + f'../{mon}Totpowr{year}.png' # NOTE: putting file in year folder
-        plt.savefig(saveLocation)
-        plt.close()
-print('Finis')
+        makeMonthlyPlot(year, month, mon, mainpath)
