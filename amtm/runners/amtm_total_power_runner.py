@@ -80,11 +80,8 @@ MONTH_STUBS = {
 MONTHS = list(MONTH_STUBS.keys())
 
 
-def getAllWindows(year, days, read_path):
-    # Clear the days dict since we'll be filling it with new ones
-    for key in days:
-        days[key] = []
-
+def getAllWindows(year, read_path):
+    days = {}
     for month in MONTHS:
         days_txt_days = readDaysTxtAllDays(year, month, read_path)
         for day in days_txt_days:
@@ -186,15 +183,25 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                 print("FFT and total power processing finished. Starting to generate the power spectrum plot")
 
 
+def getMonthsInYear(days):
+    valid_months = []
+    valid_mons = []
+    for month in MONTHS:
+        if len(days[month]) > 0:
+            valid_monts.append(month)
+    for month in valid_months:
+        valid_mons.append(MONTH_STUBS[month])
+    return valid_months, valid_mons
+
 
 if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
-    days1 = {}
-    days2 = {}
-    getAllWindows(year1, days1 read_dir)
-    getAllWindows(year2, days2 read_dir)
+    days1 = getAllWindows(year1, read_dir)
+    months1, mons1 = getMonthsInYear(days1)
+    days2 = getAllWindows(year2, read_dir)
+    months2, mons2 = getMonthsInYear(days2)
 
     if skip_processing:
         print("Skipping FFT and total power processing.")
