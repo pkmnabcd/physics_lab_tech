@@ -10,7 +10,7 @@ from total_power_graphing_winter import makeWinterPlot
 IDL_DIR = join("C:\\", "Program Files", "Harris", "IDL89")
 sys.path.append(f"{IDL_DIR}/lib/bridges")
 
-from idlpy import IDL
+from idlpy import IDL, IDLError
 
 
 
@@ -183,7 +183,7 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                     try:
                         IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
                     except IDLError as e:
-                        attempt -= 1
+                        attempt += 1
                         print(f"Encountered the following IDL Error: {e}\nRestarting IDL and will attempt {MAX_ATTEMPTS-attempt} more times. If it's a memory problem and it persists, restart your computer and try again.")
                         IDL.run(".FULL_RESET_SESSION")
                         IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
