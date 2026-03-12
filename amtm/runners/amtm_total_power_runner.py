@@ -82,7 +82,32 @@ MONTHS = list(MONTH_STUBS.keys())
 
 
 def getAllWindows(year, read_path):
-    days = {}
+    days = {
+        "January": [
+        ],
+        "February": [
+        ],
+        "March": [
+        ],
+        "April": [
+        ],
+        "May": [
+        ],
+        "June": [
+        ],
+        "July": [
+        ],
+        "August": [
+        ],
+        "September": [
+        ],
+        "October": [
+        ],
+        "November": [
+        ],
+        "December": [
+        ]
+    }
     for month in MONTHS:
         days_txt_days = readDaysTxtAllDays(year, month, read_path)
         for day in days_txt_days:
