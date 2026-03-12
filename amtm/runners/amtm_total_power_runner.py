@@ -234,6 +234,15 @@ def daysTxtAreSame(year):
     for month in MONTHS:
         days_read_path = join(read_dir, f"{month}{year}", "days.txt")
         days_save_path = join(save_dir, year, f"{month}{year}", "days.txt")
+        days_read_exists = exists(days_read_path)
+        days_save_exists = exists(days_save_path)
+        if not days_read_exists and not days_read_exists:
+            continue
+        if (not days_read_exists and days_read_exists) or (days_read_exists and not days_read_exists):
+            print(f"WARNING!!! Only one of the following days.txt files exists:\n\t{days_read_path}\n\t{days_save_path}")
+            areSame = False
+            continue
+
         days_read = getDaysTxtData(days_read_path)
         days_save = getDaysTxtData(days_save_path)
         if len(days_read) != len(days_save):
