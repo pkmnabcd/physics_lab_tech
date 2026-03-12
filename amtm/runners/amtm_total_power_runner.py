@@ -160,7 +160,7 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
             for begin_end in begin_ends:  # Iterating over each window for the day
                 begin = begin_end[0]
                 end = begin_end[1]
-                print(f"--- {month_stub}{day} frame: [{begin:04d},{end:04d}]")
+                print(f"--- {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
 
                 # Prepares the strings needed by read_images
                 source_path = join(read_dir, f"{month}{year}", "")
@@ -191,7 +191,7 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                         IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
                 #IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
                 calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
-                print("FFT and total power processing finished. Starting to generate the power spectrum plot")
+                print(f"--- FFT and total power processing finished for {year} {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
 
 
 def getMonthsInYear(days):
@@ -214,6 +214,8 @@ if __name__ == "__main__":
     months1, mons1 = getMonthsInYear(days1)
     days2 = getAllWindows(year2, read_dir)
     months2, mons2 = getMonthsInYear(days2)
+
+    # TODO: make function that checks to make sure that the days.txt file from the drive and save folders match
 
     if skip_processing:
         print("Skipping FFT and total power processing.")
