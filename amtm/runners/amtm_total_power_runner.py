@@ -198,6 +198,7 @@ if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
+    print(f"--- Finding all nights for the {year1}-{year2} winter ---")
     days1 = getAllWindows(year1, read_dir)
     months1, mons1 = getMonthsInYear(days1)
     days2 = getAllWindows(year2, read_dir)
