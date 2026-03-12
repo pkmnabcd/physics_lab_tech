@@ -90,7 +90,7 @@ def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
     mmin = timestamp_data[:,4]
     msec = timestamp_data[:,5]
 
-    tL = len(timefile) # Length of the columns in the file
+    tL = len(timestamp_data) # Length of the columns in the file
     # creates a numpy array containing the starting time in decimal hours
     tmp_dec_hour_holder = []
     for i in range(0,tL):
