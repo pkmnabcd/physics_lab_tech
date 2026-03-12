@@ -49,7 +49,7 @@ def getDaysTxtData(days_path):
 
     data = []
     for line in split_lines:
-        data.append((line[0], int(line[1]), int(line[2])))
+        data.append((line[0], line[1], line[2]))
     return data
 
 
