@@ -182,6 +182,7 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                 while attempt < MAX_ATTEMPTS:
                     try:
                         IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
+                        attempt = MAX_ATTEMPTS # Break out of the loop
                     except IDLError as e:
                         attempt += 1
                         print(f"Encountered the following IDL Error: {e}\nRestarting IDL and will attempt {MAX_ATTEMPTS-attempt} more times. If it's a memory problem and it persists, restart your computer and try again.")
