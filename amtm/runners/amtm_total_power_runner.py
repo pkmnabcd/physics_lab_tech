@@ -177,7 +177,17 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                 # This should hopefully fix memory running out issues.
                 # The reason I haven't fixed it is because I don't know the exact
                 # exception.
-                IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
+                MAX_ATTEMPTS = 5
+                attempt = 0
+                while attempt < MAX_ATTEMPTS:
+                    try:
+                        IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
+                    except IDLError as e:
+                        attempt -= 1
+                        print(f"Encountered the following IDL Error: {e}\nRestarting IDL and will attempt {MAX_ATTEMPTS-attempt} more times. If it's a memory problem and it persists, restart your computer and try again.")
+                        IDL.run(".FULL_RESET_SESSION")
+                        IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
+                        IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
                 #IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
                 calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
                 print("FFT and total power processing finished. Starting to generate the power spectrum plot")
