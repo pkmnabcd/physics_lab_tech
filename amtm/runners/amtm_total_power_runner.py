@@ -258,9 +258,11 @@ if __name__ == "__main__":
     months2, mons2 = getMonthsInYear(days2)
 
     # TODO: make function that checks to make sure that the days.txt file from the drive and save folders match
+    print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
     if not daysTxtAreSame(year1) or not daysTxtAreSame(year2):
         print("--- Exiting because some days.txt files are not the same ---")
         exit()
+    print("--- Check passed ---")
 
     if skip_processing:
         print("--- Skipping FFT and total power processing. ---")
