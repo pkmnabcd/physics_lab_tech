@@ -239,7 +239,8 @@ def daysTxtAreSame(year):
         days_save_exists = exists(days_save_path)
         if not days_read_exists and not days_save_exists:
             continue
-        if (not days_read_exists and days_save_exists) or (days_read_exists and not days_save_exists):
+        # There should be a days.txt file in the save if there's one on the drive
+        if (days_read_exists and not days_save_exists):
             print(f"WARNING!!! Only one of the following days.txt files exists:\n\t{days_read_path}\n\t{days_save_path}")
             areSame = False
             continue
