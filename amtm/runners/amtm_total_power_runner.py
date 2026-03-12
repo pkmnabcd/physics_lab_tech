@@ -165,19 +165,9 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
 
                 # Prepares the strings needed by read_images
                 source_path = join(read_dir, f"{month}{year}", "")
-                #day_string = join(f"{month_stub}{day}", "")
                 day_string = f"{month_stub}{day}"
                 end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}")
-                #end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "")
-                #begin_str = str(begin)
-                #end_str = str(end)
 
-                # Create csv files using the IDL code in read_images
-                # TODO: change this to catch memory errors from IDL and then
-                # run ".FULL_RESET_SESSION" then recompile the modules and try again
-                # This should hopefully fix memory running out issues.
-                # The reason I haven't fixed it is because I don't know the exact
-                # exception.
                 MAX_ATTEMPTS = 5
                 attempt = 0
                 while attempt < MAX_ATTEMPTS:
@@ -190,7 +180,6 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                         IDL.run(".FULL_RESET_SESSION")
                         IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
                         IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-                #IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
                 calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
                 print(f"--- FFT and total power processing finished for {year} {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
 
