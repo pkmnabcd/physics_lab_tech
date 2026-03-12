@@ -1,5 +1,6 @@
 import sys
 from os.path import join, exists
+
 from calculate_tot_powr import calcWindowTotalPowerOverTime
 from total_power_graphing_monthly import makeMonthlyPlot
 from total_power_graphing_winter import makeWinterPlot
@@ -270,7 +271,7 @@ if __name__ == "__main__":
     print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
     if not daysTxtAreSame(year1) or not daysTxtAreSame(year2):
         print("--- Exiting because some days.txt files are not the same ---")
-        exit()
+        sys.exit()
     print("--- Check passed ---")
 
     if skip_processing:
