@@ -1,6 +1,6 @@
-
 import sys
 from os.path import join, exists
+
 from power_spectrum_daily import makeWindowPowerSpectrum
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
@@ -9,7 +9,7 @@ from power_spectrum_daily import makeWindowPowerSpectrum
 IDL_DIR = join("C:\\", "Program Files", "Harris", "IDL89")
 sys.path.append(f"{IDL_DIR}/lib/bridges")
 
-from idlpy import IDL
+from idlpy import IDL, IDLError
 
 
 
@@ -218,12 +218,18 @@ if __name__ == "__main__":
 
                 # Create csv files using the IDL code in read_images
                 if not skip_IDL:
-                    # TODO: change this to catch memory errors from IDL and then
-                    # run ".FULL_RESET_SESSION" then recompile the modules and try again
-                    # This should hopefully fix memory running out issues.
-                    # The reason I haven't fixed it is because I don't know the exact
-                    # exception.
-                    IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
+                    MAX_ATTEMPTS = 5
+                    attempt = 0
+                    while attempt < MAX_ATTEMPTS:
+                        try:
+                            IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
+                            attempt = MAX_ATTEMPTS # Break out of the loop
+                        except IDLError as e:
+                            attempt += 1
+                            print(f"Encountered the following IDL Error: {e}\nRestarting IDL and will attempt {MAX_ATTEMPTS-attempt} more times. If it's a memory problem and it persists, restart your computer and try again.")
+                            IDL.run(".FULL_RESET_SESSION")
+                            IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
+                            IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
                     print("FFT processing finished. Starting to generate the power spectrum plot")
                 else:
                     print("Skipping FFT processing. Starting to generate the power spectrum plot")
