@@ -205,6 +205,48 @@ def getMonthsInYear(days):
     return valid_months, valid_mons
 
 
+def getDaysTxtData(days_path):
+    split_lines = []
+    with open(days_path) as f:
+        lines = f.readlines()
+        for i in range(len(lines)):
+            line = lines[i]
+            line = line.strip("\n\r")
+            if len(line) == 0 or line[0] == '#':
+                continue
+            parts = line.split()
+            if i == 0: # The first line should be the month stub
+                if len(parts) != 1:
+                    print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
+                continue
+            if len(parts) != 3:
+                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
+            split_lines.append(parts)
+
+    data = []
+    for line in split_lines:
+        data.append((line[0], line[1], line[2]))
+    return data
+
+
+def daysTxtAreSame(year):
+    areSame = True
+    for month in MONTHS:
+        days_read_path = join(read_dir, f"{month}{year}", "days.txt")
+        days_save_path = join(save_dir, year, f"{month}{year}", "days.txt")
+        days_read = getDaysTxtData(days_read_path)
+        days_save = getDaysTxtData(days_save_path)
+        if len(days_read) != len(days_save):
+            print(f"WARNING!!! the days.txt data are not the same length at the following two paths!\n\t{days_read_path}\n\t{days_save_path}")
+            areSame = False
+            continue
+        for i in range(len(days_read)):
+            for j in range(3): # 3 is length of inner tuples
+                if days_read[i][j] != days_save[i][j]:
+                    print(f"WARNING!!! the days.txt data do not share the same data at the following two paths!\n\t{days_read_path}\n\t{days_save_path}")
+                    areSame = False
+    return areSame
+
 if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
@@ -216,9 +258,12 @@ if __name__ == "__main__":
     months2, mons2 = getMonthsInYear(days2)
 
     # TODO: make function that checks to make sure that the days.txt file from the drive and save folders match
+    if not daysTxtAreSame(year1) or not daysTxtAreSame(year2):
+        print("--- Exiting because some days.txt files are not the same ---")
+        exit()
 
     if skip_processing:
-        print("Skipping FFT and total power processing.")
+        print("--- Skipping FFT and total power processing. ---")
     else:
         doIDLAndTotPowrProcessingOneYear(year1, days1)
         doIDLAndTotPowrProcessingOneYear(year2, days2)
