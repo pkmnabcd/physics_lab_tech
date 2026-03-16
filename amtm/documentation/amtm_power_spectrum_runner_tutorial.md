@@ -120,6 +120,27 @@ skip_IDL = False
 ```
 If you have already done the IDL processing previously (so you already have the CSV files), you can skip that processing by setting this option to True.
 
+## File Setup
+The runner is expecting a variety of files in your drive where you're processing and where you're saving the data.
+
+### **Read Drive**
+The read drive should contain your raw and processed data.
+The `read_dir` variable should take you to the folder that contains the month-year folders like `October2016` or `April2020`.
+These folder names should have no space between the month and year, and the month should be capitalized and spelled out.
+
+Inside the month-year folder you should have raw data folders labelled mon-night like `Sep01-02`, `Apr09-10`, and `Aug31-01`.
+These folders have the raw images and the `processed` folder that has processed images.
+For nights that you want to make power spectrums for, there should be the following set of processed files in the processed folder.
+* BandOH
+* BandOH_caun
+* TempOH
+* TempOH_caun
+* BG_31_ff
+* P12_31_ff
+* P14_31_ff
+
+Also inside the year-month folder should be a days.txt file.
+
 
 # Appendix A: os.path.join
 ## Motivation
