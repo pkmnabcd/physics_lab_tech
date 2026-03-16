@@ -249,6 +249,7 @@ def daysTxtAreSame(year):
                     areSame = False
     return areSame
 
+# Main line of execution
 if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
@@ -259,7 +260,6 @@ if __name__ == "__main__":
     days2 = getAllWindows(year2, read_dir)
     months2, mons2 = getMonthsInYear(days2)
 
-    # TODO: make function that checks to make sure that the days.txt file from the drive and save folders match
     print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
     if not daysTxtAreSame(year1) or not daysTxtAreSame(year2):
         print("--- Exiting because some days.txt files are not the same ---")
