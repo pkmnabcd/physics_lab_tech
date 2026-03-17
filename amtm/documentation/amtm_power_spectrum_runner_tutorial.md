@@ -123,8 +123,8 @@ If you have already done the IDL processing previously (so you already have the 
 ## File Setup
 The runner is expecting a variety of files in your drive where you're processing and where you're saving the data.
 
-### **Read Drive**
-The read drive should contain your raw and processed data.
+### **Read Directory**
+The read directory should contain your raw and processed data.
 The `read_dir` variable should take you to the folder that contains the month-year folders like `October2016` or `April2020`.
 These folder names should have no space between the month and year, and the month should be capitalized and spelled out.
 
@@ -139,7 +139,24 @@ For nights that you want to make power spectrums for, there should be the follow
 * P12_31_ff
 * P14_31_ff
 
-Also inside the year-month folder should be a days.txt file.
+Also inside the year-month folder should be a `days.txt` file (if the month has any windows).
+The `days.txt` file should look like the following example.
+
+```
+Sep
+01-02 0039 0600
+01-02 0670 1050
+09-10 0000 0350
+11-12 0004 0400
+30-31 0204 1245
+31-01 0001 0112
+31-01 0403 1330
+```
+So, the format is that there should be the month stub at the top of the file and the image indexes of the windows below.
+The window indexes should have a width of 4 with zeros padding the front (so '0030' instead of '30').
+The date should just be the night with each day of the month taking two characters (so '01-02' instead of '1-2').
+
+### **Save Directory**
 
 
 # Appendix A: os.path.join
