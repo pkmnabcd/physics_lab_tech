@@ -124,7 +124,7 @@ If you have already done the IDL processing previously (so you already have the 
 The runner is expecting a variety of files in your drive where you're processing and where you're saving the data.
 
 ### **Read Directory**
-The read directory should contain your raw and processed data.
+The read directory should contain your raw and processed image data.
 The `read_dir` variable should take you to the folder that contains the month-year folders like `October2016` or `April2020`.
 These folder names should have no space between the month and year, and the month should be capitalized and spelled out.
 
@@ -157,6 +157,34 @@ The window indexes should have a width of 4 with zeros padding the front (so '00
 The date should just be the night with each day of the month taking two characters (so '01-02' instead of '1-2').
 
 ### **Save Directory**
+The save directory should contain your processed csv and txt files, as well as the generated plots.
+The `save_dir` variable should take you to the folder that contains the year folders like `2016` or `2020`.
+Inside the year folder there should be month-year folders like `October2016` or `April2020`.
+These folder names should have no space between the month and year, and the month should be capitalized and spelled out.
+
+Inside the month-year folder you should have your `days.txt` file.
+It should be identical to the corresponding file in the read directory.
+
+Also in the month-year folder you should have a `timestamp.txt` file.
+This file should contain the timestamp of the first image indexed in each window in the `days.txt` file for that month.
+
+```
+#0-year 1-month 2-day 3-hour 4-minute 5-second
+#Ut time of the starting frame given and aligned for each day in days.txt
+2016 11  1 16 49 19
+2016 11  5  1 19  1
+2016 11  5 15 17 55
+2016 11  6 15 19 32
+2016 11  7 12 26 37
+2016 11  7 15 15 30
+2016 11  8  3 49 28
+2016 11  8  5  4 28
+2016 11  8 22 35 17
+2016 11 20 20 30  2
+```
+TODO: add details about above.
+
+The only thing that maps the timestamp to the window in `days.txt` is the ordering, so
 
 
 # Appendix A: os.path.join
