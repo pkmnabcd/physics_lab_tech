@@ -171,20 +171,57 @@ This file should contain the timestamp of the first image indexed in each window
 ```
 #0-year 1-month 2-day 3-hour 4-minute 5-second
 #Ut time of the starting frame given and aligned for each day in days.txt
-2016 11  1 16 49 19
+2016 11  1 16 30 22
+2016 11  1 19 49 19
 2016 11  5  1 19  1
 2016 11  5 15 17 55
 2016 11  6 15 19 32
 2016 11  7 12 26 37
-2016 11  7 15 15 30
+2016 11 17 15 15 30
 2016 11  8  3 49 28
 2016 11  8  5  4 28
 2016 11  8 22 35 17
 2016 11 20 20 30  2
 ```
-TODO: add details about above.
+As shown in the comments, the above numbers represent the following.
+The year, month, day of month, hour, minute, second of the first image in the corresponding window.
+You get that timestamp from the Norway image reader.
+So that the file looks nice and organized, use the spacing shown above, where single-digit numbers are right-justified within the column.
 
-The only thing that maps the timestamp to the window in `days.txt` is the ordering, so
+The only thing that maps the timestamp to the window in `days.txt` is the ordering, so given the following example `days.txt` file,
+```
+Nov
+01-02 0039 0600
+01-02 0670 1050
+05-06 0000 0350
+...
+...
+```
+
+the correspondance would be the following.
+* `01-02 0039 0600` corresponds to `2016 11  1 16 30 22`
+* `01-02 0670 1050` corresponds to `2016 11  2  1 49 19`
+* `05-06 0000 0350` corresponds to `2016 11  6  1 19  1`
+and so on.
+These timestamps are used to get the timeseries data for the plots.
+
+
+# Running the Program
+Once you have opened the runner in your chosen environment and adjusted the required variables, you should be able to simply hit the run button to run it.
+The program will constantly log what it's up to, so you should be able to track its progress.
+Messages (besides error messages) that are from the runner and not the IDL code will have dashes to signify their origin (`--- message ---`).
+The program will output the following sets of files in your `save_dir`.
+* Inside the year then month-year folders, there will be power spectrum plots made for each window. They have the month stub, days of the month that the night involves, and the image indexes of the start and end of the window. They will look like the following.
+    * `Nov30-01OH_0000-0400.jpg`
+    * `Feb01-02OH_0301-1424.jpg`
+* Also inside the year then month-year folders, there will be folders made for each window in your `days.txt` file. They have the month stub, days of the month that the night involves, and the image indexes of the start and end of the window. They will look like the following.
+    * `Nov30-01_0000-0400`
+    * `Feb01-02_0301-1424`
+* Inside these folders will be several CSV files that have the various powers calculated by the FFT processing. Note that the total power processing uses the same folders, so there may be other files associated with that process. The ones that are made by this program are the following.
+    * `OH_PER_.csv`
+    * `OH_POW_.csv`
+    * `OH_TOTAL_.csv`
+    * `OH_WIN_.csv`
 
 
 # Appendix A: os.path.join
