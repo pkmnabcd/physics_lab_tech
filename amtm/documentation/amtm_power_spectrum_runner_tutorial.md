@@ -103,7 +103,7 @@ Each of these nights should have at least one entry in the corresponding month's
 ## Some Options
 The following are a few options that you can use, if desired. They are turned off (or `False`) by default.
 
-### **do_all**
+### **do_all_windows**
 This involves the following code.
 ```python
 do_all_windows = False
