@@ -1,6 +1,6 @@
 # Purpose of This Program
-This program is a runner program for AMTM power spectrum processing and generation.
-It can do the processing for a set of nights or all the nights for a drive.
+This program is a runner program for AMTM total power processing and generation.
+It will generate the total power data and plots for an entire winter of data.
 
 # Prerequisites
 You need an environment like anaconda/spyder that has the following python libraries.
@@ -13,16 +13,18 @@ It is typically installed at a path similar to `C:\Program Files\Harris\IDL89` f
 I think you need IDL version 8.5 or higher.
 
 Make sure to have the following python programs in the same directory.
-* `amtm_power_spectrum_runner.py`
-* `power_spectrum_daily.py`
+* `amtm_total_power_runner.py`
+* `calculate_tot_powr.py`
+* `total_power_graphing_monthly.py`
+* `total_power_graphing_winter.py`
 
 Make sure you have the following IDL `.pro` files at a known location.
 They are often found in a directory similar to `C:\Users\Person\OneDrive\Desktop\MachineLearning\IDLCode`.
-* `m_fft_amtm.pro`
-* `read_images_AMTM.pro`
+* `m_fft_amtm_loop.pro`
+* `read_images_AMTM_total_power.pro`
 
 # Setup
-After making sure all of the prerequisites are met, open the python script `amtm_power_spectrum_runner.py` in spyder or an editor.
+After making sure all of the prerequisites are met, open the python script `amtm_total_power_runner.py` in spyder or an editor.
 To use the program, you'll need to change several lines near the top of the script.
 If you're unfamiliar with the `os.path.join` function, see [Appendix A](#appendix-a-ospathjoin) before editing.
 
@@ -55,71 +57,24 @@ read_dir = join("I:\\")
 This is the main directory where the raw data images are stored at, usually the root of the drive, but sometimes there's another subdirectory of the root you have to navigate to.
 This directory should contain your `months.txt` file and the month-year folders like `October2016`.
 
-### **year**
+### **year1 and year2**
 You'll edit the following line with the year that you are looking at.
 In one drive, there is typically two different years since the drive is for a winter's worth of data.
-You can choose one year to process at a time.
+Put the earlier year as `year1` and the later year as `year2`.
 ```python
-year = "2016"
+year1 = "2016"
+year2 = "2017"
 ```
-
-### **days**
-Finally, you'll edit the following code.
-```python
-days = {
-    "January": [
-    ],
-    "February": [
-    ],
-    "March": [
-    ],
-    "April": [
-    ],
-    "May": [
-    ],
-    "June": [
-    ],
-    "July": [
-    ],
-    "August": [
-    ],
-    "September": [
-        "16-17"
-    ],
-    "October": [
-    ],
-    "November": [
-        "07-08",
-        "08-09"
-    ],
-    "December": [
-    ]
-}
-```
-This object `days` is a python dictionary with the month names as keys and a list of nights as the values.
-If you have no nights in that month, you can leave the month's list empty.
-If you want to do multiple nights in a month, make sure to put commas after each line (except the last one, but python is okay even if you leave the comma there).
-Each of these nights should have at least one entry in the corresponding month's `days.txt` file.
 
 ## Some Options
 The following are a few options that you can use, if desired. They are turned off (or `False`) by default.
 
-### **do_all_windows**
+### **skip_processing**
 This involves the following code.
 ```python
-do_all_windows = False
+skip_processing = False
 ```
-If you want to just make a power spectrum for each window, set this option to True.
-It will make a power spectrum for each window in the drive's `days.txt` file for each month in the `year`, designated above.
-So, to make the power spectrums for all the windows in the drive, you will have to do it twice, once for each year your drive covers.
-
-
-### **skip_IDL**
-This involves the following code.
-```python
-skip_IDL = False
-```
-If you have already done the IDL processing previously (so you already have the CSV files), you can skip that processing by setting this option to True.
+If you have already done the IDL and total power processing previously (so you already have the CSV files), you can skip that processing by setting this option to True.
 
 ## File Setup
 The runner is expecting a variety of files in your drive where you're processing and where you're saving the data.
@@ -212,17 +167,13 @@ Once you have opened the runner in your chosen environment and adjusted the requ
 The program will constantly log what it's up to, so you should be able to track its progress.
 Messages (besides error messages) that are from the runner and not the IDL code will have dashes to signify their origin (`--- message ---`).
 The program will output the following sets of files in your `save_dir`.
-* Inside the year then month-year folders, there will be power spectrum plots made for each window. They have the month stub, days of the month that the night involves, and the image indexes of the start and end of the window. They will look like the following.
-    * `Nov30-01OH_0000-0400.jpg`
-    * `Feb01-02OH_0301-1424.jpg`
-* Also inside the year then month-year folders, there will be folders made for each window in your `days.txt` file. They have the month stub, days of the month that the night involves, and the image indexes of the start and end of the window. They will look like the following.
+* Inside the base `save_dir` directory there will be a plot of the winter. In its filename it will say the `year1` and `year2` of the drive. It will look like, for example `Totpowr_winter_2013_to_2014.jpg`.
+* Inside the year folders, there will be total power plots made for each month of windows. They have the month stub and the year in their filenames. They will look like, for example `MarTotpowr2016.jpg`.
+* Inside the year then month-year folders, there will be folders made for each window in your `days.txt` file. They have the month stub, days of the month that the night involves, and the image indexes of the start and end of the window. They will look like the following.
     * `Nov30-01_0000-0400`
     * `Feb01-02_0301-1424`
-* Inside these folders will be several CSV files that have the various powers calculated by the FFT processing. Note that the total power processing uses the same folders, so there may be other files associated with that process. The ones that are made by this program are the following.
-    * `OH_PER_.csv`
-    * `OH_POW_.csv`
-    * `OH_TOTAL_.csv`
-    * `OH_WIN_.csv`
+* Inside these folders will be one to several CSV files that have the various powers calculated by the FFT processing. Note that the power spectrum processing uses the same folders, so there may be other CSV files associated with that process. The ones that are made by this program are `TempOH0_TOTAL.csv` and possibly more files with indexes 1, 2, 3, etc. The number of these CSV files depends on the length of the window.
+* Also inside these folders is a file called `T_and_power.txt` that has the total power calculations for each `TempOHi_TOTAL.csv` file in the folder.
 
 
 # Appendix A: os.path.join
