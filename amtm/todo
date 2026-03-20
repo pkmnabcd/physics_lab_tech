@@ -1,3 +1,5 @@
 Move total power calculator file to a different, non-grapher directory
 
 Add potential errors to documentation
+
+Check to make sure the inputted paths exist
