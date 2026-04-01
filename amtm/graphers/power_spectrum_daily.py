@@ -125,7 +125,7 @@ def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_pat
     """
     # Prep a bunch of strings/paths I'll need later
     base_path = join(main_path, year, f"{month}{year}")
-    oh_total_path = join(base_path, f"{month_stub}{night}_{begin}-{end}", "OH_TOTAL.csv")
+    oh_total_path = join(base_path, f"{month_stub}{night}_{begin}-{end}", "TempOH_TOTAL.csv")
     fig_save_path = join(base_path, f"{month_stub}{night}OH_{begin}-{end}.jpg")
     fig_title = f"Power Spectrum {month_stub}{night}, {year}"
 

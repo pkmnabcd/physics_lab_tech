@@ -246,8 +246,8 @@ if __name__ == "__main__":
                             IDL.run(".FULL_RESET_SESSION")
                             IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
                             IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-                    print("FFT processing finished. Starting to generate the power spectrum plot")
+                    print("--- FFT processing finished. Starting to generate the power spectrum plot ---")
                 else:
-                    print("Skipping FFT processing. Starting to generate the power spectrum plot")
+                    print("--- Skipping FFT processing. Starting to generate the power spectrum plot ---")
                 makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
 

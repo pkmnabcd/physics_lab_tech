@@ -219,10 +219,10 @@ The program will output the following sets of files in your `save_dir`.
     * `Nov30-01_0000-0400`
     * `Feb01-02_0301-1424`
 * Inside these folders will be several CSV files that have the various powers calculated by the FFT processing. Note that the total power processing uses the same folders, so there may be other files associated with that process. The ones that are made by this program are the following.
-    * `OH_PER_.csv`
-    * `OH_POW_.csv`
-    * `OH_TOTAL_.csv`
-    * `OH_WIN_.csv`
+    * `TempOH_PER_.csv`
+    * `TempOH_POW_.csv`
+    * `TempOH_TOTAL_.csv`
+    * `TempOH_WIN_.csv`
 
 
 # Appendix A: os.path.join
