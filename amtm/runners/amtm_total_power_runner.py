@@ -82,6 +82,21 @@ MONTH_STUBS = {
 MONTHS = list(MONTH_STUBS.keys())
 
 
+def checkGivenPaths():
+    if not exists(IDL_DIR):
+        print(f"WARNING!! The given IDL_DIR: {IDL_DIR} does not exist!")
+        exit()
+    if not exists(idl_scripts_dir):
+        print(f"WARNING!! The given idl_scripts_dir: {idl_scripts_dir} does not exist!")
+        exit()
+    if not exists(save_dir):
+        print(f"WARNING!! The given save_dir: {save_dir} does not exist!")
+        exit()
+    if not exists(read_dir):
+        print(f"WARNING!! The given read_dir: {read_dir} does not exist!")
+        exit()
+
+
 def getAllWindows(year, read_path):
     days = {}
     for month in MONTHS:
@@ -251,6 +266,8 @@ def daysTxtAreSame(year):
 
 # Main line of execution
 if __name__ == "__main__":
+    checkGivenPaths()
+
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 

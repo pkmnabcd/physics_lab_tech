@@ -118,6 +118,21 @@ MONTH_STUBS = {
 MONTHS = list(MONTH_STUBS.keys())
 
 
+def checkGivenPaths():
+    if not exists(IDL_DIR):
+        print(f"WARNING!! The given IDL_DIR: {IDL_DIR} does not exist!")
+        exit()
+    if not exists(idl_scripts_dir):
+        print(f"WARNING!! The given idl_scripts_dir: {idl_scripts_dir} does not exist!")
+        exit()
+    if not exists(save_dir):
+        print(f"WARNING!! The given save_dir: {save_dir} does not exist!")
+        exit()
+    if not exists(read_dir):
+        print(f"WARNING!! The given read_dir: {read_dir} does not exist!")
+        exit()
+
+
 def getAllWindows(year, read_path):
     # Clear the days dict since we'll be filling it with new ones
     for key in days:
@@ -127,7 +142,6 @@ def getAllWindows(year, read_path):
         days_txt_days = readDaysTxtAllDays(year, month, read_path)
         for day in days_txt_days:
             days[month] = days_txt_days
-
 
 
 def readDaysTxtAllDays(year, month, main_path):
@@ -187,6 +201,8 @@ def readDaysTxtOneDay(year, month, day, main_path):
     return begin_ends
 
 if __name__ == "__main__":
+    checkGivenPaths()
+
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
