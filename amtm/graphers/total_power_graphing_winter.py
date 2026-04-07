@@ -154,10 +154,13 @@ def getPowrForYear(year, mons, months, mainpath):
             power = dayfolder + '/T_and_power.txt'
 
             # TODO: change this so it only checks for file0 and makes sure np array is 2-D
-            if exists(file0) == True and exists(file1) == True:
-                powrs.append(np.loadtxt(power))  #opens the files in a np, index-able array 6 column array,
+            if exists(file0):
+                powr = np.loadtxt(power)  #opens the files in a np, index-able array 6 column array,
+                if powr.ndim == 1:
+                    powr = np.array([powr])
+                powrs.append(powr)
             else:
-                print(f"WARNING: {day} is too short to have TempOH1_TOTAL.csv file, so its total power won't be used.")
+                print(f"WARNING: {day} doesn't have a TempOH0_TOTAL.csv file, so its total power won't be used.")
     return powrs
 
 

@@ -210,20 +210,23 @@ def makeMonthlyPlot(year, month, mon, mainpath):
         filethere = mainpath+f'/{year}/{month}{year}/{day}/'\
 
         file0 = filethere +  'TempOH0_TOTAL.csv'
-        file1 = filethere + 'TempOH1_TOTAL.csv'
         dayfolder = path+f'{day}'
         power = dayfolder + '/T_and_power.txt'
 
         # TODO: change this so it only checks for file0 and makes sure np array is 2-D
-        if exists(file0) == True and exists(file1) == True:
+        if exists(file0):
             powr = np.loadtxt(power) #opens the files in a np, index-able array 6 column array,
+
+            if powr.ndim == 1:
+                powr = np.array([powr])
+
             # 0-year 1-month 2-day 3-time in decimal hour
             # 4- power value(x) 5-exponent(y) of power in base 10(power)
             lp = len(powr)
 
             plt.plot(getTimeInDoY(powr), (powr[0:lp,4]), marker = '.',linestyle = 'solid', markersize = 5, color = f'{color}' )
         else:
-            print(f"WARNING: {day} is too short to have TempOH1_TOTAL.csv file, so its total power won't be used.")
+            print(f"WARNING: {day} doesn't have a TempOH0_TOTAL.csv file, so its total power won't be used.")
 
     plt.title(f'Total Power {month}, {year}')
     plt.ylabel('Total power')
