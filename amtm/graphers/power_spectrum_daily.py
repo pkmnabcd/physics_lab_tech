@@ -75,7 +75,7 @@ def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
 
     ####################Actual Mesh Plot
     # This is probaly responsible for the log power scale changing with each graph.
-    plt.pcolormesh(x,y,(data[:,:-1]),cmap='jet',vmin=-10, vmax = -6.5)
+    plt.pcolormesh(x,y,(data[:,:-1]),cmap='jet',vmin=-9, vmax = -7)
     plt.colorbar(label='log$_{10}$(PSD)')
 
     plt.plot()
