@@ -85,16 +85,16 @@ MONTHS = list(MONTH_STUBS.keys())
 def checkGivenPaths():
     if not exists(IDL_DIR):
         print(f"WARNING!! The given IDL_DIR: {IDL_DIR} does not exist!")
-        exit()
+        sys.exit()
     if not exists(idl_scripts_dir):
         print(f"WARNING!! The given idl_scripts_dir: {idl_scripts_dir} does not exist!")
-        exit()
+        sys.exit()
     if not exists(save_dir):
         print(f"WARNING!! The given save_dir: {save_dir} does not exist!")
-        exit()
+        sys.exit()
     if not exists(read_dir):
         print(f"WARNING!! The given read_dir: {read_dir} does not exist!")
-        exit()
+        sys.exit()
 
 
 def getAllWindows(year, read_path):
