@@ -1,5 +1,6 @@
 import sys
 from os.path import join, exists
+from pathlib import Path
 
 from calculate_tot_powr import calcWindowTotalPowerOverTime
 from total_power_graphing_monthly import makeMonthlyPlot
@@ -182,6 +183,9 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                 source_path = join(read_dir, f"{month}{year}", "")
                 day_string = f"{month_stub}{day}"
                 end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}")
+
+                # Make the csv folder if it doesn't exist
+                Path(end_path).mkdir(exist_ok=True)
 
                 MAX_ATTEMPTS = 5
                 attempt = 0

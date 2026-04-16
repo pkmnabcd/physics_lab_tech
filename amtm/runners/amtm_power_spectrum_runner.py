@@ -1,5 +1,6 @@
 import sys
 from os.path import join, exists
+from pathlib import Path
 
 from power_spectrum_daily import makeWindowPowerSpectrum
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
@@ -231,6 +232,9 @@ if __name__ == "__main__":
                 end_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "")
                 begin_str = str(begin)
                 end_str = str(end)
+
+                # Make the csv folder if it doesn't exist
+                Path(end_path).mkdir(exist_ok=True)
 
                 # Create csv files using the IDL code in read_images
                 if not skip_IDL:
