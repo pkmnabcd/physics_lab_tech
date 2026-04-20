@@ -1,1 +1,4 @@
 Add potential errors to documentation
+
+It's not clear that you can do either the year or the days for power spectrum.
+Make sure to clarify that you can run the program to find all the days for whichever year, or you can pick the specific days you want to do. Also make sure to clarify that to do the whole winter, you have to run it first with the first year, then run again with the second year.
