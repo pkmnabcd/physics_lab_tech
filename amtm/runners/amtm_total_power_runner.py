@@ -34,7 +34,7 @@ idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "AMTM", "
 save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
 
 # NOTE: this should be the main directory of the drive you're using.
-# It should contain the month-year folders (like October2016/) and months.txt file.
+# It should contain the month-year folders (like October2016/) and maybe an old months.txt file.
 read_dir = join("I:\\")
 
 # NOTE: this is the years in your winter
@@ -98,10 +98,10 @@ def checkGivenPaths():
         sys.exit()
 
 
-def getAllWindows(year, read_path):
+def getAllWindows(year, path):
     days = {}
     for month in MONTHS:
-        days_txt_days = readDaysTxtAllDays(year, month, read_path)
+        days_txt_days = readDaysTxtAllDays(year, month, path)
         days[month] = days_txt_days
     return days
 
@@ -276,9 +276,9 @@ if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
     print(f"--- Finding all nights for the {year1}-{year2} winter ---")
-    days1 = getAllWindows(year1, read_dir)
+    days1 = getAllWindows(year1, save_dir)
     months1, mons1 = getMonthsInYear(days1)
-    days2 = getAllWindows(year2, read_dir)
+    days2 = getAllWindows(year2, save_dir)
     months2, mons2 = getMonthsInYear(days2)
 
     print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
