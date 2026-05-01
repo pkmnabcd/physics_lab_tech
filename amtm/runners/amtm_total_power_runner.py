@@ -34,7 +34,7 @@ idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "AMTM", "
 save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
 
 # NOTE: this should be the main directory of the drive you're using.
-# It should contain the month-year folders (like October2016/) and months.txt file.
+# It should contain the month-year folders (like October2016/) and maybe an old months.txt file.
 read_dir = join("I:\\")
 
 # NOTE: this is the years in your winter
