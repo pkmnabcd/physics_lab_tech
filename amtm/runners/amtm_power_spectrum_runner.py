@@ -32,7 +32,7 @@ idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "AMTM", "
 save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
 
 # NOTE: this should be the main directory of the drive you're using.
-# It should contain the month-year folders (like October2016/) and maybe an old months.txt file.
+# It should contain the month-year folders (like October2016/) and months.txt file.
 read_dir = join("I:\\")
 
 # NOTE: this is the year you're making power spectrums for.
@@ -134,13 +134,13 @@ def checkGivenPaths():
         sys.exit()
 
 
-def getAllWindows(year, path):
+def getAllWindows(year, read_path):
     # Clear the days dict since we'll be filling it with new ones
     for key in days:
         days[key] = []
 
     for month in MONTHS:
-        days_txt_days = readDaysTxtAllDays(year, month, path)
+        days_txt_days = readDaysTxtAllDays(year, month, read_path)
         for day in days_txt_days:
             days[month] = days_txt_days
 
@@ -210,7 +210,7 @@ if __name__ == "__main__":
     if do_all_windows:
         print(f"--- Getting power spectrums for all windows in year {year} on the drive ---")
         # NOTE: wipe and add all nights in days.txt files into days dict.
-        getAllWindows(year, save_dir)
+        getAllWindows(year, read_dir)
 
     print(f"--- Generating power spectrums for {year} ---")
     for month in MONTHS:
