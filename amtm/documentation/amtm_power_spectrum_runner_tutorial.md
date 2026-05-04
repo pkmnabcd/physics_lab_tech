@@ -64,7 +64,11 @@ year = "2016"
 ```
 
 ### **days**
-Finally, you'll edit the following code.
+There are two main ways you can run this program.
+You can either specify the nights that you want the power spectrum made for, or you can do all known windows for the year.
+If you want to specify the days that you want to make power spectrums for, edit the following code.
+Otherwise, ignore it because it will get filled in automatically by the program.
+For more information, see [the do_all_windows section](#do_all_windows).
 ```python
 days = {
     "January": [
@@ -112,6 +116,7 @@ do_all_windows = False
 If you want to just make a power spectrum for each window, set this option to True.
 It will make a power spectrum for each window in the drive's `days.txt` file for each month in the `year`, designated above.
 So, to make the power spectrums for all the windows in the drive, you will have to do it twice, once for each year your drive covers.
+It will ignore the `days` dictionary defined in the code.
 
 
 ### **skip_IDL**
