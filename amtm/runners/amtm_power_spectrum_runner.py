@@ -160,10 +160,10 @@ def readDaysTxtAllDays(year, month, main_path):
             parts = line.split()
             if i == 0: # The first line should be the month stub
                 if len(parts) != 1:
-                    print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
+                    print("WARNING! The first line should be the month stub like Nov or Apr . Make sure days.txt is formatted correctly.")
                 continue
             if len(parts) != 3:
-                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
+                print(f"WARNING! At least one row in {read_path} has {len(parts)} columns instead of 3. Make sure {read_path} is formatted correctly.")
             split_lines.append(parts)
 
     days_list = []
@@ -192,7 +192,7 @@ def readDaysTxtOneDay(year, month, day, main_path):
                     print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
                 continue
             if len(parts) != 3:
-                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
+                print(f"WARNING! At least one row in {read_path} has {len(parts)} columns instead of 3. Make sure {read_path} is formatted correctly.")
             split_lines.append(parts)
 
     begin_ends = []
@@ -200,6 +200,60 @@ def readDaysTxtOneDay(year, month, day, main_path):
         if line[0] == day:
             begin_ends.append((int(line[1]), int(line[2])))
     return begin_ends
+
+def getDaysTxtData(days_path):
+    split_lines = []
+    with open(days_path) as f:
+        lines = f.readlines()
+        for i in range(len(lines)):
+            line = lines[i]
+            line = line.strip("\n\r")
+            if len(line) == 0 or line[0] == '#':
+                continue
+            parts = line.split()
+            if i == 0: # The first line should be the month stub
+                if len(parts) != 1:
+                    print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
+                continue
+            if len(parts) != 3:
+                print(f"WARNING! At least one row in {days_path} has {len(parts)} columns instead of 3. Make sure {days_path} is formatted correctly.")
+            split_lines.append(parts)
+
+    data = []
+    for line in split_lines:
+        data.append((line[0], line[1], line[2]))
+    return data
+
+
+def daysTxtAreSame(year):
+    areSame = True
+    for month in MONTHS:
+        days_read_path = join(read_dir, f"{month}{year}", "days.txt")
+        days_save_path = join(save_dir, year, f"{month}{year}", "days.txt")
+        days_read_exists = exists(days_read_path)
+        days_save_exists = exists(days_save_path)
+        if not days_read_exists and not days_save_exists:
+            continue
+        # There should be a days.txt file in the save if there's one on the drive
+        elif (days_read_exists and not days_save_exists):
+            print(f"WARNING!!! Only one of the following days.txt files exists:\n\t{days_read_path}\n\t{days_save_path}")
+            areSame = False
+            continue
+        elif (not days_read_exists and days_save_exists):
+            continue # save may have months not present in read drive
+
+        days_read = getDaysTxtData(days_read_path)
+        days_save = getDaysTxtData(days_save_path)
+        if len(days_read) != len(days_save):
+            print(f"WARNING!!! the days.txt data are not the same length at the following two paths!\n\t{days_read_path}\n\t{days_save_path}")
+            areSame = False
+            continue
+        for i in range(len(days_read)):
+            for j in range(3): # 3 is length of inner tuples
+                if days_read[i][j] != days_save[i][j]:
+                    print(f"WARNING!!! the days.txt data do not share the same data at the following two paths!\n\t{days_read_path}\n\t{days_save_path}")
+                    areSame = False
+    return areSame
 
 if __name__ == "__main__":
     checkGivenPaths()

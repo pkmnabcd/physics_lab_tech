@@ -124,7 +124,7 @@ def readDaysTxtAllDays(year, month, main_path):
                     print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
                 continue
             if len(parts) != 3:
-                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
+                print(f"WARNING! At least one row in {read_path} has {len(parts)} columns instead of 3. Make sure {read_path} is formatted correctly.")
             split_lines.append(parts)
 
     days_list = []
@@ -153,7 +153,7 @@ def readDaysTxtOneDay(year, month, day, main_path):
                     print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
                 continue
             if len(parts) != 3:
-                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
+                print(f"WARNING! At least one row in {read_path} has {len(parts)} columns instead of 3. Make sure {read_path} is formatted correctly.")
             split_lines.append(parts)
 
     begin_ends = []
@@ -229,7 +229,7 @@ def getDaysTxtData(days_path):
                     print("WARNING! The first line should be the month stub like Nov or Apr. Make sure days.txt is formatted correctly.")
                 continue
             if len(parts) != 3:
-                print(f"WARNING! parts has a length of {len(parts)} instead of 3. Make sure days.txt is formatted correctly.")
+                print(f"WARNING! At least one row in {days_path} has {len(parts)} columns instead of 3. Make sure {days_path} is formatted correctly.")
             split_lines.append(parts)
 
     data = []
