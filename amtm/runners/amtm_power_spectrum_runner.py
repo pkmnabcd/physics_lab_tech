@@ -261,6 +261,12 @@ if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
+    print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
+    if not daysTxtAreSame(year):
+        print("--- Exiting because some days.txt files are not the same ---")
+        sys.exit()
+    print("--- Check passed ---")
+
     if do_all_windows:
         print(f"--- Getting power spectrums for all windows in year {year} on the drive ---")
         # NOTE: wipe and add all nights in days.txt files into days dict.
