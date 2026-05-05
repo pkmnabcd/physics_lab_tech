@@ -1,2 +1,2 @@
-Add potential errors to documentation
-
+Add checking to make sure timestamps.txt exists (maybe in the calculate_tot_powr.py ?)
+    Also update documentation to reflect that new error

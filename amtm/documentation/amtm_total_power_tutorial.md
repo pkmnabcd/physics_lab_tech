@@ -161,6 +161,35 @@ the correspondance would be the following.
 and so on.
 These timestamps are used to get the timeseries data for the plots.
 
+# Potential Errors
+This section covers some potential errors you may run into and some possible troubleshooting steps.
+
+## Path Not Existing
+Several errors you may encounter may involve path not found errors or directories not existing.
+* **WARNING!! The given ____dir: ___ does not exist!**
+    * This happens when the directories you put in don't exist. These are the `IDL_DIR`, `idl_scripts_dir`, `save_dir`, and `read_dir`. Make sure these paths are correct. You can check to see what paths were actually used by using Spyder's variable explorer or by printing the variable when running the script with interactivity after it runs (`python -i`).
+* **FileNotFoundError: ___/timestamp.txt not found.**
+    * This means that your `timestamp.txt` file is missing. Make sure you make your timestamp file according to the [save directory prep instructions](#save-directory).
+* **WARNING! File missing: ___/TempOH_TOTAL.csv**
+    * This means that the `.csv` files from the IDL processing haven't been made. Make sure that the `skip_processing` option is false the first time you run this program on the data.
+
+## Improper Files
+You may encounter errors relating to improperly formatted or files.
+There can also be errors relating to files not being filled out properly.
+In particular, the `days.txt` and `timestamp.txt` could be easily messed up.
+For these, see the instructions for the [read directory setup](#read-directory) and the [save directory setup](#save-directory) to see where you went wrong with your file setup.
+* **WARNING! The first line should be the month stub like Nov or Apr . Make sure days.txt is formatted correctly.**
+    * You will get this if your `days.txt` file is missing the month stub on the first line of the file.
+* **WARNING! At least one row in ___/days.txt has _ columns instead of 3. Make sure ___/days.txt is formatted correctly.**
+    * You will get this if at least one row of the `days.txt` file (besides the line with the month stub) doesn't have 3 columns.
+* **WARNING!!! Only one of the following days.txt files exists:**
+    * This will occur when the `days.txt` file exists only in the `read_dir`'s month-year or in the `save_dir`'s year/month-year folder. Make sure that it is present in both.
+* **WARNING!!! the days.txt data are not the same length at the following two paths!**
+    * This will occur when the the `read_dir`'s and `save_dir`'s version of `days.txt` contain different numbers of columns. Make sure that they have the same data.
+* **WARNING!!! the days.txt data do not share the same data at the following two paths!**
+    * This will occur when the the `read_dir`'s and `save_dir`'s version of `days.txt` contain the same number of columns, but have different windows. Make sure that they have the same data.
+* **WARNING: The length of days.txt: __ does not equal the length of timestamp.txt: __**
+    * This will happen when the `days.txt` file doesn't have the same number of data rows as the `timestamp.txt` file. This means that there isn't a timestamp to go along with each data window. Make sure each window has a corresponding timestamp of the beginning.
 
 # Running the Program
 Once you have opened the runner in your chosen environment and adjusted the required variables, you should be able to simply hit the run button to run it.
