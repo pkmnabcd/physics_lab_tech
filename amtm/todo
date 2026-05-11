@@ -1,2 +1,4 @@
 Add checking to make sure timestamps.txt exists (maybe in the calculate_tot_powr.py ?)
     Also update documentation to reflect that new error
+
+Possibly rename do_all_windows to do_all_days for clarity
