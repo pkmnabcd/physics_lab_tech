@@ -235,7 +235,7 @@ def makeMonthlyPlot(year, month, mon, mainpath):
     xlim0, xlim1 = getXLimits(mon, year)
     plt.xlim(xlim0,xlim1)
 
-    saveLocation = path + f'../{mon}Totpowr{year}.png' # NOTE: putting file in year folder
+    saveLocation = join(path, "..", f"{mon}Totpowr{year}.png" # NOTE: putting file in year folder
     plt.savefig(saveLocation)
     plt.close()
     print('Finis')
