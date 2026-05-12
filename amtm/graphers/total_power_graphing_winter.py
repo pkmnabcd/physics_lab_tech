@@ -203,7 +203,8 @@ def makeWinterPlot(year1, year2, months1, months2, mons1, mons2, mainpath):
 
     plt.legend(fontsize=20)
 
-    saveLocation = mainpath + f'../Totpowr_winter_{year1}_to_{year2}.png'
+    # NOTE: this should put the plot in the main folder
+    saveLocation = join(mainpath, f"Totpowr_winter_{year1}_to_{year2}.png")
     plt.savefig(saveLocation)
     plt.close()
     print('Finis')
