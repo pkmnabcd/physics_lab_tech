@@ -73,6 +73,10 @@ def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
     timestamp_path = join(mainpath, year, f'{month}{year}', 'timestamp.txt')
     save_path = join(mainpath, year, f'{month}{year}', dayframe, "T_and_power.txt")
 
+    if not exists(timestamp_path):
+        print(f"WARNING: This timestamp file is missing! {timestamp_path}")
+        return -1
+
     days_data = getDaysTxtData(days_path)
     timestamp_data = np.loadtxt(timestamp_path)
 
@@ -81,7 +85,7 @@ def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
 
     if not len(days_data) == len(timestamp_data):
         print(f"WARNING: The length of days.txt: {len(days_data)} does not equal the length of timestamp.txt: {len(timestamp_data)}")
-        return
+        return -1
 
     myear = timestamp_data[:,0]
     mmonth = timestamp_data[:,1]

@@ -199,7 +199,8 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                         IDL.run(".FULL_RESET_SESSION")
                         IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
                         IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-                calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir)
+                if -1 == calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir):
+                    sys.exit()
                 print(f"--- FFT and total power processing finished for {year} {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
 
 
