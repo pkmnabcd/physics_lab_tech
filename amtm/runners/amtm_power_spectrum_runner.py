@@ -305,6 +305,9 @@ if __name__ == "__main__":
                             IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin_str, ends=end_str, endDir=end_path)
                             attempt = MAX_ATTEMPTS # Break out of the loop
                         except IDLError as e:
+                            if "Attempt to subscript TEMPFILES with I is out of range." in str(e):
+                                print(f"Encountered the following IDL Error: {e}\nThis means that you need to do the image processing for this night.")
+                                sys.exit()
                             attempt += 1
                             print(f"Encountered the following IDL Error: {e}\nRestarting IDL and will attempt {MAX_ATTEMPTS-attempt} more times. If it's a memory problem and it persists, restart your computer and try again.")
                             IDL.run(".FULL_RESET_SESSION")
