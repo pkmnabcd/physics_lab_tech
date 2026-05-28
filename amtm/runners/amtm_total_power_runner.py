@@ -4,7 +4,8 @@ from pathlib import Path
 
 from calculate_tot_powr import calcWindowTotalPowerOverTime
 from total_power_graphing_monthly import makeMonthlyPlot
-from total_power_graphing_winter import makeWinterPlot
+from total_power_graphing_winter_1_year import makeWinterPlotOneYear
+from total_power_graphing_winter_2_year import makeWinterPlotTwoYear
 # NOTE: The supporting python files should be in the same directory as this python program
 
 
@@ -327,7 +328,7 @@ if __name__ == "__main__":
 
     if winter_over_2_years:
         print(f"--- Making winter plot for the {year1}-{year2} winter ---")
-        makeWinterPlot(year1, year2, months1, months2, mons1, mons2, save_dir)
+        makeWinterPlotTwoYear(year1, year2, months1, months2, mons1, mons2, save_dir)
     else:
         print(f"--- Making winter plot for the {year1} winter ---")
-        #makeWinterPlot(year1, year2, months1, months2, mons1, mons2, save_dir)
+        makeWinterPlotOneYear(year1, months1, mons1, save_dir)

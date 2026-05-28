@@ -213,7 +213,7 @@ Once you have opened the runner in your chosen environment and adjusted the requ
 The program will constantly log what it's up to, so you should be able to track its progress.
 Messages (besides error messages) that are from the runner and not the IDL code will have dashes to signify their origin (`--- message ---`).
 The program will output the following sets of files in your `save_dir`.
-* Inside the base `save_dir` directory there will be a plot of the winter. In its filename it will say the `year1` and `year2` of the drive. It will look like, for example `Totpowr_winter_2013_to_2014.jpg`.
+* Inside the base `save_dir` directory there will be a plot of the winter. In its filename it will say the `year1` and `year2` of the drive (or just `year1` if the winter takes place in just one year). It will look like, for example `Totpowr_winter_2013_to_2014.jpg`.
 * Inside the year folders, there will be total power plots made for each month of windows. They have the month stub and the year in their filenames. They will look like, for example `MarTotpowr2016.jpg`.
 * Inside the year then month-year folders, there will be folders made for each window in your `days.txt` file. They have the month stub, days of the month that the night involves, and the image indexes of the start and end of the window. They will look like the following.
     * `Nov30-01_0000-0400`
