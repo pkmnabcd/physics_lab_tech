@@ -5,10 +5,10 @@ from pathlib import Path
 from calculate_tot_powr import calcWindowTotalPowerOverTime
 from total_power_graphing_monthly import makeMonthlyPlot
 from total_power_graphing_winter import makeWinterPlot
-# NOTE: power_spectrum_daily.py should be in the same directory as this python program
+# NOTE: The supporting python files should be in the same directory as this python program
 
 
-# NOTE: you may have to adjust IDL_DIR for your system
+# NOTE: You may have to adjust IDL_DIR for your system.
 IDL_DIR = join("C:\\", "Program Files", "Harris", "IDL89")
 sys.path.append(f"{IDL_DIR}/lib/bridges")
 
@@ -24,20 +24,25 @@ from idlpy import IDL, IDLError
 # NOTE: Begin editing here!!!!!!!
 
 
-# NOTE: the following code yields the path
+# NOTE: The following code yields the path
 # C:\Users\Domi\OneDrive\Desktop\MachineLearning\IDLCode
 idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "AMTM", "IDLCode")
 
-# NOTE: this should the directory where ALOMAR output data goes.
+# NOTE: This should the directory where ALOMAR output data goes.
 # It should contain your year folders, plots of the winter, etc.
 # This is where the output CSV files go.
 save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
 
-# NOTE: this should be the main directory of the drive you're using.
+# NOTE: This should be the main directory of the drive you're using.
 # It should contain the month-year folders (like October2016/) and maybe an old months.txt file.
 read_dir = join("I:\\")
 
-# NOTE: this is the years in your winter
+# NOTE: If your winter takes place over two years, set this as True.
+# Otherwise (like in the south pole), set it to False.
+winter_over_2_years = True
+
+# NOTE: this is the years in your winter.
+# If there is only one year in your data, set that as year1.
 year1 = "2016"
 year2 = "2017"
 
@@ -282,20 +287,27 @@ if __name__ == "__main__":
     print(f"--- Finding all nights for the {year1}-{year2} winter ---")
     days1 = getAllWindows(year1, read_dir)
     months1, mons1 = getMonthsInYear(days1)
-    days2 = getAllWindows(year2, read_dir)
-    months2, mons2 = getMonthsInYear(days2)
+    if winter_over_2_years:
+        days2 = getAllWindows(year2, read_dir)
+        months2, mons2 = getMonthsInYear(days2)
 
     print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
-    if not daysTxtAreSame(year1) or not daysTxtAreSame(year2):
-        print("--- Exiting because some days.txt files are not the same ---")
-        sys.exit()
+    if winter_over_2_years:
+        if not daysTxtAreSame(year1) or not daysTxtAreSame(year2):
+            print("--- Exiting because some days.txt files are not the same ---")
+            sys.exit()
+    else:
+        if not daysTxtAreSame(year1):
+            print("--- Exiting because some days.txt files are not the same ---")
+            sys.exit()
     print("--- Check passed ---")
 
     if skip_processing:
         print("--- Skipping FFT and total power processing. ---")
     else:
         doIDLAndTotPowrProcessingOneYear(year1, days1)
-        doIDLAndTotPowrProcessingOneYear(year2, days2)
+        if winter_over_2_years:
+            doIDLAndTotPowrProcessingOneYear(year2, days2)
     print("--- Generating Plots ---")
 
     # Making monthly plots for year 1
@@ -305,12 +317,17 @@ if __name__ == "__main__":
         print(f"--- Making montly plot for {month} {year1} ---")
         makeMonthlyPlot(year1, month, mon, save_dir)
 
-    # Making monthly plots for year 2
-    for i in range(len(months2)):
-        month = months2[i]
-        mon = mons2[i]
-        print(f"--- Making montly plot for {month} {year2} ---")
-        makeMonthlyPlot(year2, month, mon, save_dir)
+    if winter_over_2_years:
+        # Making monthly plots for year 2
+        for i in range(len(months2)):
+            month = months2[i]
+            mon = mons2[i]
+            print(f"--- Making montly plot for {month} {year2} ---")
+            makeMonthlyPlot(year2, month, mon, save_dir)
 
-    print(f"--- Making winter plot for the {year1}-{year2} winter ---")
-    makeWinterPlot(year1, year2, months1, months2, mons1, mons2, save_dir)
+    if winter_over_2_years:
+        print(f"--- Making winter plot for the {year1}-{year2} winter ---")
+        makeWinterPlot(year1, year2, months1, months2, mons1, mons2, save_dir)
+    else:
+        print(f"--- Making winter plot for the {year1} winter ---")
+        #makeWinterPlot(year1, year2, months1, months2, mons1, mons2, save_dir)

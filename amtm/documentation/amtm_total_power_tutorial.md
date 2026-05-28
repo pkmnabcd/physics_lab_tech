@@ -57,13 +57,30 @@ read_dir = join("I:\\")
 This is the main directory where the raw data images are stored at, usually the root of the drive, but sometimes there's another subdirectory of the root you have to navigate to.
 This directory should contain your `months.txt` file and the month-year folders like `October2016`.
 
+### **winter_over_2_years**
+This corresponds to the following line.
+```python
+winter_over_2_years = True
+```
+This variable should be `True` if the winter your drive's data covers takes place over two years.
+For example, ALOMAR AMTM data often takes place from August to April.
+However, if your winter takes place in a single year, like as in the south pole, make this variable `False`.
+
 ### **year1 and year2**
-You'll edit the following line with the year that you are looking at.
+You'll edit the following line with the years that you are looking at.
 In one drive, there is typically two different years since the drive is for a winter's worth of data.
 Put the earlier year as `year1` and the later year as `year2`.
 ```python
+winter_over_2_years = True
 year1 = "2016"
 year2 = "2017"
+```
+If your drive has all its data in one year (like in the south pole), only change `year1`.
+The value of `year2` will be ignored.
+```python
+winter_over_2_years = False
+year1 = "2016"
+year2 = "Literally Doesn't matter"
 ```
 
 ## Some Options
