@@ -1,6 +1,4 @@
 Add checking to make sure timestamps.txt exists (maybe in the calculate_tot_powr.py ?)
     Also update documentation to reflect that new error
-Change the code's messages depending on whether winter_over_2_years is on or not.
-    Like 'Finding all nights for the 2018-2017 winter'
 
 Possibly rename do_all_windows to do_all_days for clarity
