@@ -56,12 +56,12 @@ def getDaysTxtData(days_path):
 def getTimestampData(img_path):
     with open(img_path, "rb") as f:
         f.seek(247)
-        second = f.read(4)
-        minute = f.read(4)
-        hour = f.read(4)
-        day = f.read(4)
-        month = f.read(4) + 1   # January is the 1st month, represented by 0.
-        year = f.read(4) + 1900 # year is defined relative to 1900
+        second = int(f.read(4))
+        minute = int(f.read(4))
+        hour = int(f.read(4))
+        day = int(f.read(4))
+        month = int(f.read(4)) + 1   # January is the 1st month, represented by 0.
+        year = int(f.read(4)) + 1900 # year is defined relative to 1900
 
         decimal_hour = hour + (minute / 60) + (second / 3600)
         print(f"Acquired data: year: {year}, month: {month}, day: {day}, dec_hour: {decimal_hour}")
@@ -72,7 +72,6 @@ def getTimestampData(img_path):
 def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, p12_img_stub, mainpath, drivePath):
     dayframe = f'{mon}{night}_{begin}-{end}'
 
-    days_path = join(mainpath, year, f'{month}{year}', 'days.txt')
     save_path = join(mainpath, year, f'{month}{year}', dayframe, "T_and_power.txt")
     timestamp_img_path = join(drivePath, f"{month}{year}", f"{mon}{night}", f"{p12_img_stub}{begin}.tif")
 
