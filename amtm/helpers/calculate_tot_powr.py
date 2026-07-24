@@ -56,12 +56,12 @@ def getDaysTxtData(days_path):
 def getTimestampData(img_path):
     with open(img_path, "rb") as f:
         f.seek(247)
-        second = int(f.read(4))
-        minute = int(f.read(4))
-        hour = int(f.read(4))
-        day = int(f.read(4))
-        month = int(f.read(4)) + 1   # January is the 1st month, represented by 0.
-        year = int(f.read(4)) + 1900 # year is defined relative to 1900
+        second = int.from_bytes(f.read(4), "little")
+        minute = int.from_bytes(f.read(4), "little")
+        hour = int.from_bytes(f.read(4), "little")
+        day = int.from_bytes(f.read(4), "little")
+        month = int.from_bytes(f.read(4), "little") + 1   # January is the 1st month, represented by 0.
+        year = int.from_bytes(f.read(4), "little") + 1900 # year is defined relative to 1900
 
         decimal_hour = hour + (minute / 60) + (second / 3600)
         print(f"Acquired data: year: {year}, month: {month}, day: {day}, dec_hour: {decimal_hour}")
