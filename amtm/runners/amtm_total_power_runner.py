@@ -25,6 +25,12 @@ from idlpy import IDL, IDLError
 # NOTE: Begin editing here!!!!!!!
 
 
+# NOTE: The stub of the P12 image file. Some drives have different names for the P12 images,
+# so put in what the stub is for this drive. In my experience, ALOMAR often has 'P12_31_XXXX.tif',
+# while McMurdo AMTM often says 'P12_1_XXXX.tif'. Put in the filename before the image number (like 0492).
+p12_img_stub = "P12_31_"
+#p12_img_stub = "P12_1_"
+
 # NOTE: The following code yields the path
 # C:\Users\Domi\OneDrive\Desktop\MachineLearning\IDLCode
 idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "AMTM", "IDLCode")
@@ -208,7 +214,7 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                         IDL.run(".FULL_RESET_SESSION")
                         IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
                         IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-                if -1 == calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir):
+                if -1 == calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", p12_img_stub, save_dir, read_dir):
                     sys.exit()
                 print(f"--- FFT and total power processing finished for {year} {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
 

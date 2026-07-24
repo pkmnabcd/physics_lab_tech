@@ -53,64 +53,35 @@ def getDaysTxtData(days_path):
     return data
 
 
-def getWindowIndex(days_data, night, begin, end):
-    window_found = False
-    index = -1
-    for i in range(len(days_data)):
-        if days_data[i][0] == night and days_data[i][1] == begin and days_data[i][2] == end:
-            index = i
-            window_found = True
-            break
+def getTimestampData(img_path):
+    with open(img_path, "rb") as f:
+        f.seek(247)
+        second = f.read(4)
+        minute = f.read(4)
+        hour = f.read(4)
+        day = f.read(4)
+        month = f.read(4) + 1   # January is the 1st month, represented by 0.
+        year = f.read(4) + 1900 # year is defined relative to 1900
 
-    return window_found, index
+        decimal_hour = hour + (minute / 60) + (second / 3600)
+        print(f"Acquired data: year: {year}, month: {month}, day: {day}, dec_hour: {decimal_hour}")
+        return year, month, day, decimal_hour
 
 
 # NOTE: make sure begin and end are strings
-def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, mainpath):
+def calcWindowTotalPowerOverTime(year, month, mon, night, begin, end, p12_img_stub, mainpath, drivePath):
     dayframe = f'{mon}{night}_{begin}-{end}'
 
     days_path = join(mainpath, year, f'{month}{year}', 'days.txt')
-    timestamp_path = join(mainpath, year, f'{month}{year}', 'timestamp.txt')
     save_path = join(mainpath, year, f'{month}{year}', dayframe, "T_and_power.txt")
+    timestamp_img_path = join(drivePath, f"{month}{year}", f"{mon}{night}", f"{p12_img_stub}{begin}.tif")
 
-    if not exists(timestamp_path):
-        print(f"WARNING: This timestamp file is missing! {timestamp_path}")
+    if not exists(timestamp_img_path):
+        print(f"WARNING: The first P12 image file (needed for timestamp) is missing! {timestamp_img_path}")
         return -1
 
-    days_data = getDaysTxtData(days_path)
-    timestamp_data = np.loadtxt(timestamp_path)
-
-    if timestamp_data.ndim == 1:
-        timestamp_data = np.array([timestamp_data])  # This covers when np.loadtxt automatically reshapes single-row files
-
-    if not len(days_data) == len(timestamp_data):
-        print(f"WARNING: The length of days.txt: {len(days_data)} does not equal the length of timestamp.txt: {len(timestamp_data)}")
-        return -1
-
-    myear = timestamp_data[:,0]
-    mmonth = timestamp_data[:,1]
-    mday = timestamp_data[:,2]
-    mhour = timestamp_data[:,3]
-    mmin = timestamp_data[:,4]
-    msec = timestamp_data[:,5]
-
-    tL = len(timestamp_data) # Length of the columns in the file
-    # creates a numpy array containing the starting time in decimal hours
-    tmp_dec_hour_holder = []
-    for i in range(0,tL):
-        replace = mhour[i] + mmin[i]/60 + msec[i]/3600
-        tmp_dec_hour_holder.append(replace)
-    dec_hour = np.array(tmp_dec_hour_holder)
-
-    found, window_index = getWindowIndex(days_data, night, begin, end)
-    if not found:
-        print(f"WARNING!! The window {mon}{night} [{begin},{end}] was not found in days.txt. Make sure everything in days.txt is present and formatted correctly.")
-        return
-
-    dyear = myear[window_index]
-    dmonth = mmonth[window_index]
-    day = mday[window_index]
-    hour = dec_hour[window_index]
+    # NOTE: the timestamp for the start of the window is now acquired from the starting P12 image.
+    dyear, dmonth, day, hour = getTimestampData(timestamp_img_path)
 
     perd_power = []
     perd_exponent = []
