@@ -64,7 +64,6 @@ def getTimestampData(img_path):
         year = int.from_bytes(f.read(4), "little") + 1900 # year is defined relative to 1900
 
         decimal_hour = hour + (minute / 60) + (second / 3600)
-        print(f"Acquired data: year: {year}, month: {month}, day: {day}, dec_hour: {decimal_hour}")
         return year, month, day, decimal_hour
 
 
