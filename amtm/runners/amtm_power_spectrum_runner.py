@@ -48,10 +48,10 @@ do_all_windows = False
 skip_IDL = False
 
 # NOTE: Put the nights you want inside the lists like
-# "January": (
+# "January": [
 #    "01-02",
 #    "05-06"
-# ),
+# ],
 days = {
     "January": [
     ],

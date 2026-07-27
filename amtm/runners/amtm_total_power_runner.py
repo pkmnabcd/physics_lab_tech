@@ -53,10 +53,99 @@ winter_over_2_years = True
 year1 = "2016"
 year2 = "2017"
 
+# NOTE: If you want to calculate the total power for only a specific set of
+# windows, set the following to False. This will complete the fft processing
+# for those windows, but you'll have to set do_all_windows to True again to
+# make plots (recall that if you've already done the main fft processing, you
+# can use skip_fft = True to skip to the total power combining and plotting.
+# Note that setting this to True will wipe the below 'days' parameter, so you
+# don't have to modify or clean up that input.
+do_all_windows = True
+
 # NOTE: If you want to skip the IDL code or total power caculation because
 # it has already done, and you just want new plots, set the following as true
 skip_processing = False
 
+# NOTE: If you want to skip only the IDL FFT processing, but still do the total
+# power calculations, set the following to True. This is mostly needed after you
+# process with 'do_all_windows = False' so that the windows that were reprocessed
+# can have their results combined with the previous ones.
+skip_fft = False
+
+# NOTE: Put the nights you want inside the lists like
+# "January": [
+#    "01-02",
+#    "05-06"
+# ],
+# If there are two years in your winter, this should contain windows for your
+# first year. If the winter takes place all in one year, put all the windos in
+# this dict.
+days1 = {
+    "January": [
+    ],
+    "February": [
+    ],
+    "March": [
+    ],
+    "April": [
+    ],
+    "May": [
+    ],
+    "June": [
+    ],
+    "July": [
+    ],
+    "August": [
+    ],
+    "September": [
+        "16-17"
+    ],
+    "October": [
+    ],
+    "November": [
+        "07-08",
+        "08-09"
+    ],
+    "December": [
+    ]
+}
+
+# NOTE: Put the nights you want inside the lists like
+# "January": [
+#    "01-02",
+#    "05-06"
+# ],
+# If there are two years in your winter, this should contain windows for your
+# second year. If the winter takes place all in one year, this doesn't matter
+days2 = {
+    "January": [
+    ],
+    "February": [
+    ],
+    "March": [
+    ],
+    "April": [
+    ],
+    "May": [
+    ],
+    "June": [
+    ],
+    "July": [
+    ],
+    "August": [
+    ],
+    "September": [
+        "16-17"
+    ],
+    "October": [
+    ],
+    "November": [
+        "07-08",
+        "08-09"
+    ],
+    "December": [
+    ]
+}
 
 
 # NOTE: YOU SHOULD NOT EDIT ANYTHING AFTER THIS
@@ -199,24 +288,33 @@ def doIDLAndTotPowrProcessingOneYear(year, days):
                 # Make the csv folder if it doesn't exist
                 Path(end_path).mkdir(exist_ok=True)
 
-                MAX_ATTEMPTS = 5
-                attempt = 0
-                while attempt < MAX_ATTEMPTS:
-                    try:
-                        IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
-                        attempt = MAX_ATTEMPTS # Break out of the loop
-                    except IDLError as e:
-                        if "Cannot open" in str(e):
-                            print(f"Encountered the following IDL Error: {e}\nThis means that you need to do the image processing for this night.")
-                            sys.exit()
-                        attempt += 1
-                        print(f"Encountered the following IDL Error: {e}\nRestarting IDL and will attempt {MAX_ATTEMPTS-attempt} more times. If it's a memory problem and it persists, restart your computer and try again.")
-                        IDL.run(".FULL_RESET_SESSION")
-                        IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
-                        IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-                if -1 == calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", p12_img_stub, save_dir, read_dir):
-                    sys.exit()
-                print(f"--- FFT and total power processing finished for {year} {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
+                if not skip_fft:
+                    MAX_ATTEMPTS = 5
+                    attempt = 0
+                    while attempt < MAX_ATTEMPTS:
+                        try:
+                            IDL.read_images(dateString=day_string, sourcePath=source_path, begins=begin, ends=end, endDir=end_path)
+                            attempt = MAX_ATTEMPTS # Break out of the loop
+                        except IDLError as e:
+                            if "Cannot open" in str(e):
+                                print(f"Encountered the following IDL Error: {e}\nThis means that you need to do the image processing for this night.")
+                                sys.exit()
+                            attempt += 1
+                            print(f"Encountered the following IDL Error: {e}\nRestarting IDL and will attempt {MAX_ATTEMPTS-attempt} more times. If it's a memory problem and it persists, restart your computer and try again.")
+                            IDL.run(".FULL_RESET_SESSION")
+                            IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
+                            IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
+                    print(f"--- FFT processing finished for {year} {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
+                else:
+                    print("--- Skipping FFT ---")
+
+                if not do_all_windows:
+                    print(f"--- FFT processing finished for {year} {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
+                    print("--- Skipping total power processing because we're not doing all windows. ---")
+                else:
+                    if -1 == calcWindowTotalPowerOverTime(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", p12_img_stub, save_dir, read_dir):
+                        sys.exit()
+                    print(f"--- Total power processing finished for {year} {month_stub}{day} frame: [{begin:04d},{end:04d}] ---")
 
 
 def getMonthsInYear(days):
@@ -291,16 +389,25 @@ if __name__ == "__main__":
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
 
-    print(f"--- Finding all nights for the {year1}-{year2} winter ---")
-    if winter_over_2_years:
-        print(f"--- Finding all nights for the {year1}-{year2} winter ---")
+    if do_all_windows:
+        if winter_over_2_years:
+            print(f"--- Finding all nights for the {year1}-{year2} winter ---")
+        else:
+            print(f"--- Finding all nights for the {year1} winter ---")
+        days1 = getAllWindows(year1, read_dir)
+        months1, mons1 = getMonthsInYear(days1)
+        if winter_over_2_years:
+            days2 = getAllWindows(year2, read_dir)
+            months2, mons2 = getMonthsInYear(days2)
+
     else:
-        print(f"--- Finding all nights for the {year1} winter ---")
-    days1 = getAllWindows(year1, read_dir)
-    months1, mons1 = getMonthsInYear(days1)
-    if winter_over_2_years:
-        days2 = getAllWindows(year2, read_dir)
-        months2, mons2 = getMonthsInYear(days2)
+        if winter_over_2_years:
+            print(f"--- Using specified windows for the {year1}-{year2} winter ---")
+            months1, mons1 = getMonthsInYear(days1)
+        else:
+            print(f"--- Using specified windows for the {year1} winter ---")
+            months1, mons1 = getMonthsInYear(days1)
+            months2, mons2 = getMonthsInYear(days2)
 
     print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
     if winter_over_2_years:
@@ -319,6 +426,11 @@ if __name__ == "__main__":
         doIDLAndTotPowrProcessingOneYear(year1, days1)
         if winter_over_2_years:
             doIDLAndTotPowrProcessingOneYear(year2, days2)
+
+    if not do_all_windows:
+        print("--- Since not processing all windows, skipping graphing. ---")
+        sys.exit()
+
     print("--- Generating Plots ---")
 
     # Making monthly plots for year 1

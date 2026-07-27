@@ -6,3 +6,4 @@ Add functionality to do just a specific set of windows for total power processin
 
 Add documentation for all new features
     Add doc for the P12 stub field
+    Change total power doc to clarify new functionality and name of skip_fft and do_all_windows
