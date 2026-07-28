@@ -86,12 +86,42 @@ year2 = "Literally Doesn't matter"
 ## Some Options
 The following are a few options that you can use, if desired. They are turned off (or `False`) by default.
 
+### **p12_img_stub**
+For each drive you use, check the filenames, and put whatever comes before the numbers and `.tif` in the `p12_img_stub`.
+From my experience, ALOMAR often has 'P12_31_XXXX.tif', while McMurdo has 'P12_1_XXXX.tif'.
+```python
+p12_img_stub = "P12_31_"
+#p12_img_stub = "P12_1_"
+```
+
+### **do_all_windows**
+Normally when you run the program, you will set this to `True` in order to do all the fft, total power processing, and graphing for the whole winter.
+However, if you adjusted a window, setting this to `False` will then make it so the windows in the `days1` and `days2` get FFT processing done.
+Make sure `skip_processing=False` so that FFT happens.
+They won't get graphed or total power processed because those imply overwriting some but not all total power files.
+So, after running with `do_all_windows=False`, run the program again with `do_all_windows=True` and `skip_fft=True` and `skip_processing=False` so that total power processing and graphing happen with the updated windows.
+```python
+do_all_windows = True
+```
+
+### **skip_fft**
+Set this to true when you want to skip the IDL fft processing. This is mostly here so that when you run with `do_all_windows=False`, you can then combine those results with the previous results relatively quickly.
+```python
+skip_fft = False
+```
+
 ### **skip_processing**
 This involves the following code.
 ```python
 skip_processing = False
 ```
 If you have already done the IDL and total power processing previously (so you already have the CSV files), you can skip that processing by setting this option to True.
+
+### **days1 and days2**
+These are the dictionaries that you will fill out if you're running with `do_all_windows = False`.
+See the examples in the code for how you fill it out.
+They `days1` corresponds to the windows in `year1` while `days2` corresponds to the windows in `year2`.
+If you're running with `do_all_windows = True`, then these will be ignored.
 
 ## File Setup
 The runner is expecting a variety of files in your drive where you're processing and where you're saving the data.
@@ -111,6 +141,7 @@ For nights that you want to make power spectrums for, there should be the follow
 * BG_31_ff
 * P12_31_ff
 * P14_31_ff
+* **NOTE:** These may say P14_1_ff instead of _31 for each set of images.
 
 Also inside the year-month folder should be a `days.txt` file (if the month has any windows).
 The `days.txt` file should look like the following example.
@@ -138,46 +169,6 @@ These folder names should have no space between the month and year, and the mont
 Inside the month-year folder you should have your `days.txt` file.
 It should be identical to the corresponding file in the read directory.
 
-Also in the month-year folder you should have a `timestamp.txt` file.
-This file should contain the timestamp of the first image indexed in each window in the `days.txt` file for that month.
-
-```
-#0-year 1-month 2-day 3-hour 4-minute 5-second
-#Ut time of the starting frame given and aligned for each day in days.txt
-2016 11  1 16 30 22
-2016 11  1 19 49 19
-2016 11  5  1 19  1
-2016 11  5 15 17 55
-2016 11  6 15 19 32
-2016 11  7 12 26 37
-2016 11 17 15 15 30
-2016 11  8  3 49 28
-2016 11  8  5  4 28
-2016 11  8 22 35 17
-2016 11 20 20 30  2
-```
-As shown in the comments, the above numbers represent the following.
-The year, month, day of month, hour, minute, second of the first image in the corresponding window.
-You get that timestamp from the Norway image reader.
-So that the file looks nice and organized, use the spacing shown above, where single-digit numbers are right-justified within the column.
-
-The only thing that maps the timestamp to the window in `days.txt` is the ordering, so given the following example `days.txt` file,
-```
-Nov
-01-02 0039 0600
-01-02 0670 1050
-05-06 0000 0350
-...
-...
-```
-
-the correspondance would be the following.
-* `01-02 0039 0600` corresponds to `2016 11  1 16 30 22`
-* `01-02 0670 1050` corresponds to `2016 11  2  1 49 19`
-* `05-06 0000 0350` corresponds to `2016 11  6  1 19  1`
-and so on.
-These timestamps are used to get the timeseries data for the plots.
-
 # Potential Errors
 This section covers some potential errors you may run into and some possible troubleshooting steps.
 
@@ -189,11 +180,13 @@ Several errors you may encounter may involve path not found errors or directorie
     * This means that your `timestamp.txt` file is missing. Make sure you make your timestamp file according to the [save directory prep instructions](#save-directory).
 * **WARNING! File missing: ___/TempOH_TOTAL.csv**
     * This means that the `.csv` files from the IDL processing haven't been made. Make sure that the `skip_processing` option is false the first time you run this program on the data.
+* **WARNING: The first P12 image file (needed for timestamp) is missing! ____/P12___.tif**
+    * The program reads the first P12 image file for each window to get the initial timestamp. If that image is not present, you will get this error. It may just be not the expected name. See the `p12_img_stub` parameter and compare with what it is for your drive.
 
 ## Improper Files
 You may encounter errors relating to improperly formatted or files.
 There can also be errors relating to files not being filled out properly.
-In particular, the `days.txt` and `timestamp.txt` could be easily messed up.
+In particular, the `days.txt` could be easily messed up.
 For these, see the instructions for the [read directory setup](#read-directory) and the [save directory setup](#save-directory) to see where you went wrong with your file setup.
 * **WARNING! The first line should be the month stub like Nov or Apr . Make sure days.txt is formatted correctly.**
     * You will get this if your `days.txt` file is missing the month stub on the first line of the file.
@@ -205,8 +198,6 @@ For these, see the instructions for the [read directory setup](#read-directory) 
     * This will occur when the the `read_dir`'s and `save_dir`'s version of `days.txt` contain different numbers of columns. Make sure that they have the same data.
 * **WARNING!!! the days.txt data do not share the same data at the following two paths!**
     * This will occur when the the `read_dir`'s and `save_dir`'s version of `days.txt` contain the same number of columns, but have different windows. Make sure that they have the same data.
-* **WARNING: The length of days.txt: __ does not equal the length of timestamp.txt: __**
-    * This will happen when the `days.txt` file doesn't have the same number of data rows as the `timestamp.txt` file. This means that there isn't a timestamp to go along with each data window. Make sure each window has a corresponding timestamp of the beginning.
 
 # Running the Program
 Once you have opened the runner in your chosen environment and adjusted the required variables, you should be able to simply hit the run button to run it.

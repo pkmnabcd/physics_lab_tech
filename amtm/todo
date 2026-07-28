@@ -1,9 +1,1 @@
-Generate timestamps automatically so we don't have to manually fill out timestamps.txt anymore
-
 Possibly rename do_all_windows to do_all_days for clarity
-
-Add functionality to do just a specific set of windows for total power processing
-
-Add documentation for all new features
-    Add doc for the P12 stub field
-    Change total power doc to clarify new functionality and name of skip_fft and do_all_windows
