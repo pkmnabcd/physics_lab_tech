@@ -182,6 +182,8 @@ Several errors you may encounter may involve path not found errors or directorie
     * This means that the `.csv` files from the IDL processing haven't been made. Make sure that the `skip_processing` option is false the first time you run this program on the data.
 * **WARNING: The first P12 image file (needed for timestamp) is missing! ____/P12___.tif**
     * The program reads the first P12 image file for each window to get the initial timestamp. If that image is not present, you will get this error. It may just be not the expected name. See the `p12_img_stub` parameter and compare with what it is for your drive.
+* **WARNING:______ doesn't have a TempOH0_TOTAL.csv file, so its total power won't be used.**
+    * This means that when total power processing was done on that window, the window was too short, so no `TempOH0_TOTAL.csv`, `TempOH1_TOTAL.csv`, etc. Either try to expand the window, update the `days.txt` file, and run the processing, or delete the window.
 
 ## Improper Files
 You may encounter errors relating to improperly formatted or files.
