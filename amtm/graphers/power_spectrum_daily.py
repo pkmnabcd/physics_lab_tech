@@ -21,9 +21,39 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pandas import read_csv
 from os.path import exists, join
+from textwrap import wrap
 
 
 plt.rcParams.update({'font.size': 15})
+
+MONTH_STUBS = {
+    0: "Jan",
+    1: "Feb",
+    2: "Mar",
+    3: "Apr",
+    4: "May",
+    5: "Jun",
+    6: "Jul",
+    7: "Aug",
+    8: "Sep",
+    9: "Oct",
+    10: "Nov",
+    11: "Dec"
+}
+
+
+def getTimestamp(img_path):
+    with open(img_path, "rb") as f:
+        f.seek(247)
+        second = int.from_bytes(f.read(4), "little")
+        minute = int.from_bytes(f.read(4), "little")
+        hour = int.from_bytes(f.read(4), "little")
+        day = int.from_bytes(f.read(4), "little")
+        month = int.from_bytes(f.read(4), "little")   # January is the 1st month, represented by 0.
+        year = int.from_bytes(f.read(4), "little") + 1900 # year is defined relative to 1900
+
+        timestamp = f"{MONTH_STUBS[month]} {day}, {year} {hour}:{minute}:{second}"
+        return timestamp
 
 
 def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
@@ -112,7 +142,7 @@ def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
     plt.close()
 
 
-def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_path):
+def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_path, drivePath):
     """
     year: str: form of "2024"
     month: str: form of "December"
@@ -127,6 +157,12 @@ def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_pat
     base_path = join(main_path, year, f"{month}{year}")
     oh_total_path = join(base_path, f"{month_stub}{night}_{begin}-{end}", "TempOH_TOTAL.csv")
     fig_save_path = join(base_path, f"{month_stub}{night}OH_{begin}-{end}.jpg")
+    timestamp_start_path = join(drivePath, f"{month}{year}", f"{mon}{night}", f"{p12_img_stub}{begin}.tif")
+    timestamp_end_path = join(drivePath, f"{month}{year}", f"{mon}{night}", f"{p12_img_stub}{end}.tif")
+
+    timestamp_start = getTimestamp(timestamp_start_path)
+    timestamp_end = getTimestamp(timestamp_end_path)
+    # TODO: finish with wrap
     fig_title = f"Power Spectrum {month_stub}{night}, {year}"
 
     if not exists(oh_total_path):
