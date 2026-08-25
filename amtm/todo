@@ -1,1 +1,3 @@
 Possibly rename do_all_windows to do_all_days for clarity
+Get the end timestamp and add to power spectrums
+Update docs (add new errors)
