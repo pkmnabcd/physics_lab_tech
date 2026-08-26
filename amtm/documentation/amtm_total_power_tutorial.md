@@ -84,7 +84,7 @@ year2 = "Literally Doesn't matter"
 ```
 
 ## Some Options
-The following are a few options that you can use, if desired. They are turned off (or `False`) by default.
+The following are a few options that you can use, if desired.
 
 ### **p12_img_stub**
 For each drive you use, check the filenames, and put whatever comes before the numbers and `.tif` in the `p12_img_stub`.

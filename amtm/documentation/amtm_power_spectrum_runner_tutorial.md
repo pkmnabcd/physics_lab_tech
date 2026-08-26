@@ -108,6 +108,14 @@ Each of these nights should have at least one entry in the corresponding month's
 ## Some Options
 The following are a few options that you can use, if desired. They are turned off (or `False`) by default.
 
+### **p12_img_stub**
+For each drive you use, check the filenames, and put whatever comes before the numbers and `.tif` in the `p12_img_stub`.
+From my experience, ALOMAR often has 'P12_31_XXXX.tif', while McMurdo has 'P12_1_XXXX.tif'.
+```python
+p12_img_stub = "P12_31_"
+#p12_img_stub = "P12_1_"
+```
+
 ### **do_all_windows**
 This involves the following code.
 ```python
