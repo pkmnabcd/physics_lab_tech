@@ -163,7 +163,8 @@ def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_pat
     timestamp_start = getTimestamp(timestamp_start_path)
     timestamp_end = getTimestamp(timestamp_end_path)
     # TODO: finish with wrap
-    fig_title = f"Power Spectrum {month_stub}{night}, {year}"
+    fig_title = f"Power Spectrum {month_stub}{night}, {year}\n{timestamp_start} to {timestamp_end}"
+    #fig_title = "\n".join(wrap(title, 30))
 
     if not exists(oh_total_path):
         print("WARNING! File missing: " + oh_total_path)
