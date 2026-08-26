@@ -22,6 +22,12 @@ from idlpy import IDL, IDLError
 # NOTE: Begin editing here!!!!!!!
 
 
+# NOTE: The stub of the P12 image file. Some drives have different names for the P12 images,
+# so put in what the stub is for this drive. In my experience, ALOMAR often has 'P12_31_XXXX.tif',
+# while McMurdo AMTM often says 'P12_1_XXXX.tif'. Put in the filename before the image number (like 0492).
+p12_img_stub = "P12_31_"
+#p12_img_stub = "P12_1_"
+
 # NOTE: the following code yields the path
 # C:\Users\Domi\OneDrive\Desktop\MachineLearning\IDLCode
 idl_scripts_dir = join("C:\\", "Users", "Domi", "OneDrive", "Desktop", "AMTM", "IDLCode")
@@ -316,5 +322,5 @@ if __name__ == "__main__":
                     print("--- FFT processing finished. Starting to generate the power spectrum plot ---")
                 else:
                     print("--- Skipping FFT processing. Starting to generate the power spectrum plot ---")
-                makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir)
+                makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
 

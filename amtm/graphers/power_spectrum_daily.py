@@ -142,7 +142,7 @@ def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
     plt.close()
 
 
-def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_path, drivePath):
+def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_path, drivePath, p12_img_stub):
     """
     year: str: form of "2024"
     month: str: form of "December"
@@ -152,6 +152,8 @@ def makeWindowPowerSpectrum(year, month, month_stub, night, begin, end, main_pat
     end: str: form of "1462"
     main_path: str: path to main folder. Ex: "C:/Users/Ken/Desktop/AMTM_McMurdo"
         In this directory is the various year folders, summary files, winter total power graphs, etc.
+    drivePath: str: path to the drive folder containing the {month}{year} directories.
+    p12_img_stub: str: usually either "P12_31_" or "P12_1_"
     """
     # Prep a bunch of strings/paths I'll need later
     base_path = join(main_path, year, f"{month}{year}")

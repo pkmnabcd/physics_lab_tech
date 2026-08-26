@@ -2,3 +2,4 @@ Possibly rename do_all_windows to do_all_days for clarity
 Get the end timestamp and add to power spectrums
 Update docs (add new errors)
 Add checking for all the files used in timestamps
+Add details about the p12_img_stub to the power spectrum runner since it's getting used there.
