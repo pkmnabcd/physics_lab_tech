@@ -322,5 +322,5 @@ if __name__ == "__main__":
                     print("--- FFT processing finished. Starting to generate the power spectrum plot ---")
                 else:
                     print("--- Skipping FFT processing. Starting to generate the power spectrum plot ---")
-                makeWindowPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
+                makeWindowPowerSpectrum(year, month, month_stub, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
 
