@@ -52,7 +52,7 @@ def getTimestamp(img_path):
         month = int.from_bytes(f.read(4), "little")   # January is the 1st month, represented by 0.
         year = int.from_bytes(f.read(4), "little") + 1900 # year is defined relative to 1900
 
-        timestamp = f"{MONTH_STUBS[month]} {day}, {year} {hour}:{minute}:{second}"
+        timestamp = f"{MONTH_STUBS[month]} {day}, {year} {hour:02}:{minute:02}:{second:02}"
         return timestamp
 
 
