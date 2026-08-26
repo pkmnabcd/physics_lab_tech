@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pandas import read_csv
 from os.path import exists, join
-from textwrap import wrap
 
 
 plt.rcParams.update({'font.size': 15})
@@ -165,9 +164,7 @@ def makeWindowPowerSpectrum(year, month, mon, month_stub, night, begin, end, mai
 
     timestamp_start = getTimestamp(timestamp_start_path)
     timestamp_end = getTimestamp(timestamp_end_path)
-    # TODO: finish with wrap
-    fig_title = f"Power Spectrum {month_stub}{night}, {year}\n{timestamp_start} to {timestamp_end}"
-    #fig_title = "\n".join(wrap(title, 30))
+    fig_title = f"Power Spectrum {month_stub}{night}, {year}\n{timestamp_start} to {timestamp_end} (UTC)"
 
     if not exists(oh_total_path):
         print("WARNING! File missing: " + oh_total_path)
