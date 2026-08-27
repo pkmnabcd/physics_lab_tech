@@ -143,7 +143,10 @@ def checkGivenPaths():
 def checkTimestampFiles():
     for month in MONTHS:
         month_stub = MONTH_STUBS[month]
-        for day in days[month]:
+        months_days = days[month]
+        if len(months_days) == 0:
+            continue
+        for day in months_days:
             begin_ends = readDaysTxtOneDay(year, month, day, save_dir)
             for begin_end in begin_ends:
                 begin = f"{begin_end[0]:04d}"
