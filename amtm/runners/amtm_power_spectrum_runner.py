@@ -2,7 +2,7 @@ import sys
 from os.path import join, exists
 from pathlib import Path
 
-from power_spectrum_daily import makeWindowPowerSpectrum, getTimestamp
+from power_spectrum_daily import makeWindowPowerSpectrum
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
 
