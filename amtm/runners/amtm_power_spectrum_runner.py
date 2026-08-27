@@ -148,9 +148,8 @@ def checkTimestampFiles():
             for begin_end in begin_ends:
                 begin = f"{begin_end[0]:04d}"
                 end = f"{begin_end[1]:04d}"
-                img_path
-                timestamp_start_path = join(read_dir, f"{month}{year}", f"{month_stub}{night}", f"{p12_img_stub}{begin}.tif")
-                timestamp_end_path = join(read_dir, f"{month}{year}", f"{month_stub}{night}", f"{p12_img_stub}{end}.tif")
+                timestamp_start_path = join(read_dir, f"{month}{year}", f"{month_stub}{day}", f"{p12_img_stub}{begin}.tif")
+                timestamp_end_path = join(read_dir, f"{month}{year}", f"{month_stub}{day}", f"{p12_img_stub}{end}.tif")
                 if not exists(timestamp_start_path):
                     print(f"WARNING!! The following p12 image file needed for timestamps is missing: {timestamp_start_path}")
                     sys.exit()
