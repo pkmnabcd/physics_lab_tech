@@ -47,7 +47,7 @@ year = "2016"
 # NOTE: If you want to make a power spectrum for each window in all
 # the days.txt files in that year's part of the drive, set the following as true
 # If you do so, you don't need to modify the days dict below. It will be wiped
-do_all_windows = False
+do_all_windows = True
 
 # NOTE: If you want to skip the IDL code because it has already
 # done, and you just want new plots, set the following as true
@@ -143,10 +143,7 @@ def checkGivenPaths():
 def checkTimestampFiles():
     for month in MONTHS:
         month_stub = MONTH_STUBS[month]
-        months_days = days[month]
-        if len(months_days) == 0:
-            continue
-        for day in months_days:
+        for day in days[month]
             begin_ends = readDaysTxtOneDay(year, month, day, save_dir)
             for begin_end in begin_ends:
                 begin = f"{begin_end[0]:04d}"
