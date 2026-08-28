@@ -179,47 +179,6 @@ These folder names should have no space between the month and year, and the mont
 Inside the month-year folder you should have your `days.txt` file.
 It should be identical to the corresponding file in the read directory.
 
-Also in the month-year folder you should have a `timestamp.txt` file.
-This file should contain the timestamp of the first image indexed in each window in the `days.txt` file for that month.
-
-```
-#0-year 1-month 2-day 3-hour 4-minute 5-second
-#Ut time of the starting frame given and aligned for each day in days.txt
-2016 11  1 16 30 22
-2016 11  1 19 49 19
-2016 11  5  1 19  1
-2016 11  5 15 17 55
-2016 11  6 15 19 32
-2016 11  7 12 26 37
-2016 11 17 15 15 30
-2016 11  8  3 49 28
-2016 11  8  5  4 28
-2016 11  8 22 35 17
-2016 11 20 20 30  2
-```
-As shown in the comments, the above numbers represent the following.
-The year, month, day of month, hour, minute, second of the first image in the corresponding window.
-You get that timestamp from the Norway image reader.
-So that the file looks nice and organized, use the spacing shown above, where single-digit numbers are right-justified within the column.
-
-The only thing that maps the timestamp to the window in `days.txt` is the ordering, so given the following example `days.txt` file,
-```
-Nov
-01-02 0039 0600
-01-02 0670 1050
-05-06 0000 0350
-...
-...
-```
-
-the correspondance would be the following.
-* `01-02 0039 0600` corresponds to `2016 11  1 16 30 22`
-* `01-02 0670 1050` corresponds to `2016 11  2  1 49 19`
-* `05-06 0000 0350` corresponds to `2016 11  6  1 19  1`
-and so on.
-These timestamps are used to get the timeseries data for the plots.
-
-
 # Running the Program
 Once you have opened the runner in your chosen environment and adjusted the required variables, you should be able to simply hit the run button to run it.
 The program will constantly log what it's up to, so you should be able to track its progress.
@@ -244,13 +203,15 @@ This section covers some potential errors you may run into and some possible tro
 Several errors you may encounter may involve path not found errors or directories not existing.
 * **WARNING!! The given ____dir: ___ does not exist!**
     * This happens when the directories you put in don't exist. These are the `IDL_DIR`, `idl_scripts_dir`, `save_dir`, and `read_dir`. Make sure these paths are correct. You can check to see what paths were actually used by using Spyder's variable explorer or by printing the variable when running the script with interactivity after it runs (`python -i`).
+* **WARNING!! The following p12 image file needed for timestamps is missing: ___**
+    * This means that the program wasn't able to find a p12 image file needed for timestamps. This will usually mean that either the `p12_img_stub` variable isn't set correctly or the bounds of the window extend past the actual bounds of the night.
 * **WARNING! File missing: ___/TempOH_TOTAL.csv**
     * This means that the `.csv` files from the IDL processing haven't been made. Make sure that the `skip_IDL` option is false the first time you run this program on the data.
 
 ## Improper Files
 You may encounter errors relating to improperly formatted or files.
 There can also be errors relating to files not being filled out properly.
-In particular, the `days.txt` and `timestamp.txt` could be easily messed up.
+In particular, the `days.txt` could be easily messed up.
 For these, see the instructions for the [read directory setup](#read-directory) and the [save directory setup](#save-directory) to see where you went wrong with your file setup.
 * **WARNING! The first line should be the month stub like Nov or Apr . Make sure days.txt is formatted correctly.**
     * You will get this if your `days.txt` file is missing the month stub on the first line of the file.
