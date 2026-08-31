@@ -141,7 +141,7 @@ def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
     plt.close()
 
 
-def makeWindowPowerSpectrum(year, month, mon, month_stub, night, begin, end, main_path, drivePath, p12_img_stub):
+def makeDailyPowerSpectrum(year, month, mon, month_stub, night, begin, end, main_path, drivePath, p12_img_stub):
     """
     year: str: form of "2024"
     month: str: form of "December"

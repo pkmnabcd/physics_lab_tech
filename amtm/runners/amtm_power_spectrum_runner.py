@@ -2,7 +2,7 @@ import sys
 from os.path import join, exists
 from pathlib import Path
 
-from power_spectrum_daily import makeWindowPowerSpectrum
+from power_spectrum import makeDailyPowerSpectrum
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
 
@@ -322,5 +322,5 @@ if __name__ == "__main__":
                     print("--- FFT processing finished. Starting to generate the power spectrum plot ---")
                 else:
                     print("--- Skipping FFT processing. Starting to generate the power spectrum plot ---")
-                makeWindowPowerSpectrum(year, month, month_stub, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
+                makeDailyPowerSpectrum(year, month, month_stub, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
 
