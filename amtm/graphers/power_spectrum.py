@@ -141,12 +141,11 @@ def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
     plt.close()
 
 
-def makeDailyPowerSpectrum(year, month, mon, month_stub, night, begin, end, main_path, drivePath, p12_img_stub):
+def makeDailyPowerSpectrum(year, month, mon, night, begin, end, main_path, drivePath, p12_img_stub):
     """
     year: str: form of "2024"
     month: str: form of "December"
     mon: str: form of "Dec"
-    month_stub: str: form of "Dec"
     night: str: form of "09-10"
     begin: str: form of "0000"
     end: str: form of "1462"
@@ -157,14 +156,14 @@ def makeDailyPowerSpectrum(year, month, mon, month_stub, night, begin, end, main
     """
     # Prep a bunch of strings/paths I'll need later
     base_path = join(main_path, year, f"{month}{year}")
-    oh_total_path = join(base_path, f"{month_stub}{night}_{begin}-{end}", "TempOH_TOTAL.csv")
-    fig_save_path = join(base_path, f"{month_stub}{night}OH_{begin}-{end}.jpg")
+    oh_total_path = join(base_path, f"{mon}{night}_{begin}-{end}", "TempOH_TOTAL.csv")
+    fig_save_path = join(base_path, f"{mon}{night}OH_{begin}-{end}.jpg")
     timestamp_start_path = join(drivePath, f"{month}{year}", f"{mon}{night}", f"{p12_img_stub}{begin}.tif")
     timestamp_end_path = join(drivePath, f"{month}{year}", f"{mon}{night}", f"{p12_img_stub}{end}.tif")
 
     timestamp_start = getTimestamp(timestamp_start_path)
     timestamp_end = getTimestamp(timestamp_end_path)
-    fig_title = f"Power Spectrum {month_stub}{night}, {year}\n{timestamp_start} to {timestamp_end} (UTC)"
+    fig_title = f"Power Spectrum {mon}{night}, {year}\n{timestamp_start} to {timestamp_end} (UTC)"
 
     if not exists(oh_total_path):
         print("WARNING! File missing: " + oh_total_path)
