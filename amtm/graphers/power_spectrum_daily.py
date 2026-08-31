@@ -108,7 +108,7 @@ def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
     plt.colorbar(label='log$_{10}$(PSD)')
 
     plt.plot()
-    plt.title(fig_title)
+    plt.title(fig_title, pad=20)
 
     plt.plot(x0,y,color='k',lw='0.5')
     plt.plot(x,y0,color='k',lw='0.5')
@@ -131,8 +131,8 @@ def generateSpectrumPlot(oh_total_path, fig_save_path, fig_title):
     plt.xticks(np.arange(-150,150,50))
     plt.yticks(np.arange(-150,150,50))
 
-    plt.xlim(-150,150)
-    plt.ylim(-150,150)
+    plt.xlim(-100,100)
+    plt.ylim(-100,100)
     plt.xlabel('W-E [m/s]')
     plt.ylabel('N-S [m/s]')
 
