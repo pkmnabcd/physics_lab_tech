@@ -171,3 +171,7 @@ def makeDailyPowerSpectrum(year, month, mon, month_stub, night, begin, end, main
         return
 
     generateSpectrumPlot(oh_total_path, fig_save_path, fig_title)
+
+def makeMonthlyPowerSpectrum(year, month, mon, power_spectrum_paths, main_path):
+    # NOTE: define the save path based on main path and year and month, etc
+    fig_save_path = join(main_path, year, f"{month}{year}", "{month}_avg_spectrum.png")
