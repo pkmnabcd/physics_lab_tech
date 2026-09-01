@@ -1,1 +1,5 @@
 Possibly rename do_all_windows to do_all_days for clarity
+Add monthly and yearly power spectrum documentation and messages
+    Errors related to csv files
+    Messages about making monthly (and yearly) spectrums
+    Make yearly plots
