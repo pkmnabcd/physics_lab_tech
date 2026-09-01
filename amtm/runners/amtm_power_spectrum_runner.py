@@ -47,7 +47,7 @@ year = "2016"
 # NOTE: If you want to make a power spectrum for each window in all
 # the days.txt files in that year's part of the drive, set the following as true
 # If you do so, you don't need to modify the days dict below. It will be wiped
-do_all_windows = False
+do_all_windows = True
 
 # NOTE: If you want to skip the IDL code because it has already
 # done, and you just want new plots, set the following as true
@@ -138,6 +138,24 @@ def checkGivenPaths():
     if not exists(read_dir):
         print(f"WARNING!! The given read_dir: {read_dir} does not exist!")
         sys.exit()
+
+
+def checkTimestampFiles():
+    for month in MONTHS:
+        month_stub = MONTH_STUBS[month]
+        for day in days[month]:
+            begin_ends = readDaysTxtOneDay(year, month, day, save_dir)
+            for begin_end in begin_ends:
+                begin = f"{begin_end[0]:04d}"
+                end = f"{begin_end[1]:04d}"
+                timestamp_start_path = join(read_dir, f"{month}{year}", f"{month_stub}{day}", f"{p12_img_stub}{begin}.tif")
+                timestamp_end_path = join(read_dir, f"{month}{year}", f"{month_stub}{day}", f"{p12_img_stub}{end}.tif")
+                if not exists(timestamp_start_path):
+                    print(f"WARNING!! The following p12 image file needed for timestamps is missing: {timestamp_start_path}")
+                    sys.exit()
+                if not exists(timestamp_end_path):
+                    print(f"WARNING!! The following p12 image file needed for timestamps is missing: {timestamp_end_path}")
+                    sys.exit()
 
 
 def getAllWindows(year, read_path):
@@ -278,6 +296,9 @@ if __name__ == "__main__":
         # NOTE: wipe and add all nights in days.txt files into days dict.
         getAllWindows(year, read_dir)
 
+    print("--- Checking the start and end P12 files needed for timestamps for each window ---")
+    checkTimestampFiles()
+    print("--- Passed ---")
     print(f"--- Generating power spectrums for {year} ---")
     for month in MONTHS:
         print(f"--- Looking for days in month: {month} ---")

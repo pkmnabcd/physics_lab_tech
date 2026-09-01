@@ -176,8 +176,6 @@ This section covers some potential errors you may run into and some possible tro
 Several errors you may encounter may involve path not found errors or directories not existing.
 * **WARNING!! The given ____dir: ___ does not exist!**
     * This happens when the directories you put in don't exist. These are the `IDL_DIR`, `idl_scripts_dir`, `save_dir`, and `read_dir`. Make sure these paths are correct. You can check to see what paths were actually used by using Spyder's variable explorer or by printing the variable when running the script with interactivity after it runs (`python -i`).
-* **FileNotFoundError: ___/timestamp.txt not found.**
-    * This means that your `timestamp.txt` file is missing. Make sure you make your timestamp file according to the [save directory prep instructions](#save-directory).
 * **WARNING! File missing: ___/TempOH_TOTAL.csv**
     * This means that the `.csv` files from the IDL processing haven't been made. Make sure that the `skip_processing` option is false the first time you run this program on the data.
 * **WARNING: The first P12 image file (needed for timestamp) is missing! ____/P12___.tif**
