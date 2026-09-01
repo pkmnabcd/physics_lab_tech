@@ -2,7 +2,7 @@ import sys
 from os.path import join, exists
 from pathlib import Path
 
-from power_spectrum import makeDailyPowerSpectrum
+from power_spectrum import makeDailyPowerSpectrum, makeMonthlyPowerSpectrum
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
 
@@ -300,8 +300,10 @@ if __name__ == "__main__":
     checkTimestampFiles()
     print("--- Passed ---")
     print(f"--- Generating power spectrums for {year} ---")
+    year_csv_paths = []
     for month in MONTHS:
         print(f"--- Looking for days in month: {month} ---")
+        month_csv_paths = []
         days_list = days[month]
         for day in days_list:
             month_stub = MONTH_STUBS[month]
@@ -344,4 +346,12 @@ if __name__ == "__main__":
                 else:
                     print("--- Skipping FFT processing. Starting to generate the power spectrum plot ---")
                 makeDailyPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
+                csv_path = join(save_dir, year, f"{month}{year}", f"{mon}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
+                year_csv_paths.append(csv_path)
+                month_csv_paths.append(csv_path)
+        if len(month_csv_paths) > 0:
+            ok = makeMonthlyPowerSpectrum(year, month, mon, month_csv_paths, main_path)
+            if not ok:
+                print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
+                sys.exit()
 
