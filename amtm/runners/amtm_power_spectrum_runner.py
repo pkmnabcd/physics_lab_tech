@@ -350,7 +350,7 @@ if __name__ == "__main__":
                 year_csv_paths.append(csv_path)
                 month_csv_paths.append(csv_path)
         if len(month_csv_paths) > 0:
-            ok = makeMonthlyPowerSpectrum(year, month, month_stub, month_csv_paths, main_path)
+            ok = makeMonthlyPowerSpectrum(year, month, month_stub, month_csv_paths, save_dir)
             if not ok:
                 print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
                 sys.exit()
