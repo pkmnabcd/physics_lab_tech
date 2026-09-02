@@ -175,19 +175,19 @@ def makeMonthlyPowerSpectrum(year, month, mon, power_spectrum_paths, main_path):
     # NOTE: define the save path based on main path and year and month, etc
     fig_save_path = join(main_path, year, f"{month}{year}", f"{mon}{year}_avg_spectrum.png")
     avg_csv_save_path = join(main_path, year, f"{month}{year}", f"{mon}{year}_TempOH_Total.csv")
-    CSV_SHAPE = (300, 301)
+    CSV_SHAPE = (301, 301)
 
     # Get average CSV of the month
     avg_csv = np.zeros(CSV_SHAPE)
     csv_count = len(power_spectrum_paths)
     for csv_path in power_spectrum_paths:
-        csv_data = read_csv(csv_path)
+        csv_data = read_csv(csv_path, header=None)
         if csv_data.shape != CSV_SHAPE:
             print(f"A csv file has this shape {csv_data.shape} instead of {CSV_SHAPE}.\n\tFound at this path: {csv_path}")
             return False
         avg_csv += csv_data
     avg_csv /= csv_count
-    avg_csv.to_csv(avg_csv_save_path, index=False)
+    avg_csv.to_csv(avg_csv_save_path, index=False, header=False)
 
     fig_title = f"Monthly Average Power Spectrum {month} {year}"
     generateSpectrumPlot(avg_csv_save_path, fig_save_path, fig_title)
