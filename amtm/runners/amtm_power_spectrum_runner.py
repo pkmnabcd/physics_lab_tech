@@ -346,11 +346,11 @@ if __name__ == "__main__":
                 else:
                     print("--- Skipping FFT processing. Starting to generate the power spectrum plot ---")
                 makeDailyPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
-                csv_path = join(save_dir, year, f"{month}{year}", f"{mon}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
+                csv_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
                 year_csv_paths.append(csv_path)
                 month_csv_paths.append(csv_path)
         if len(month_csv_paths) > 0:
-            ok = makeMonthlyPowerSpectrum(year, month, mon, month_csv_paths, main_path)
+            ok = makeMonthlyPowerSpectrum(year, month, month_stub, month_csv_paths, main_path)
             if not ok:
                 print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
                 sys.exit()
