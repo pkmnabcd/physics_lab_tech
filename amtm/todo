@@ -3,3 +3,4 @@ Add monthly and yearly power spectrum documentation and messages
     Errors related to csv files
     Messages about making monthly (and yearly) spectrums
     Make yearly plots
+Add winter over 2 years to power spectrum so I can instead get whole-winter spectrums even for alomar which has winter over 2 years

@@ -2,7 +2,7 @@ import sys
 from os.path import join, exists
 from pathlib import Path
 
-from power_spectrum import makeDailyPowerSpectrum, makeMonthlyPowerSpectrum
+from power_spectrum import makeDailyPowerSpectrum, makeMonthlyPowerSpectrum, makeYearlyPowerSpectrum
 # NOTE: power_spectrum_daily.py should be in the same directory as this python program
 
 
@@ -349,9 +349,22 @@ if __name__ == "__main__":
                 csv_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
                 year_csv_paths.append(csv_path)
                 month_csv_paths.append(csv_path)
+        # Make monthly average power spectrum
         if len(month_csv_paths) > 0:
+            print(f"--- Starting to generate the {month} monthly power spectrum plot ---")
             ok = makeMonthlyPowerSpectrum(year, month, month_stub, month_csv_paths, save_dir)
             if not ok:
                 print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
                 sys.exit()
+            print(f"--- Finished generating the monthly power spectrum plot ---")
 
+    # Make yearly average power spectrum
+    # TODO: add winter over 2 years so I can instead get whole-winter spectrums
+    # Even alomar which has winter over 2 years
+    if len(year_csv_paths) > 0:
+        print(f"--- Starting to generate the {year} yearly power spectrum plot ---")
+        ok = makeYearlyPowerSpectrum(year, year_csv_paths, save_dir)
+        if not ok:
+            print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
+            sys.exit()
+        print(f"--- Finished generating the yearly power spectrum plot ---")
