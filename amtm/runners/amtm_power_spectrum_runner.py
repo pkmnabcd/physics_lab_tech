@@ -356,7 +356,7 @@ if __name__ == "__main__":
             if not ok:
                 print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
                 sys.exit()
-            print(f"--- Finished generating the monthly power spectrum plot ---")
+            print("--- Finished generating the monthly power spectrum plot ---")
 
     # Make yearly average power spectrum
     # TODO: add winter over 2 years so I can instead get whole-winter spectrums
@@ -367,4 +367,4 @@ if __name__ == "__main__":
         if not ok:
             print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
             sys.exit()
-        print(f"--- Finished generating the yearly power spectrum plot ---")
+        print("--- Finished generating the yearly power spectrum plot ---")
