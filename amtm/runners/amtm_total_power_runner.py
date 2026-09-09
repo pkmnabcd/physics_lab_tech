@@ -404,10 +404,10 @@ if __name__ == "__main__":
         if winter_over_2_years:
             print(f"--- Using specified windows for the {year1}-{year2} winter ---")
             months1, mons1 = getMonthsInYear(days1)
+            months2, mons2 = getMonthsInYear(days2)
         else:
             print(f"--- Using specified windows for the {year1} winter ---")
             months1, mons1 = getMonthsInYear(days1)
-            months2, mons2 = getMonthsInYear(days2)
 
     print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
     if winter_over_2_years:

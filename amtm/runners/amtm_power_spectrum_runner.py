@@ -391,6 +391,16 @@ def getMonthsInYear(days):
     return valid_months, valid_mons
 
 
+def getMonthCSVPaths(year, month, days):
+    month_paths = []
+    month_days = days[month]
+    for day in month_days:
+        begin_ends = readDaysTxtOneDay(year, month, day, save_dir)
+        csv_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
+        month_paths.append(csv_path)
+    return month_paths
+
+
 if __name__ == "__main__":
     checkGivenPaths()
 
@@ -412,10 +422,10 @@ if __name__ == "__main__":
         if winter_over_2_years:
             print(f"--- Using specified windows for the {year1}-{year2} winter ---")
             months1, mons1 = getMonthsInYear(days1)
+            months2, mons2 = getMonthsInYear(days2)
         else:
             print(f"--- Using specified windows for the {year1} winter ---")
             months1, mons1 = getMonthsInYear(days1)
-            months2, mons2 = getMonthsInYear(days2)
 
     print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
     if winter_over_2_years:
@@ -442,17 +452,32 @@ if __name__ == "__main__":
         print("--- Skipping monthly and winterly spectrums because do_all_windows = False ---")
         sys.exit()
 
-    # TODO: add code to get the monthly paths
-    # the following code doesn't work yet
-
-    # Make monthly average power spectrum
-    if len(month_csv_paths) > 0:
+    # Generate monthly power spectrum plots
+    winter_csv_paths = []
+    for month in months1:
+        month_csv_paths = getMonthCSVPaths(year1, month, days1)
         print(f"--- Starting to generate the {month} monthly power spectrum plot ---")
-        ok = makeMonthlyPowerSpectrum(year, month, month_stub, month_csv_paths, save_dir)
+        ok = makeMonthlyPowerSpectrum(year1, month, MONTH_STUBS[month], month_csv_paths, save_dir)
         if not ok:
             print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
             sys.exit()
         print("--- Finished generating the monthly power spectrum plot ---")
+        for window_path in month_csv_paths:
+            winter_csv_paths.append(window_path)
+
+    if winter_over_2_years:
+        for month in months2:
+            month_csv_paths = getMonthCSVPaths(year2, month, days2)
+            print(f"--- Starting to generate the {month} monthly power spectrum plot ---")
+            ok = makeMonthlyPowerSpectrum(year2, month, MONTH_STUBS[month], month_csv_paths, save_dir)
+            if not ok:
+                print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
+                sys.exit()
+            print("--- Finished generating the monthly power spectrum plot ---")
+            for window_path in month_csv_paths:
+                winter_csv_paths.append(window_path)
+
+    # TODO: finish winterly plots
 
     # Make yearly average power spectrum
     # TODO: add winter over 2 years so I can instead get whole-winter spectrums
