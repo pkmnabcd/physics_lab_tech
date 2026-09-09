@@ -209,14 +209,11 @@ def checkTimestampFiles(days, year):
 
 
 def getAllWindows(year, read_path):
-    # Clear the days dict since we'll be filling it with new ones
-    for key in days:
-        days[key] = []
-
+    days = {}
     for month in MONTHS:
         days_txt_days = readDaysTxtAllDays(year, month, read_path)
-        for day in days_txt_days:
-            days[month] = days_txt_days
+        days[month] = days_txt_days
+    return days
 
 
 def readDaysTxtAllDays(year, month, main_path):
@@ -332,10 +329,8 @@ def daysTxtAreSame(year):
 
 def doIDLProcessingOneYear(year, days):
     print(f"--- Generating by-window power spectrums for {year} ---")
-    year_csv_paths = []
     for month in MONTHS:
         print(f"--- Looking for days in month: {month} ---")
-        month_csv_paths = []
         days_list = days[month]
         for day in days_list:
             month_stub = MONTH_STUBS[month]
@@ -401,12 +396,6 @@ if __name__ == "__main__":
 
     IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
     IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-
-    print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
-    if not daysTxtAreSame(year):
-        print("--- Exiting because some days.txt files are not the same ---")
-        sys.exit()
-    print("--- Check passed ---")
 
     if do_all_windows:
         if winter_over_2_years:
