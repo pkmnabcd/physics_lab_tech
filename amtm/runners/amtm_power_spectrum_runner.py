@@ -349,6 +349,9 @@ if __name__ == "__main__":
                 csv_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
                 year_csv_paths.append(csv_path)
                 month_csv_paths.append(csv_path)
+
+        if not do_all_windows:
+            continue
         # Make monthly average power spectrum
         if len(month_csv_paths) > 0:
             print(f"--- Starting to generate the {month} monthly power spectrum plot ---")
@@ -357,6 +360,10 @@ if __name__ == "__main__":
                 print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
                 sys.exit()
             print("--- Finished generating the monthly power spectrum plot ---")
+
+    if not do_all_windows:
+        print("--- Skipping winter power spectrum because not doing all windows ---")
+        sys.exit()
 
     # Make yearly average power spectrum
     # TODO: add winter over 2 years so I can instead get whole-winter spectrums
