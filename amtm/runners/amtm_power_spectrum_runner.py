@@ -41,12 +41,22 @@ save_dir = join("C:\\", "Gabes_stuff", "AMTM_ALOMAR")
 # It should contain the month-year folders (like October2016/) and maybe an old months.txt file.
 read_dir = join("I:\\")
 
-# NOTE: this is the year you're making power spectrums for.
-year = "2016"
+# NOTE: If your winter takes place over two years, set this as True.
+# Otherwise (like in the south pole), set it to False.
+winter_over_2_years = True
 
-# NOTE: If you want to make a power spectrum for each window in all
-# the days.txt files in that year's part of the drive, set the following as true
-# If you do so, you don't need to modify the days dict below. It will be wiped
+# NOTE: this is the years in your winter.
+# If there is only one year in your data, set that as year1.
+year1 = "2016"
+year2 = "2017"
+
+# NOTE: If you want to make power spectrums for only a specific set of
+# windows, set the following to False. This will complete the fft processing
+# and graphing for those windows, but you'll have to set do_all_windows to True again to
+# make monthly and yearly plots (recall that if you've already done the main fft processing, you
+# can use skip_fft = True to skip to the total power combining and plotting).
+# Note that setting this to True will wipe the below 'days1' and 'days2' parameters, so you
+# don't have to modify or clean up that input.
 do_all_windows = True
 
 # NOTE: If you want to skip the IDL code because it has already
@@ -58,7 +68,47 @@ skip_IDL = False
 #    "01-02",
 #    "05-06"
 # ],
-days = {
+# If there are two years in your winter, this should contain windows for your
+# first year. If the winter takes place all in one year, put all the windos in
+# this dict.
+days1 = {
+    "January": [
+    ],
+    "February": [
+    ],
+    "March": [
+    ],
+    "April": [
+    ],
+    "May": [
+    ],
+    "June": [
+    ],
+    "July": [
+    ],
+    "August": [
+    ],
+    "September": [
+        "16-17"
+    ],
+    "October": [
+    ],
+    "November": [
+        "07-08",
+        "08-09"
+    ],
+    "December": [
+    ]
+}
+
+# NOTE: Put the nights you want inside the lists like
+# "January": [
+#    "01-02",
+#    "05-06"
+# ],
+# If there are two years in your winter, this should contain windows for your
+# second year. If the winter takes place all in one year, this doesn't matter
+days2 = {
     "January": [
     ],
     "February": [
@@ -140,7 +190,7 @@ def checkGivenPaths():
         sys.exit()
 
 
-def checkTimestampFiles():
+def checkTimestampFiles(days, year):
     for month in MONTHS:
         month_stub = MONTH_STUBS[month]
         for day in days[month]:
@@ -279,27 +329,9 @@ def daysTxtAreSame(year):
                     areSame = False
     return areSame
 
-if __name__ == "__main__":
-    checkGivenPaths()
 
-    IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
-    IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
-
-    print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
-    if not daysTxtAreSame(year):
-        print("--- Exiting because some days.txt files are not the same ---")
-        sys.exit()
-    print("--- Check passed ---")
-
-    if do_all_windows:
-        print(f"--- Getting power spectrums for all windows in year {year} on the drive ---")
-        # NOTE: wipe and add all nights in days.txt files into days dict.
-        getAllWindows(year, read_dir)
-
-    print("--- Checking the start and end P12 files needed for timestamps for each window ---")
-    checkTimestampFiles()
-    print("--- Passed ---")
-    print(f"--- Generating power spectrums for {year} ---")
+def doIDLProcessingOneYear(year, days):
+    print(f"--- Generating by-window power spectrums for {year} ---")
     year_csv_paths = []
     for month in MONTHS:
         print(f"--- Looking for days in month: {month} ---")
@@ -346,24 +378,92 @@ if __name__ == "__main__":
                 else:
                     print("--- Skipping FFT processing. Starting to generate the power spectrum plot ---")
                 makeDailyPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
-                csv_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
-                year_csv_paths.append(csv_path)
-                month_csv_paths.append(csv_path)
+                # TODO: move this to different part of code
 
-        if not do_all_windows:
-            continue
-        # Make monthly average power spectrum
-        if len(month_csv_paths) > 0:
-            print(f"--- Starting to generate the {month} monthly power spectrum plot ---")
-            ok = makeMonthlyPowerSpectrum(year, month, month_stub, month_csv_paths, save_dir)
-            if not ok:
-                print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
-                sys.exit()
-            print("--- Finished generating the monthly power spectrum plot ---")
+                #csv_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
+                #year_csv_paths.append(csv_path)
+                #month_csv_paths.append(csv_path)
+
+
+def getMonthsInYear(days):
+    valid_months = []
+    valid_mons = []
+    for month in MONTHS:
+        if len(days[month]) > 0:
+            valid_months.append(month)
+    for month in valid_months:
+        valid_mons.append(MONTH_STUBS[month])
+    return valid_months, valid_mons
+
+
+if __name__ == "__main__":
+    checkGivenPaths()
+
+    IDL.run(f".compile {join(idl_scripts_dir, FFT_FILENAME)}")
+    IDL.run(f".compile {join(idl_scripts_dir, READ_IMAGE_FILENAME)}")
+
+    print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
+    if not daysTxtAreSame(year):
+        print("--- Exiting because some days.txt files are not the same ---")
+        sys.exit()
+    print("--- Check passed ---")
+
+    if do_all_windows:
+        if winter_over_2_years:
+            print(f"--- Finding all nights for the {year1}-{year2} winter ---")
+        else:
+            print(f"--- Finding all nights for the {year1} winter ---")
+        days1 = getAllWindows(year1, read_dir)
+        months1, mons1 = getMonthsInYear(days1)
+        if winter_over_2_years:
+            days2 = getAllWindows(year2, read_dir)
+            months2, mons2 = getMonthsInYear(days2)
+
+    else:
+        if winter_over_2_years:
+            print(f"--- Using specified windows for the {year1}-{year2} winter ---")
+            months1, mons1 = getMonthsInYear(days1)
+        else:
+            print(f"--- Using specified windows for the {year1} winter ---")
+            months1, mons1 = getMonthsInYear(days1)
+            months2, mons2 = getMonthsInYear(days2)
+
+    print("--- Checking to make sure the days.txt in the read dir and save dir are the same ---")
+    if winter_over_2_years:
+        if not daysTxtAreSame(year1) or not daysTxtAreSame(year2):
+            print("--- Exiting because some days.txt files are not the same ---")
+            sys.exit()
+    else:
+        if not daysTxtAreSame(year1):
+            print("--- Exiting because some days.txt files are not the same ---")
+            sys.exit()
+    print("--- Check passed ---")
+
+    print("--- Checking the start and end P12 files needed for timestamps for each window ---")
+    checkTimestampFiles(days1, year1)
+    if winter_over_2_years:
+        checkTimestampFiles(days2, year2)
+    print("--- Passed ---")
+
+    doIDLProcessingOneYear(year1, days1)
+    if winter_over_2_years:
+        doIDLProcessingOneYear(year2, days2)
 
     if not do_all_windows:
-        print("--- Skipping winter power spectrum because not doing all windows ---")
+        print("--- Skipping monthly and winterly spectrums because do_all_windows = False ---")
         sys.exit()
+
+    # TODO: add code to get the monthly paths
+    # the following code doesn't work yet
+
+    # Make monthly average power spectrum
+    if len(month_csv_paths) > 0:
+        print(f"--- Starting to generate the {month} monthly power spectrum plot ---")
+        ok = makeMonthlyPowerSpectrum(year, month, month_stub, month_csv_paths, save_dir)
+        if not ok:
+            print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
+            sys.exit()
+        print("--- Finished generating the monthly power spectrum plot ---")
 
     # Make yearly average power spectrum
     # TODO: add winter over 2 years so I can instead get whole-winter spectrums

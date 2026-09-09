@@ -57,8 +57,8 @@ year2 = "2017"
 # windows, set the following to False. This will complete the fft processing
 # for those windows, but you'll have to set do_all_windows to True again to
 # make plots (recall that if you've already done the main fft processing, you
-# can use skip_fft = True to skip to the total power combining and plotting.
-# Note that setting this to True will wipe the below 'days' parameter, so you
+# can use skip_fft = True to skip to the total power combining and plotting).
+# Note that setting this to True will wipe the below 'days1' and 'days2' parameters, so you
 # don't have to modify or clean up that input.
 do_all_windows = True
 
