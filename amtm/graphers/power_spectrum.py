@@ -194,10 +194,17 @@ def makeMonthlyPowerSpectrum(year, month, mon, power_spectrum_paths, main_path):
     return True
 
 
-def makeYearlyPowerSpectrum(year, power_spectrum_paths, main_path):
+def makeYearlyPowerSpectrum(year1, year2, power_spectrum_paths, main_path, winter_over_2_years):
     # NOTE: define the save path based on main path and year and month, etc
-    fig_save_path = join(main_path, year, f"{year}_avg_spectrum.png")
-    avg_csv_save_path = join(main_path, year, f"{year}_TempOH_Total.csv")
+    if winter_over_2_years:
+        fig_save_path = join(main_path, year, f"{year1}-{year2}_avg_spectrum.png")
+        avg_csv_save_path = join(main_path, year, f"{year}-{year2}_TempOH_Total.csv")
+        fig_title = f"Winterly Average Power Spectrum {year1}-{year2}"
+    else:
+        year = year1
+        fig_save_path = join(main_path, year, f"{year}_avg_spectrum.png")
+        avg_csv_save_path = join(main_path, year, f"{year}_TempOH_Total.csv")
+        fig_title = f"Winterly Average Power Spectrum {year}"
     CSV_SHAPE = (301, 301)
 
     # Get average CSV of the year
@@ -212,6 +219,5 @@ def makeYearlyPowerSpectrum(year, power_spectrum_paths, main_path):
     avg_csv /= csv_count
     avg_csv.to_csv(avg_csv_save_path, index=False, header=False)
 
-    fig_title = f"Yearly Average Power Spectrum {year}"
     generateSpectrumPlot(avg_csv_save_path, fig_save_path, fig_title)
     return True

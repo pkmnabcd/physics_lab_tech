@@ -477,15 +477,14 @@ if __name__ == "__main__":
             for window_path in month_csv_paths:
                 winter_csv_paths.append(window_path)
 
-    # TODO: finish winterly plots
-
-    # Make yearly average power spectrum
-    # TODO: add winter over 2 years so I can instead get whole-winter spectrums
-    # Even alomar which has winter over 2 years
-    if len(year_csv_paths) > 0:
-        print(f"--- Starting to generate the {year} yearly power spectrum plot ---")
-        ok = makeYearlyPowerSpectrum(year, year_csv_paths, save_dir)
+    # Make winterly average power spectrum
+    if len(winter_csv_paths) > 0:
+        if winter_over_2_years:
+            print(f"--- Starting to generate the {year1}-{year2} winterly power spectrum plot ---")
+        else:
+            print(f"--- Starting to generate the {year1} winterly power spectrum plot ---")
+        ok = makeYearlyPowerSpectrum(year1, year2, winter_csv_paths, save_dir, winter_over_2_years)
         if not ok:
             print("WARNING!!! Inconsistent CSV dimension issues made the average power spectrum calculation fail.")
             sys.exit()
-        print("--- Finished generating the yearly power spectrum plot ---")
+        print("--- Finished generating the winterly power spectrum plot ---")
