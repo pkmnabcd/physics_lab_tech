@@ -399,7 +399,7 @@ def getMonthCSVPaths(year, month, days):
         for begin_end in begin_ends:
             begin = f"{begin_end[0]:04d}"
             end = f"{begin_end[1]:04d}"
-            csv_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
+            csv_path = join(save_dir, year, f"{month}{year}", f"{MONTH_STUBS[month]}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
             month_paths.append(csv_path)
     return month_paths
 
