@@ -3,7 +3,7 @@ from os.path import join, exists
 from pathlib import Path
 
 from power_spectrum import makeDailyPowerSpectrum, makeMonthlyPowerSpectrum, makeYearlyPowerSpectrum
-# NOTE: power_spectrum_daily.py should be in the same directory as this python program
+# NOTE: power_spectrum.py should be in the same directory as this python program
 
 
 # NOTE: you may have to adjust IDL_DIR for your system
@@ -373,11 +373,6 @@ def doIDLProcessingOneYear(year, days):
                 else:
                     print("--- Skipping FFT processing. Starting to generate the power spectrum plot ---")
                 makeDailyPowerSpectrum(year, month, month_stub, day, f"{begin:04d}", f"{end:04d}", save_dir, read_dir, p12_img_stub)
-                # TODO: move this to different part of code
-
-                #csv_path = join(save_dir, year, f"{month}{year}", f"{month_stub}{day}_{begin:04d}-{end:04d}", "TempOH_TOTAL.csv")
-                #year_csv_paths.append(csv_path)
-                #month_csv_paths.append(csv_path)
 
 
 def getMonthsInYear(days):
